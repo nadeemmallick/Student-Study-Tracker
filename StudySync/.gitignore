@@ -1,0 +1,43 @@
+# ================================================
+# StudySync – .gitignore
+# ================================================
+
+# ===== SECURITY – Never commit secrets =====
+**/application-local.properties
+**/application-local.yml
+**/.env
+**/.env.*
+
+# ===== Maven =====
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ===== Spring Boot =====
+*.jar
+*.war
+*.nar
+
+# ===== IDE – IntelliJ IDEA =====
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# ===== IDE – VS Code =====
+.vscode/
+*.code-workspace
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Logs =====
+*.log
+logs/
+
+# ===== Node (future use) =====
+node_modules/
+npm-debug.log*

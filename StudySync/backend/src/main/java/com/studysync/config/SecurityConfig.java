@@ -1,7 +1,10 @@
 package com.studysync.config;
 
+import com.studysync.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,12 +26,21 @@ import java.util.List;
  *  - All other routes require authentication
  *  - BCrypt password encoder registered
  *
- * Day 2: Wire UserDetailsService + AuthenticationProvider
- * Future: Add JWT filter here
+ * Day 2 (done):
+ *  - UserDetailsService wired → loads users from DB by email
+ *  - DaoAuthenticationProvider wired → validates credentials against DB
+ *
+ * Future: Add JWT filter here (Day 10)
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final UserDetailsServiceImpl userDetailsService;
+
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     // ===== Public API Endpoints (no auth required) =====
     private static final String[] PUBLIC_URLS = {
@@ -57,17 +69,33 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(PUBLIC_URLS).permitAll()   // Allow register/login
                     .anyRequest().authenticated()               // Everything else requires login
-            );
+            )
 
-        // TODO Day 2: Add JWT authentication filter here
+            // Wire our custom authentication provider
+            .authenticationProvider(authenticationProvider());
+
+        // TODO Day 10: Add JWT authentication filter here
         // http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // AUTHENTICATION PROVIDER
+    // Wires UserDetailsService + PasswordEncoder so Spring Security can
+    // validate login credentials against the database.
+    // ─────────────────────────────────────────────────────────────────────────
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
+
     /**
      * CORS Configuration
-     * Allows frontend (VS Code Live Server on port 5500) to call the backend
+     * Allows frontend (VS Code Live Server on port 5500) to call the backend.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -77,15 +105,15 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:5500",      // VS Code Live Server
                 "http://127.0.0.1:5500",     // VS Code Live Server (alternate)
-                "http://localhost:3000",      // React (future use)
-                "https://your-frontend.netlify.app"  // TODO: Replace with actual Netlify URL
+                "http://localhost:3000"       // React (future use)
+                // TODO: Add actual Netlify URL before deployment
         ));
 
         // Allowed HTTP methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
         // Allowed headers
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
 
         // Allow credentials (cookies/auth headers)
         config.setAllowCredentials(true);
@@ -97,8 +125,8 @@ public class SecurityConfig {
 
     /**
      * Password Encoder – BCrypt
-     * Used to hash passwords before storing in DB
-     * Used in: UserService.registerUser()
+     * Used to hash passwords before storing in DB.
+     * Used in: UserService.registerUser() and DaoAuthenticationProvider.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {

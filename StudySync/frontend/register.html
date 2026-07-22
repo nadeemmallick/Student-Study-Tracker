@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account – StudySync</title>
+    <meta name="description" content="Create your free StudySync account and start tracking your study sessions, assignments, and academic goals." />
+    <link rel="stylesheet" href="css/forms.css" />
+</head>
+<body>
+
+    <!-- Animated background -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Register Card -->
+    <div class="auth-wrapper">
+        <div class="auth-card">
+
+            <!-- Brand -->
+            <div class="brand">
+                <div class="brand-icon">📚</div>
+                <span class="brand-name">StudySync</span>
+            </div>
+
+            <!-- Heading -->
+            <h1 class="auth-title">Create account</h1>
+            <p class="auth-subtitle">Start your academic journey with StudySync</p>
+
+            <!-- Error message (shown on failed registration) -->
+            <div id="reg-error" class="error-msg" role="alert"></div>
+
+            <!-- Register Form -->
+            <form id="register-form" novalidate>
+
+                <div class="form-group">
+                    <label for="reg-name">Full name</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">👤</span>
+                        <input
+                            type="text"
+                            id="reg-name"
+                            name="name"
+                            placeholder="Nadeem Mallick"
+                            autocomplete="name"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Email address</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">✉️</span>
+                        <input
+                            type="email"
+                            id="reg-email"
+                            name="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password">Password</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🔒</span>
+                        <input
+                            type="password"
+                            id="reg-password"
+                            name="password"
+                            placeholder="Minimum 6 characters"
+                            autocomplete="new-password"
+                            required
+                            minlength="6"
+                        />
+                    </div>
+                </div>
+
+                <button type="submit" id="reg-btn" class="btn-primary">
+                    Create Account
+                </button>
+
+            </form>
+
+            <div class="divider">already have an account?</div>
+
+            <!-- Footer -->
+            <p class="auth-footer">
+                Already have an account? <a href="login.html">Sign in here</a>
+            </p>
+
+        </div>
+    </div>
+
+    <script type="module" src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | StudySync</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="app-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h2 class="brand-name">StudySync</h2>
+                <button class="btn-icon mobile-close" id="sidebarClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="subjects.html" class="nav-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="study-session.html" class="nav-item">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span>Sessions</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="goals.html" class="nav-item">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Goals</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info">
+                        <p class="user-name" id="userNameDisplay">Loading...</p>
+                        <p class="user-role">Student</p>
+                    </div>
+                </div>
+                <button class="btn-icon logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Topbar -->
+            <header class="topbar glass-panel">
+                <div class="topbar-left">
+                    <button class="btn-icon mobile-menu" id="sidebarOpen">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" placeholder="Search assignments, notes...">
+                    </div>
+                </div>
+                
+                <div class="topbar-right">
+                    <button class="btn-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <div>
+                        <h1 class="page-title text-gradient">Welcome back, <span id="welcomeName">Student</span>! 👋</h1>
+                        <p class="page-subtitle">Here is what's happening with your studies today.</p>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" id="startSessionBtn">
+                            <i class="fa-solid fa-play"></i> Start Session
+                        </button>
+                        <button class="btn btn-secondary" id="addAssignmentBtn">
+                            <i class="fa-solid fa-plus"></i> Add Assignment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Statistic Cards Grid -->
+                <div class="stats-grid">
+                    
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(124,58,237,0.2); color: #a78bfa;">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <span class="stat-badge positive">+12% from yesterday</span>
+                        </div>
+                        <div class="stat-value" id="hoursToday">0h 0m</div>
+                        <div class="stat-label">Studied Today</div>
+                    </div>
+
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(245,158,11,0.2); color: #fbbf24;">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                            <span class="stat-badge neutral">Current best</span>
+                        </div>
+                        <div class="stat-value" id="currentStreak">0 Days</div>
+                        <div class="stat-label">Active Streak</div>
+                    </div>
+
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(239,68,68,0.2); color: #f87171;">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                            </div>
+                            <span class="stat-badge negative">2 High Priority</span>
+                        </div>
+                        <div class="stat-value" id="pendingAssignments">0</div>
+                        <div class="stat-label">Pending Assignments</div>
+                    </div>
+
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(16,185,129,0.2); color: #34d399;">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <span class="stat-badge positive">On track</span>
+                        </div>
+                        <div class="stat-value" id="weeklyGoal">0%</div>
+                        <div class="stat-label">Weekly Goal Progress</div>
+                        <div class="progress-bar-bg mt-3">
+                            <div class="progress-bar-fill" style="width: 0%;" id="weeklyGoalProgress"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Bottom Section (Activity/Upcoming) -->
+                <div class="bottom-grid">
+                    <div class="activity-panel glass-panel">
+                        <div class="panel-header">
+                            <h3>Upcoming Assignments</h3>
+                            <a href="assignments.html" class="view-all">View All</a>
+                        </div>
+                        <div class="panel-content" id="upcomingAssignments">
+                            <!-- Mock List -->
+                            <div class="list-item">
+                                <div class="item-icon" style="color: #f87171;"><i class="fa-solid fa-circle-exclamation"></i></div>
+                                <div class="item-details">
+                                    <h4>Math Calculus Homework</h4>
+                                    <p>Due Today at 11:59 PM</p>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="item-icon" style="color: #fbbf24;"><i class="fa-regular fa-clock"></i></div>
+                                <div class="item-details">
+                                    <h4>Physics Lab Report</h4>
+                                    <p>Due Tomorrow at 10:00 AM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity-panel glass-panel">
+                        <div class="panel-header">
+                            <h3>Recent Study Sessions</h3>
+                            <a href="study-session.html" class="view-all">View All</a>
+                        </div>
+                        <div class="panel-content" id="recentSessions">
+                            <!-- Mock List -->
+                            <div class="list-item">
+                                <div class="item-icon" style="color: #a78bfa;"><i class="fa-solid fa-laptop"></i></div>
+                                <div class="item-details">
+                                    <h4>Computer Science</h4>
+                                    <p>2 hours • Today</p>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="item-icon" style="color: #34d399;"><i class="fa-solid fa-book-open"></i></div>
+                                <div class="item-details">
+                                    <h4>Literature Review</h4>
+                                    <p>45 mins • Yesterday</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

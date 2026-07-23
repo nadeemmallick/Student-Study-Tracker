@@ -46,7 +46,9 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> register(
             @Valid @RequestBody RegisterRequest request) {
 
+        log.info("Registration attempt for email: {}", request.getEmail());
         AuthResponse authResponse = userService.registerUser(request);
+        log.info("Registration successful for userId: {}", authResponse.getUserId());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -72,7 +74,9 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> login(
             @Valid @RequestBody LoginRequest request) {
 
+        log.info("Login attempt for email: {}", request.getEmail());
         AuthResponse authResponse = userService.loginUser(request);
+        log.info("Login successful for userId: {}", authResponse.getUserId());
 
         return ResponseEntity.ok(ApiResponse.<AuthResponse>builder()
                 .success(true)

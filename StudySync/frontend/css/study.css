@@ -1,0 +1,218 @@
+/* =========================================================
+   study.css – Study Session specific styles
+========================================================= */
+
+/* ── Session History List ────────────────────────────────────────────────── */
+.session-history {
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    border-radius: 16px;
+}
+
+.section-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.session-item {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+
+.session-item:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateX(5px);
+}
+
+.session-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    /* color applied inline */
+}
+
+.session-details {
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.session-details h4 {
+    font-size: 1rem;
+    color: #fff;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.subject-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.session-details p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.session-time {
+    text-align: right;
+    margin-right: 1.5rem;
+}
+
+.duration-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.time-range {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.session-actions .action-btn {
+    background: rgba(255,255,255,0.05);
+    border: none;
+    color: var(--text-muted);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.session-actions .action-btn:hover {
+    background: rgba(239,68,68,0.2);
+    color: #f87171;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.loading-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+/* ── Form Specifics ──────────────────────────────────────────────────────── */
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group.half {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.select-wrap {
+    position: relative;
+}
+
+.select-wrap select {
+    appearance: none;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    color: #fff;
+    outline: none;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.select-wrap select:focus {
+    border-color: var(--accent);
+}
+
+.select-wrap .select-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.duration-preview {
+    background: rgba(255,255,255,0.05);
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.duration-preview span {
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* Reusing generic form elements from subjects.css conceptually */
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 10px;
+    color: #fff;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.form-group input:focus {
+    border-color: var(--accent);
+    background: rgba(124,58,237,0.05);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}

@@ -23,56 +23,51 @@ async function apiFetch(endpoint, method = "GET", body = null) {
     }
 
     const response = await fetch(`${API_BASE}${endpoint}`, options);
-    const data = await response.json();
-
-    if (!response.ok) {
-        // Throw the server's error message so the UI can display it
-        throw new Error(data.message || "Something went wrong. Please try again.");
+    
+    // Some endpoints might return 204 No Content
+    if (response.status === 204) {
+        return { ok: true };
     }
 
-    return data;
-}
-
-// ── Auth helpers ────────────────────────────────────────────────────────────
-
-export async function registerUser(name, email, password) {
-    return apiFetch("/auth/register", "POST", { name, email, password });
-}
-
-export async function loginUser(email, password) {
-    return apiFetch("/auth/login", "POST", { email, password });
-}
-
-// ── Session helpers ──────────────────────────────────────────────────────────
-
-/**
- * Save logged-in user to sessionStorage.
- * SessionStorage clears when the browser tab closes (good for security).
- */
-export function saveSession(userData) {
-    sessionStorage.setItem("studysync_user", JSON.stringify(userData));
-}
-
-export function getSession() {
-    const stored = sessionStorage.getItem("studysync_user");
-    return stored ? JSON.parse(stored) : null;
-}
-
-export function clearSession() {
-    sessionStorage.removeItem("studysync_user");
-}
-
-export function isLoggedIn() {
-    return getSession() !== null;
-}
-
-/**
- * Guard for protected pages.
- * Call at top of dashboard/any page that needs login.
- * Redirects to login if no session found.
- */
-export function requireAuth() {
-    if (!isLoggedIn()) {
-        window.location.href = "/login.html";
+    let data;
+    try {
+        data = await response.json();
+    } catch (e) {
+        data = {}; // If response is not JSON
     }
+
+    // Wrap the response so we can check res.ok and await res.json() like native fetch,
+    // which is what subjects.js and study.js expect.
+    return {
+        ok: response.ok,
+        json: async () => data,
+        status: response.status
+    };
 }
+
+// ── Global API Object ────────────────────────────────────────────────────────
+window.api = {
+    get: (endpoint) => apiFetch(endpoint, "GET"),
+    post: (endpoint, body) => apiFetch(endpoint, "POST", body),
+    put: (endpoint, body) => apiFetch(endpoint, "PUT", body),
+    delete: (endpoint) => apiFetch(endpoint, "DELETE")
+};
+
+// ── Auth & Session Helpers ──────────────────────────────────────────────────
+window.auth = {
+    registerUser: (name, email, password) => api.post("/auth/register", { name, email, password }),
+    loginUser: (email, password) => api.post("/auth/login", { email, password }),
+    saveSession: (userData) => sessionStorage.setItem("studysync_user", JSON.stringify(userData)),
+    getSession: () => {
+        const stored = sessionStorage.getItem("studysync_user");
+        return stored ? JSON.parse(stored) : null;
+    },
+    clearSession: () => sessionStorage.removeItem("studysync_user"),
+    isLoggedIn: () => window.auth.getSession() !== null,
+    requireAuth: () => {
+        if (!window.auth.isLoggedIn()) {
+            window.location.href = "/login.html";
+        }
+    }
+};
+

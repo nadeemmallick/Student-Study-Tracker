@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments | StudySync</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/assignments.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="app-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h2 class="brand-name">StudySync</h2>
+                <button class="btn-icon mobile-close" id="sidebarClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="subjects.html" class="nav-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="study-session.html" class="nav-item">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span>Sessions</span>
+                </a>
+                <a href="assignments.html" class="nav-item active">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="goals.html" class="nav-item">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Goals</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info">
+                        <p class="user-name" id="userNameDisplay">Loading...</p>
+                        <p class="user-role">Student</p>
+                    </div>
+                </div>
+                <button class="btn-icon logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Topbar -->
+            <header class="topbar glass-panel">
+                <div class="topbar-left">
+                    <button class="btn-icon mobile-menu" id="sidebarOpen">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" placeholder="Search assignments...">
+                    </div>
+                </div>
+                
+                <div class="topbar-right">
+                    <button class="btn-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Assignments Content -->
+            <div class="dashboard-content">
+                
+                <div class="welcome-section">
+                    <div>
+                        <h1 class="page-title text-gradient">Assignments 📝</h1>
+                        <p class="page-subtitle">Manage your homework, projects, and deadlines.</p>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" id="addAssignmentBtn">
+                            <i class="fa-solid fa-plus"></i> New Assignment
+                        </button>
+                    </div>
+                </div>
+
+                <div class="assignments-container">
+                    <div class="status-column glass-panel">
+                        <div class="column-header">
+                            <h3><i class="fa-regular fa-circle"></i> To Do</h3>
+                        </div>
+                        <div class="task-list" id="pendingList">
+                            <!-- Tasks injected here -->
+                            <div class="loading-state">Loading tasks...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-column glass-panel">
+                        <div class="column-header">
+                            <h3><i class="fa-solid fa-spinner"></i> In Progress</h3>
+                        </div>
+                        <div class="task-list" id="inProgressList">
+                            <!-- Tasks injected here -->
+                        </div>
+                    </div>
+                    
+                    <div class="status-column glass-panel">
+                        <div class="column-header">
+                            <h3><i class="fa-regular fa-circle-check"></i> Completed</h3>
+                        </div>
+                        <div class="task-list" id="completedList">
+                            <!-- Tasks injected here -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </main>
+    </div>
+
+    <!-- Assignment Modal (Hidden by default) -->
+    <div class="modal-overlay" id="assignmentModal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Assignment</h3>
+                <button class="btn-icon" id="closeModalBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="assignmentForm">
+                <input type="hidden" id="assignmentIdInput">
+                
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="assignmentTitleInput" required placeholder="E.g., Read Chapter 5">
+                </div>
+                
+                <div class="form-group">
+                    <label>Subject</label>
+                    <div class="input-wrap select-wrap">
+                        <select id="assignmentSubjectInput" required>
+                            <option value="" disabled selected>Loading subjects...</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>Due Date</label>
+                        <input type="date" id="assignmentDueDateInput" required>
+                    </div>
+                    <div class="form-group half">
+                        <label>Priority</label>
+                        <div class="input-wrap select-wrap">
+                            <select id="assignmentPriorityInput" required>
+                                <option value="LOW">Low</option>
+                                <option value="MEDIUM" selected>Medium</option>
+                                <option value="HIGH">High</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Status</label>
+                    <div class="input-wrap select-wrap">
+                        <select id="assignmentStatusInput" required>
+                            <option value="PENDING" selected>Pending</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="COMPLETED">Completed</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down select-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea id="assignmentDescInput" placeholder="Add any details or links..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Assignment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script> <!-- Sidebar toggle -->
+    <script src="js/assignments.js"></script>
+</body>
+</html>

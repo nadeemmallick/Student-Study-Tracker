@@ -42,9 +42,9 @@ public class StudySessionService {
         }
 
         // Calculate Duration in minutes
-        long minutes = Duration.between(request.getStartTime(), request.getEndTime()).toMinutes();
+        long minutes = java.time.temporal.ChronoUnit.MINUTES.between(request.getStartTime(), request.getEndTime());
         if (minutes < 0) {
-            // Handle edge case where end time is past midnight (assuming same day for now)
+            // Handle midnight crossover (e.g. 23:00 to 01:00 = -1320 + 1440 = 120 minutes)
             minutes += 24 * 60;
         }
 

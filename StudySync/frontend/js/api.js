@@ -58,16 +58,22 @@ window.api = {
 window.auth = {
     registerUser: (name, email, password) => api.post("/auth/register", { name, email, password }),
     loginUser: (email, password) => api.post("/auth/login", { email, password }),
-    saveSession: (userData) => sessionStorage.setItem("studysync_user", JSON.stringify(userData)),
+    saveSession: (userData) => {
+        localStorage.setItem("studysync_user", JSON.stringify(userData));
+        sessionStorage.setItem("studysync_user", JSON.stringify(userData));
+    },
     getSession: () => {
-        const stored = sessionStorage.getItem("studysync_user");
+        const stored = localStorage.getItem("studysync_user") || sessionStorage.getItem("studysync_user");
         return stored ? JSON.parse(stored) : null;
     },
-    clearSession: () => sessionStorage.removeItem("studysync_user"),
+    clearSession: () => {
+        localStorage.removeItem("studysync_user");
+        sessionStorage.removeItem("studysync_user");
+    },
     isLoggedIn: () => window.auth.getSession() !== null,
     requireAuth: () => {
         if (!window.auth.isLoggedIn()) {
-            window.location.href = "/login.html";
+            window.location.href = "login.html";
         }
     }
 };

@@ -4,9 +4,12 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    window.auth.requireAuth();
+    const session = window.auth.getSession();
+    if (!session) return;
+
     // --- State ---
-    // Hardcoding userId for now as per plan until Auth is fully integrated
-    const userId = 1; 
+    const userId = session.userId;
     let subjects = [];
     let isEditMode = false;
     

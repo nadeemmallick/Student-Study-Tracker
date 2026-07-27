@@ -47,10 +47,11 @@ async function apiFetch(endpoint, method = "GET", body = null) {
 
 // ── Global API Object ────────────────────────────────────────────────────────
 window.api = {
-    get: (endpoint) => apiFetch(endpoint, "GET"),
-    post: (endpoint, body) => apiFetch(endpoint, "POST", body),
-    put: (endpoint, body) => apiFetch(endpoint, "PUT", body),
-    delete: (endpoint) => apiFetch(endpoint, "DELETE")
+    get:    (endpoint)        => apiFetch(endpoint, "GET"),
+    post:   (endpoint, body)  => apiFetch(endpoint, "POST",   body),
+    put:    (endpoint, body)  => apiFetch(endpoint, "PUT",    body),
+    patch:  (endpoint, body)  => apiFetch(endpoint, "PATCH",  body),
+    delete: (endpoint)        => apiFetch(endpoint, "DELETE")
 };
 
 // ── Auth & Session Helpers ──────────────────────────────────────────────────

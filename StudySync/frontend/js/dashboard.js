@@ -4,6 +4,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Require user to be logged in
+    window.auth.requireAuth();
+
     // --- Mobile Sidebar Toggle ---
     const sidebar = document.getElementById('sidebar');
     const sidebarOpen = document.getElementById('sidebarOpen');
@@ -26,9 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Simulate fetching user data from local storage or API
     const loadUserData = () => {
         // Mock user from auth.js if exists, else fallback
+        const sessionUser = window.auth.getSession();
+        
         const mockUser = {
-            name: 'Nadeem',
-            hoursToday: '2h 45m',
+            name: sessionUser ? sessionUser.name : 'Nadeem',
+            hoursToday: '2h 45m', // TODO: Fetch from real API when Analytics are done
             currentStreak: 5,
             pendingAssignments: 3,
             weeklyGoalProgress: 65 // percentage
@@ -61,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             if(confirm('Are you sure you want to log out?')) {
-                // Clear token/session here in the future
+                window.auth.clearSession();
                 window.location.href = 'login.html';
             }
         });

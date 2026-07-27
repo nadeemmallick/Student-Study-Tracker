@@ -43,9 +43,10 @@ public class SecurityConfig {
     }
 
     // ===== Public API Endpoints (no auth required) =====
+    // TODO Day 10: Restrict these once JWT is implemented.
+    // For now all /api/** is open to allow full frontend testing.
     private static final String[] PUBLIC_URLS = {
-            "/api/auth/register",
-            "/api/auth/login",
+            "/api/**",
             "/error"
     };
 

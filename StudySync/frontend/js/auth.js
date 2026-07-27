@@ -3,10 +3,8 @@
    Wires the HTML forms to the backend REST API via api.js
 ========================================================= */
 
-import { registerUser, loginUser, saveSession, isLoggedIn } from "./api.js";
-
 // ── Redirect already logged-in users straight to dashboard ──────────────────
-if (isLoggedIn()) {
+if (window.auth.isLoggedIn()) {
     window.location.href = "dashboard.html";
 }
 
@@ -31,10 +29,15 @@ if (registerForm) {
         btnEl.textContent = "Creating account…";
 
         try {
-            const response = await registerUser(name, email, password);
+            const response = await window.auth.registerUser(name, email, password);
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Registration failed");
+            }
 
             // Save session and redirect to dashboard
-            saveSession(response.data);
+            window.auth.saveSession(result.data);
             window.location.href = "dashboard.html";
 
         } catch (err) {
@@ -67,10 +70,15 @@ if (loginForm) {
         btnEl.textContent = "Signing in…";
 
         try {
-            const response = await loginUser(email, password);
+            const response = await window.auth.loginUser(email, password);
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error(result.message || "Login failed");
+            }
 
             // Save session and redirect to dashboard
-            saveSession(response.data);
+            window.auth.saveSession(result.data);
             window.location.href = "dashboard.html";
 
         } catch (err) {

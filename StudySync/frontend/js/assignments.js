@@ -4,8 +4,12 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     
+    window.auth.requireAuth();
+    const session = window.auth.getSession();
+    if (!session) return;
+
     // --- State ---
-    const userId = 1; // Hardcoded per plan
+    const userId = session.userId;
     let assignments = [];
     let subjects = [];
     let isEditMode = false;

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Goals | StudySync</title>
+    <meta name="description" content="Set and track your daily and weekly study goals with StudySync." />
+    <link rel="stylesheet" href="css/goals.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">📚</div>
+            <span class="brand-name">StudySync</span>
+        </div>
+
+        <span class="nav-section-label">Navigation</span>
+        <a href="dashboard.html"    class="nav-link"><span class="nav-icon">🏠</span>Dashboard</a>
+        <a href="subjects.html"     class="nav-link"><span class="nav-icon">📖</span>Subjects</a>
+        <a href="study-session.html" class="nav-link"><span class="nav-icon">⏱️</span>Study Sessions</a>
+        <a href="assignments.html"  class="nav-link"><span class="nav-icon">📋</span>Assignments</a>
+        <a href="goals.html"        class="nav-link active"><span class="nav-icon">🎯</span>Goals</a>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-link" id="logoutBtn"><span class="nav-icon">🚪</span>Logout</a>
+        </div>
+    </aside>
+
+    <!-- ── Main Content ──────────────────────────────────────── -->
+    <div class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <div>
+                    <div class="page-title">🎯 Goals</div>
+                    <div class="page-subtitle">Set and track your study targets</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="btn-primary" id="addGoalBtn">
+                    <span>＋</span> New Goal
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Body -->
+        <div class="page-body">
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-icon purple">🎯</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-label">Total Goals</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">✅</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="statCompleted">0</div>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon yellow">📅</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="statDaily">0</div>
+                        <div class="stat-label">Daily Goals</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple">📆</div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="statWeekly">0</div>
+                        <div class="stat-label">Weekly Goals</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Goals -->
+            <div class="goals-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="type-indicator daily"></div>
+                        Daily Goals
+                        <span class="section-badge" id="dailyCount">0</span>
+                    </div>
+                </div>
+                <div class="goals-grid" id="dailyGoalsList">
+                    <div class="loading-state"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+            <!-- Weekly Goals -->
+            <div class="goals-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <div class="type-indicator weekly"></div>
+                        Weekly Goals
+                        <span class="section-badge" id="weeklyCount">0</span>
+                    </div>
+                </div>
+                <div class="goals-grid" id="weeklyGoalsList">
+                    <div class="loading-state"><div class="spinner"></div></div>
+                </div>
+            </div>
+
+        </div><!-- /page-body -->
+    </div><!-- /main-content -->
+</div><!-- /app-layout -->
+
+<!-- ── Goal Modal ──────────────────────────────────────────── -->
+<div class="modal-overlay" id="goalModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title" id="modalTitle">New Goal</h2>
+            <button class="modal-close" id="closeModalBtn" aria-label="Close">✕</button>
+        </div>
+
+        <form id="goalForm" novalidate>
+            <input type="hidden" id="goalId" value="" />
+
+            <div class="form-group">
+                <label class="form-label" for="goalTitle">Goal Title *</label>
+                <input
+                    type="text"
+                    id="goalTitle"
+                    class="form-control"
+                    placeholder="e.g. Study 3 hours of Physics"
+                    maxlength="255"
+                    required
+                />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="goalType">Type *</label>
+                    <select id="goalType" class="form-control" required>
+                        <option value="DAILY">📅 Daily</option>
+                        <option value="WEEKLY">📆 Weekly</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="targetHours">Target Hours *</label>
+                    <input
+                        type="number"
+                        id="targetHours"
+                        class="form-control"
+                        placeholder="e.g. 3.5"
+                        min="0.1"
+                        max="24"
+                        step="0.5"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="cancelModalBtn">Cancel</button>
+                <button type="submit" class="btn-primary" id="saveGoalBtn">Save Goal</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/goals.js"></script>
+</body>
+</html>

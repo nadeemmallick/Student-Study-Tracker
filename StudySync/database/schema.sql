@@ -28,13 +28,16 @@ CREATE TABLE IF NOT EXISTS users (
 -- ================================================
 -- TABLE: subjects
 -- Subjects a student is studying
+-- Column names match Subject.java entity exactly.
 -- ================================================
 CREATE TABLE IF NOT EXISTS subjects (
     subject_id      BIGINT          NOT NULL AUTO_INCREMENT,
     user_id         BIGINT          NOT NULL,
-    subject_name    VARCHAR(100)    NOT NULL,
-    color           VARCHAR(20)     DEFAULT '#2563EB',  -- Hex color for UI display
+    name            VARCHAR(100)    NOT NULL,                      -- maps to Subject.name
+    description     VARCHAR(500)    DEFAULT NULL,                  -- maps to Subject.description
+    color_code      VARCHAR(7)      DEFAULT '#2563EB',             -- maps to Subject.colorCode (@Column name="color_code")
     created_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     PRIMARY KEY (subject_id),
     CONSTRAINT fk_subjects_user
@@ -45,16 +48,19 @@ CREATE TABLE IF NOT EXISTS subjects (
 -- ================================================
 -- TABLE: study_sessions
 -- Each logged study session for a student
+-- Column names + types match StudySession.java entity exactly.
 -- ================================================
 CREATE TABLE IF NOT EXISTS study_sessions (
-    session_id  BIGINT          NOT NULL AUTO_INCREMENT,
-    user_id     BIGINT          NOT NULL,
-    subject_id  BIGINT          NOT NULL,
-    start_time  DATETIME        NOT NULL,
-    end_time    DATETIME        NOT NULL,
-    duration    INT             NOT NULL,               -- Duration in minutes
-    notes       TEXT,                                  -- Optional session notes
-    created_at  TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    session_id          BIGINT          NOT NULL AUTO_INCREMENT,
+    user_id             BIGINT          NOT NULL,
+    subject_id          BIGINT          NOT NULL,
+    date                DATE            NOT NULL,                  -- maps to StudySession.date (LocalDate)
+    start_time          TIME            NOT NULL,                  -- maps to StudySession.startTime (LocalTime)
+    end_time            TIME            NOT NULL,                  -- maps to StudySession.endTime (LocalTime)
+    duration_minutes    INT             NOT NULL,                  -- maps to StudySession.durationMinutes (@Column name="duration_minutes")
+    notes               VARCHAR(1000)   DEFAULT NULL,              -- maps to StudySession.notes
+    created_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at          TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     PRIMARY KEY (session_id),
     CONSTRAINT fk_sessions_user
@@ -74,6 +80,7 @@ CREATE TABLE IF NOT EXISTS assignments (
     user_id         BIGINT          NOT NULL,
     subject_id      BIGINT          NOT NULL,
     title           VARCHAR(255)    NOT NULL,
+    description     VARCHAR(2000)   DEFAULT NULL,              -- maps to Assignment.description
     due_date        DATE            NOT NULL,
     priority        ENUM('LOW', 'MEDIUM', 'HIGH') NOT NULL DEFAULT 'MEDIUM',
     status          ENUM('PENDING', 'IN_PROGRESS', 'COMPLETED') NOT NULL DEFAULT 'PENDING',

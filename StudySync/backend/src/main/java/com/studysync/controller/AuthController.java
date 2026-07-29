@@ -40,7 +40,7 @@ public class AuthController {
      *
      * Response 201:
      * { "success": true, "message": "Registration successful",
-     *   "data": { "userId": 1, "name": "Nadeem", "email": "nadeem@example.com" } }
+     *   "data": { "userId": 1, "name": "Nadeem", "email": "nadeem@example.com", "token": "eyJ..." } }
      */
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<AuthResponse>> register(
@@ -68,7 +68,7 @@ public class AuthController {
      *
      * Response 200:
      * { "success": true, "message": "Login successful",
-     *   "data": { "userId": 1, "name": "Nadeem", "email": "nadeem@example.com" } }
+     *   "data": { "userId": 1, "name": "Nadeem", "email": "nadeem@example.com", "token": "eyJ..." } }
      */
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(

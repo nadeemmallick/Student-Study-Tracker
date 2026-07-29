@@ -4,6 +4,8 @@ import com.studysync.dto.GoalRequest;
 import com.studysync.dto.GoalResponse;
 import com.studysync.entity.Goal;
 import com.studysync.entity.User;
+import com.studysync.exception.ResourceNotFoundException;
+import com.studysync.exception.UnauthorizedException;
 import com.studysync.repository.GoalRepository;
 import com.studysync.repository.UserRepository;
 import org.slf4j.Logger;
@@ -65,7 +67,7 @@ public class GoalService {
         log.info("Creating goal for userId: {} — title: {}", userId, request.getTitle());
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         Goal goal = Goal.builder()
                 .user(user)
@@ -91,11 +93,11 @@ public class GoalService {
         log.info("Updating goalId: {} for userId: {}", goalId, userId);
 
         Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new RuntimeException("Goal not found with id: " + goalId));
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found with id: " + goalId));
 
         // Security: ensure the goal belongs to the requesting user
         if (!goal.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized: goal does not belong to this user");
+            throw new UnauthorizedException("Goal does not belong to this user");
         }
 
         goal.setTitle(request.getTitle());
@@ -121,13 +123,13 @@ public class GoalService {
         log.info("Toggling goalId: {} for userId: {}", goalId, userId);
 
         Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new RuntimeException("Goal not found with id: " + goalId));
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found with id: " + goalId));
 
         if (!goal.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized: goal does not belong to this user");
+            throw new UnauthorizedException("Goal does not belong to this user");
         }
 
-        goal.setCompleted(!goal.getCompleted());
+        goal.setCompleted(!Boolean.TRUE.equals(goal.getCompleted()));
         Goal toggled = goalRepository.save(goal);
         log.info("Goal {} toggled to completed={}", goalId, toggled.getCompleted());
         return GoalResponse.from(toggled);
@@ -144,10 +146,10 @@ public class GoalService {
         log.info("Deleting goalId: {} for userId: {}", goalId, userId);
 
         Goal goal = goalRepository.findById(goalId)
-                .orElseThrow(() -> new RuntimeException("Goal not found with id: " + goalId));
+                .orElseThrow(() -> new ResourceNotFoundException("Goal not found with id: " + goalId));
 
         if (!goal.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized: goal does not belong to this user");
+            throw new UnauthorizedException("Goal does not belong to this user");
         }
 
         goalRepository.delete(goal);

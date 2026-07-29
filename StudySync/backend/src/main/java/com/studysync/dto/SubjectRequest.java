@@ -16,7 +16,8 @@ public class SubjectRequest {
     @Size(max = 7, message = "Color code must not exceed 7 characters")
     private String colorCode;
 
-    @NotNull(message = "User ID is required")
+    // userId is not required in the request body — it is always set by the
+    // controller from the validated JWT token (authentication.getDetails()).
     private Long userId;
 
     public SubjectRequest() {}

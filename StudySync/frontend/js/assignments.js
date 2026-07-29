@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSubjects() {
         try {
-            const res = await api.get(`/subjects?userId=${userId}`);
+            const res = await api.get('/subjects');
             if (res.ok) {
                 subjects = await res.json();
                 populateSubjectDropdown();
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchAssignments() {
         showLoadingState();
         try {
-            const res = await api.get(`/assignments?userId=${userId}`);
+            const res = await api.get('/assignments');
             if (res.ok) {
                 assignments = await res.json();
                 renderAssignments();
@@ -131,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         const assignmentData = {
-            userId: userId,
             subjectId: parseInt(subjectSelect.value),
             title: titleInput.value.trim(),
             description: descInput.value.trim(),
@@ -167,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Are you sure you want to delete this assignment?')) return;
         
         try {
-            const res = await api.delete(`/assignments/${id}?userId=${userId}`);
+            const res = await api.delete(`/assignments/${id}`);
             if (res.ok) {
                 fetchAssignments();
             } else {

@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── State ─────────────────────────────────────────────────────────────────
     let goals = [];
     let isEditMode = false;
+    let todayStudyHours = 0;   // hours studied today (for DAILY goal progress)
+    let weekStudyHours  = 0;   // hours studied this week (for WEEKLY goal progress)
 
     // ── DOM Elements ──────────────────────────────────────────────────────────
     const dailyList   = document.getElementById('dailyGoalsList');
@@ -50,21 +52,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // FETCH GOALS FROM API
+    // FETCH GOALS + ANALYTICS IN PARALLEL (Day 10: wire real progress)
     // ─────────────────────────────────────────────────────────────────────────
     async function fetchGoals() {
         try {
-            const res = await api.get(`/goals?userId=${userId}`);
-            if (res.ok) {
-                const data = await res.json();
-                // GoalController returns raw array (no wrapper)
+            // Fetch goals and analytics simultaneously for speed
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const [goalsRes, analyticsRes] = await Promise.all([
+                api.get('/goals'),
+                api.get(`/analytics?timezone=${encodeURIComponent(tz)}`)
+            ]);
+
+            if (goalsRes.ok) {
+                const data = await goalsRes.json();
                 goals = Array.isArray(data) ? data : (data.data || []);
             } else {
-                throw new Error('Failed to fetch');
+                throw new Error('Failed to fetch goals');
+            }
+
+            if (analyticsRes.ok) {
+                const analytics = await analyticsRes.json();
+                // weeklyTrend is a LinkedHashMap ordered oldest→newest, so the
+                // last entry is always today's hours.
+                const trendValues = Object.values(analytics.weeklyTrend || {});
+                todayStudyHours = trendValues.length > 0
+                    ? trendValues[trendValues.length - 1]
+                    : 0;
+                weekStudyHours = trendValues.reduce((sum, h) => sum + h, 0);
             }
         } catch (err) {
             console.warn('Backend offline, using mock data:', err.message);
             goals = getMockGoals();
+            todayStudyHours = 2.5;
+            weekStudyHours  = 14.0;
         }
         renderAll();
     }
@@ -104,9 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const completedClass = isCompleted ? 'completed' : '';
         const typeLabel   = goal.goalType === 'DAILY' ? 'Daily' : 'Weekly';
 
-        // Mock a % progress — 0% if not done, 100% if done
-        // Real progress would come from actual study hours (Day 8 Analytics)
-        const progress = isCompleted ? 100 : 0;
+        // Real progress: compare actual study hours (from analytics) to target.
+        // DAILY goals compare against today's study hours from the weekly trend.
+        // WEEKLY goals compare against the sum of the last 7 days.
+        const studiedHours = goal.goalType === 'DAILY' ? todayStudyHours : weekStudyHours;
+        const rawProgress  = goal.targetHours > 0
+            ? (studiedHours / parseFloat(goal.targetHours)) * 100
+            : 0;
+        const progress     = Math.min(100, Math.round(rawProgress)); // cap at 100%
+        const progressLabel = `${studiedHours.toFixed(1)}h / ${goal.targetHours}h`;
 
         return `
         <div class="goal-card ${typeClass} ${completedClass}" data-id="${goal.goalId}">
@@ -120,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="goal-progress-wrap">
                 <span>Progress</span>
-                <span class="goal-target">${goal.targetHours}h target</span>
+                <span class="goal-target">${progressLabel}</span>
             </div>
             <div class="goal-progress-bar">
                 <div class="goal-progress-fill" style="width: ${progress}%"></div>
@@ -236,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let res;
             if (isEditMode) {
                 const id = goalIdInput.value;
-                res = await api.put(`/goals/${id}?userId=${userId}`, payload);
+                res = await api.put(`/goals/${id}`, payload);
             } else {
-                res = await api.post(`/goals?userId=${userId}`, payload);
+                res = await api.post('/goals', payload);
             }
 
             if (res.ok) {
@@ -281,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─────────────────────────────────────────────────────────────────────────
     async function handleToggle(id) {
         try {
-            const res = await api.patch(`/goals/${id}/toggle?userId=${userId}`);
+            const res = await api.patch(`/goals/${id}/toggle`);
             if (res.ok) {
                 await fetchGoals();
             } else {
@@ -303,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleDelete(id) {
         if (!confirm('Delete this goal?')) return;
         try {
-            const res = await api.delete(`/goals/${id}?userId=${userId}`);
+            const res = await api.delete(`/goals/${id}`);
             if (res.ok) {
                 await fetchGoals();
             } else {

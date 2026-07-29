@@ -8,7 +8,8 @@ import java.time.LocalTime;
 
 public class StudySessionRequest {
 
-    @NotNull(message = "User ID is required")
+    // userId is not required in the request body — it is always set by the
+    // controller from the validated JWT token (authentication.getDetails()).
     private Long userId;
 
     @NotNull(message = "Subject ID is required")

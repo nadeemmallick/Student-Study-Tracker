@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSubjects() {
         try {
-            const res = await api.get(`/subjects?userId=${userId}`);
+            const res = await api.get('/subjects');
             if (res.ok) {
                 subjects = await res.json();
                 populateSubjectDropdown();
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchSessions() {
         sessionsList.innerHTML = '<div class="loading-state">Loading history...</div>';
         try {
-            const res = await api.get(`/sessions?userId=${userId}`);
+            const res = await api.get('/sessions');
             if (res.ok) {
                 sessions = await res.json();
                 renderSessions();
@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         
         const sessionData = {
-            userId: userId,
             subjectId: parseInt(subjectSelect.value),
             date: dateInput.value,
             startTime: startInput.value + ':00',
@@ -151,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Are you sure you want to delete this session?')) return;
         
         try {
-            const res = await api.delete(`/sessions/${id}?userId=${userId}`);
+            const res = await api.delete(`/sessions/${id}`);
             if (res.ok) {
                 fetchSessions();
             } else {

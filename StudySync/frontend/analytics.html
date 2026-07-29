@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analytics & Reports | StudySync</title>
     <meta name="description" content="Track your study stats, visual trends, and subject distribution with StudySync Analytics." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/analytics.css" />
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,22 +16,49 @@
 <div class="app-layout">
 
     <!-- ── Sidebar ──────────────────────────────────────────── -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-icon">📚</div>
-            <span class="brand-name">StudySync</span>
+    <aside class="sidebar glass-panel" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-icon">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h2 class="brand-name">StudySync</h2>
+            <button class="btn-icon mobile-close" id="sidebarClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
 
-        <span class="nav-section-label">Navigation</span>
-        <a href="dashboard.html"     class="nav-link"><span class="nav-icon">🏠</span>Dashboard</a>
-        <a href="subjects.html"      class="nav-link"><span class="nav-icon">📖</span>Subjects</a>
-        <a href="study-session.html" class="nav-link"><span class="nav-icon">⏱️</span>Study Sessions</a>
-        <a href="assignments.html"   class="nav-link"><span class="nav-icon">📋</span>Assignments</a>
-        <a href="goals.html"         class="nav-link"><span class="nav-icon">🎯</span>Goals</a>
-        <a href="analytics.html"     class="nav-link active"><span class="nav-icon">📊</span>Analytics</a>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="subjects.html" class="nav-item">
+                <i class="fa-solid fa-book"></i>
+                <span>Subjects</span>
+            </a>
+            <a href="study-session.html" class="nav-item">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="assignments.html" class="nav-item">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Assignments</span>
+            </a>
+            <a href="goals.html" class="nav-item">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Goals</span>
+            </a>
+            <a href="analytics.html" class="nav-item active">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+        </nav>
 
         <div class="sidebar-footer">
-            <a href="#" class="nav-link" id="logoutBtn"><span class="nav-icon">🚪</span>Logout</a>
+            <a href="#" class="nav-item logout" id="logoutBtn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
         </div>
     </aside>
 
@@ -86,15 +115,19 @@
             <!-- Charts Grid -->
             <div class="charts-grid">
                 
-                <!-- Chart 1: Last 7 Days Trend -->
+                <!-- Chart 1: Study Trend -->
                 <div class="chart-card">
-                    <div class="chart-header">
+                    <div class="chart-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div class="chart-title-wrap">
                             <div>
-                                <div class="chart-title">📈 7-Day Study Trend</div>
-                                <div class="chart-subtitle">Daily hours studied over the past week</div>
+                                <div class="chart-title">📈 Study Trend</div>
+                                <div class="chart-subtitle">Daily hours studied over time</div>
                             </div>
                         </div>
+                        <select id="trendRange" style="border: 1px solid #ddd; border-radius: 8px; padding: 6px 12px; background: white; font-family: inherit; font-size: 0.9rem; cursor: pointer; color: #333; outline: none;">
+                            <option value="7">Last 7 Days</option>
+                            <option value="30">Last 30 Days</option>
+                        </select>
                     </div>
                     <div class="chart-container">
                         <canvas id="weeklyTrendChart"></canvas>

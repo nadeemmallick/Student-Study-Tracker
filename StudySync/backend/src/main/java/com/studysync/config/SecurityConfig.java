@@ -1,5 +1,6 @@
 package com.studysync.config;
 
+import com.studysync.security.JwtAuthFilter;
 import com.studysync.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -30,23 +32,28 @@ import java.util.List;
  *  - UserDetailsService wired → loads users from DB by email
  *  - DaoAuthenticationProvider wired → validates credentials against DB
  *
- * Future: Add JWT filter here (Day 10)
+ * Day 10 (done):
+ *  - JwtAuthFilter added – validates Bearer token on every request
+ *  - Route protection restored: only /api/auth/** is open; all other
+ *    /api/** routes require a valid JWT
+ *  - Removed per-controller @CrossOrigin(*) – CORS handled here only
  */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthFilter          jwtAuthFilter;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService,
+                          JwtAuthFilter jwtAuthFilter) {
         this.userDetailsService = userDetailsService;
+        this.jwtAuthFilter      = jwtAuthFilter;
     }
 
-    // ===== Public API Endpoints (no auth required) =====
-    // TODO Day 10: Restrict these once JWT is implemented.
-    // For now all /api/** is open to allow full frontend testing.
+    // ── Public routes (no JWT required) ──────────────────────────────────────
     private static final String[] PUBLIC_URLS = {
-            "/api/**",
+            "/api/auth/**",   // register and login
             "/error"
     };
 
@@ -56,27 +63,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF (REST API – stateless)
+            // Disable CSRF (REST API – stateless, JWT-based)
             .csrf(csrf -> csrf.disable())
 
-            // CORS configuration
+            // CORS configuration (central – no per-controller @CrossOrigin needed)
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-            // Session management – STATELESS for REST APIs
+            // Session management – STATELESS: JWT replaces server-side sessions
             .sessionManagement(session ->
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(PUBLIC_URLS).permitAll()   // Allow register/login
-                    .anyRequest().authenticated()               // Everything else requires login
+                    .requestMatchers(PUBLIC_URLS).permitAll()   // register / login
+                    .anyRequest().authenticated()               // everything else requires JWT
             )
 
-            // Wire our custom authentication provider
-            .authenticationProvider(authenticationProvider());
+            // Wire DaoAuthenticationProvider (used for credential validation in UserService)
+            .authenticationProvider(authenticationProvider())
 
-        // TODO Day 10: Add JWT authentication filter here
-        // http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            // Add JWT filter before Spring's username/password filter
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -97,6 +104,7 @@ public class SecurityConfig {
     /**
      * CORS Configuration
      * Allows frontend (VS Code Live Server on port 5500) to call the backend.
+     * Specific origins are required when allowCredentials is true.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -113,10 +121,10 @@ public class SecurityConfig {
         // Allowed HTTP methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 
-        // Allowed headers
+        // Allowed headers – include Authorization for JWT
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
 
-        // Allow credentials (cookies/auth headers)
+        // Allow credentials (needed for Authorization header + specific origins)
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

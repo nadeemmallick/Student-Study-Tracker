@@ -24,38 +24,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Mock Data Rendering ---
+    // --- Fetch Real Data from API ---
     
-    // Simulate fetching user data from local storage or API
-    const loadUserData = () => {
-        // Mock user from auth.js if exists, else fallback
+    const loadUserData = async () => {
         const sessionUser = window.auth.getSession();
+        const userName = sessionUser ? sessionUser.name : 'Student';
         
-        const mockUser = {
-            name: sessionUser ? sessionUser.name : 'Nadeem',
-            hoursToday: '2h 45m', // TODO: Fetch from real API when Analytics are done
-            currentStreak: 5,
-            pendingAssignments: 3,
-            weeklyGoalProgress: 65 // percentage
-        };
+        // Basic user info
+        document.getElementById('userNameDisplay').textContent = userName;
+        document.getElementById('welcomeName').textContent = userName;
 
-        // Inject into DOM
-        document.getElementById('userNameDisplay').textContent = mockUser.name;
-        document.getElementById('welcomeName').textContent = mockUser.name;
-        
-        document.getElementById('hoursToday').textContent = mockUser.hoursToday;
-        document.getElementById('currentStreak').textContent = mockUser.currentStreak + ' Days';
-        document.getElementById('pendingAssignments').textContent = mockUser.pendingAssignments;
-        
-        const goalEl = document.getElementById('weeklyGoal');
-        const progressEl = document.getElementById('weeklyGoalProgress');
-        
-        if (goalEl && progressEl) {
-            goalEl.textContent = mockUser.weeklyGoalProgress + '%';
-            // Animate progress bar fill after a small delay
-            setTimeout(() => {
-                progressEl.style.width = mockUser.weeklyGoalProgress + '%';
-            }, 300);
+        try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const res = await api.get(`/analytics?timezone=${encodeURIComponent(tz)}`);
+            if (res.ok) {
+                const data = await res.json();
+                
+                // hoursToday -> from weeklyTrend last value (today)
+                const trendValues = Object.values(data.weeklyTrend || {});
+                const todayHours = trendValues.length > 0 ? trendValues[trendValues.length - 1] : 0;
+                
+                // pending assignments
+                const pending = (data.totalAssignments || 0) - (data.completedAssignments || 0);
+                
+                // streak -> no real streak logic yet, we'll show total sessions
+                const sessionsCount = data.totalSessions || 0; 
+                
+                // goal progress -> completed vs total goals
+                const goalProgress = data.totalGoals > 0 
+                    ? Math.round((data.completedGoals / data.totalGoals) * 100) 
+                    : 0;
+
+                // Inject into DOM
+                document.getElementById('hoursToday').textContent = todayHours.toFixed(1) + 'h';
+                document.getElementById('currentStreak').textContent = sessionsCount + ' Sessions';
+                document.getElementById('pendingAssignments').textContent = pending;
+                
+                const goalEl = document.getElementById('weeklyGoal');
+                const progressEl = document.getElementById('weeklyGoalProgress');
+                
+                if (goalEl && progressEl) {
+                    goalEl.textContent = goalProgress + '%';
+                    setTimeout(() => {
+                        progressEl.style.width = goalProgress + '%';
+                    }, 300);
+                }
+            } else {
+                console.warn("Failed to fetch analytics for dashboard");
+            }
+        } catch(e) {
+            console.error("Dashboard error:", e);
         }
     };
 

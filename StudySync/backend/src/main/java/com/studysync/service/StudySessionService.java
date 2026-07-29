@@ -5,46 +5,63 @@ import com.studysync.dto.StudySessionResponse;
 import com.studysync.entity.StudySession;
 import com.studysync.entity.Subject;
 import com.studysync.entity.User;
+import com.studysync.exception.ResourceNotFoundException;
+import com.studysync.exception.UnauthorizedException;
 import com.studysync.repository.StudySessionRepository;
 import com.studysync.repository.SubjectRepository;
 import com.studysync.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * StudySessionService – business logic for Study Session management.
+ *
+ * Day 10: Added @Transactional, SLF4J logger, removed unused Duration import,
+ *         and replaced bare RuntimeException with typed exceptions:
+ *           ResourceNotFoundException → HTTP 404
+ *           UnauthorizedException     → HTTP 403
+ */
 @Service
 public class StudySessionService {
+
+    private static final Logger log = LoggerFactory.getLogger(StudySessionService.class);
 
     private final StudySessionRepository studySessionRepository;
     private final UserRepository userRepository;
     private final SubjectRepository subjectRepository;
 
-    public StudySessionService(StudySessionRepository studySessionRepository, 
-                               UserRepository userRepository, 
+    public StudySessionService(StudySessionRepository studySessionRepository,
+                               UserRepository userRepository,
                                SubjectRepository subjectRepository) {
         this.studySessionRepository = studySessionRepository;
         this.userRepository = userRepository;
         this.subjectRepository = subjectRepository;
     }
 
+    @Transactional
     public StudySessionResponse createSession(StudySessionRequest request) {
+        log.info("Creating study session for userId: {} — date: {}", request.getUserId(), request.getDate());
+
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + request.getUserId()));
 
         Subject subject = subjectRepository.findById(request.getSubjectId())
-                .orElseThrow(() -> new RuntimeException("Subject not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Subject not found with id: " + request.getSubjectId()));
 
-        // Validate Subject belongs to User
+        // Validate subject belongs to user
         if (!subject.getUser().getUserId().equals(user.getUserId())) {
-            throw new RuntimeException("Subject does not belong to the user");
+            throw new UnauthorizedException("Subject does not belong to this user");
         }
 
-        // Calculate Duration in minutes
-        long minutes = java.time.temporal.ChronoUnit.MINUTES.between(request.getStartTime(), request.getEndTime());
+        // Calculate duration in minutes; handle midnight crossover (e.g. 23:00 → 01:00)
+        long minutes = ChronoUnit.MINUTES.between(request.getStartTime(), request.getEndTime());
         if (minutes < 0) {
-            // Handle midnight crossover (e.g. 23:00 to 01:00 = -1320 + 1440 = 120 minutes)
             minutes += 24 * 60;
         }
 
@@ -59,23 +76,30 @@ public class StudySessionService {
                 .build();
 
         StudySession saved = studySessionRepository.save(session);
+        log.info("Study session created with id: {}", saved.getSessionId());
         return StudySessionResponse.fromEntity(saved);
     }
 
+    @Transactional(readOnly = true)
     public List<StudySessionResponse> getSessionsByUserId(Long userId) {
+        log.info("Fetching study sessions for userId: {}", userId);
         return studySessionRepository.findByUser_UserIdOrderByDateDescStartTimeDesc(userId).stream()
                 .map(StudySessionResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteSession(Long sessionId, Long userId) {
+        log.info("Deleting sessionId: {} for userId: {}", sessionId, userId);
+
         StudySession session = studySessionRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Study session not found with id: " + sessionId));
 
         if (!session.getUser().getUserId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new UnauthorizedException("Study session does not belong to this user");
         }
 
         studySessionRepository.delete(session);
+        log.info("Study session deleted: {}", sessionId);
     }
 }

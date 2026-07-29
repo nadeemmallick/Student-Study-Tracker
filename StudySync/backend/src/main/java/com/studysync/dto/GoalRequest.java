@@ -21,7 +21,7 @@ public class GoalRequest {
 
     @NotNull(message = "Target hours is required")
     @DecimalMin(value = "0.1", message = "Target hours must be at least 0.1")
-    @DecimalMax(value = "24.0", message = "Target hours cannot exceed 24")
+    @DecimalMax(value = "168.0", message = "Target hours cannot exceed 168 (1 week)")
     private BigDecimal targetHours;
 
     private Boolean completed;

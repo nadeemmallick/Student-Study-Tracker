@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,8 +49,8 @@ public class AnalyticsService {
      * Aggregates all analytics data for a specific user ID.
      */
     @Transactional(readOnly = true)
-    public AnalyticsResponse getUserAnalytics(Long userId) {
-        log.info("Generating analytics report for userId: {}", userId);
+    public AnalyticsResponse getUserAnalytics(Long userId, String timezone) {
+        log.info("Generating analytics report for userId: {}, timezone: {}", userId, timezone);
 
         // 1. Fetch user data entities
         List<StudySession> sessions = studySessionRepository.findByUser_UserIdOrderByDateDescStartTimeDesc(userId);
@@ -95,7 +96,14 @@ public class AnalyticsService {
                 .collect(Collectors.toList());
 
         // 4. Last 7 Days Weekly Trend
-        LocalDate today = LocalDate.now();
+        ZoneId zoneId;
+        try {
+            zoneId = ZoneId.of(timezone);
+        } catch (Exception e) {
+            log.warn("Invalid timezone '{}', falling back to UTC", timezone);
+            zoneId = ZoneId.of("UTC");
+        }
+        LocalDate today = LocalDate.now(zoneId);
         Map<String, Double> weeklyTrend = new LinkedHashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE (MM/dd)");
 
@@ -116,7 +124,27 @@ public class AnalyticsService {
             }
         }
 
-        // 5. Build and return response
+        // 5. Last 30 Days Monthly Trend
+        Map<String, Double> monthlyTrend = new LinkedHashMap<>();
+        DateTimeFormatter monthlyFormatter = DateTimeFormatter.ofPattern("MMM dd");
+        
+        for (int i = 29; i >= 0; i--) {
+            LocalDate d = today.minusDays(i);
+            monthlyTrend.put(d.format(monthlyFormatter), 0.0);
+        }
+
+        for (StudySession s : sessions) {
+            if (s.getDate() != null && !s.getDate().isBefore(today.minusDays(29)) && !s.getDate().isAfter(today)) {
+                String key = s.getDate().format(monthlyFormatter);
+                if (monthlyTrend.containsKey(key)) {
+                    double currentHrs = monthlyTrend.get(key);
+                    double addHrs = (s.getDurationMinutes() != null ? s.getDurationMinutes() : 0) / 60.0;
+                    monthlyTrend.put(key, Math.round((currentHrs + addHrs) * 10.0) / 10.0);
+                }
+            }
+        }
+
+        // 6. Build and return response
         return AnalyticsResponse.builder()
                 .totalStudyHours(totalHours)
                 .totalSessions(totalSessionsCount)
@@ -127,6 +155,7 @@ public class AnalyticsService {
                 .totalGoals(goals.size())
                 .subjectBreakdown(subjectStats)
                 .weeklyTrend(weeklyTrend)
+                .monthlyTrend(monthlyTrend)
                 .build();
     }
 }

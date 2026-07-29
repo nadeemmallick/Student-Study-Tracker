@@ -21,6 +21,7 @@ public class AnalyticsResponse {
     // Charts Data
     private List<SubjectStat> subjectBreakdown;
     private Map<String, Double> weeklyTrend; // Date -> Hours
+    private Map<String, Double> monthlyTrend; // Date -> Hours
 
     public AnalyticsResponse() {}
 
@@ -34,6 +35,7 @@ public class AnalyticsResponse {
         this.totalGoals = builder.totalGoals;
         this.subjectBreakdown = builder.subjectBreakdown;
         this.weeklyTrend = builder.weeklyTrend;
+        this.monthlyTrend = builder.monthlyTrend;
     }
 
     public static Builder builder() { return new Builder(); }
@@ -48,6 +50,7 @@ public class AnalyticsResponse {
         private Integer totalGoals = 0;
         private List<SubjectStat> subjectBreakdown;
         private Map<String, Double> weeklyTrend;
+        private Map<String, Double> monthlyTrend;
 
         public Builder totalStudyHours(Double v)        { this.totalStudyHours = v; return this; }
         public Builder totalSessions(Integer v)          { this.totalSessions = v; return this; }
@@ -58,6 +61,7 @@ public class AnalyticsResponse {
         public Builder totalGoals(Integer v)            { this.totalGoals = v; return this; }
         public Builder subjectBreakdown(List<SubjectStat> v) { this.subjectBreakdown = v; return this; }
         public Builder weeklyTrend(Map<String, Double> v)    { this.weeklyTrend = v; return this; }
+        public Builder monthlyTrend(Map<String, Double> v)   { this.monthlyTrend = v; return this; }
 
         public AnalyticsResponse build() { return new AnalyticsResponse(this); }
     }
@@ -99,4 +103,5 @@ public class AnalyticsResponse {
     public Integer getTotalGoals()              { return totalGoals; }
     public List<SubjectStat> getSubjectBreakdown() { return subjectBreakdown; }
     public Map<String, Double> getWeeklyTrend()  { return weeklyTrend; }
+    public Map<String, Double> getMonthlyTrend() { return monthlyTrend; }
 }

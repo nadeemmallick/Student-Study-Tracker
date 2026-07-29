@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchSubjects() {
         subjectsGrid.innerHTML = '<div class="loading-state">Loading subjects...</div>';
         try {
-            const res = await api.get(`/subjects?userId=${userId}`);
+            const res = await api.get('/subjects');
             if (res.ok) {
                 subjects = await res.json();
                 renderSubjects();
@@ -103,8 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const subjectData = {
             name: subjectNameInput.value.trim(),
             description: subjectDescInput.value.trim(),
-            colorCode: subjectColorInput.value,
-            userId: userId
+            colorCode: subjectColorInput.value
         };
 
         try {
@@ -134,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Are you sure you want to delete this subject?')) return;
         
         try {
-            const res = await api.delete(`/subjects/${id}?userId=${userId}`);
+            const res = await api.delete(`/subjects/${id}`);
             if (res.ok) {
                 fetchSubjects();
             } else {

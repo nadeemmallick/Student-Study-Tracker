@@ -23,24 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Chart Instances ───────────────────────────────────────────────────────
+    // ── Chart Instances & State ───────────────────────────────────────────────
     let trendChartInstance = null;
     let subjectChartInstance = null;
+    let currentAnalyticsData = null;
 
     // ── Fetch Analytics Data ──────────────────────────────────────────────────
     async function fetchAnalytics() {
         try {
-            const res = await api.get(`/analytics?userId=${userId}`);
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            const res = await api.get(`/analytics?timezone=${encodeURIComponent(tz)}`);
             if (res.ok) {
                 const data = await res.json();
+                currentAnalyticsData = data;
                 renderAnalytics(data);
             } else {
                 throw new Error('Failed to fetch analytics');
             }
         } catch (err) {
             console.warn('Backend offline, using fallback mock analytics:', err.message);
-            renderAnalytics(getMockAnalytics());
+            const mockData = getMockAnalytics();
+            currentAnalyticsData = mockData;
+            renderAnalytics(mockData);
         }
+    }
+
+    // ── UI Events ─────────────────────────────────────────────────────────────
+    const trendRangeSelect = document.getElementById('trendRange');
+    if (trendRangeSelect) {
+        trendRangeSelect.addEventListener('change', (e) => {
+            if (currentAnalyticsData) {
+                if (e.target.value === '30') {
+                    renderWeeklyTrendChart(currentAnalyticsData.monthlyTrend || {});
+                } else {
+                    renderWeeklyTrendChart(currentAnalyticsData.weeklyTrend || {});
+                }
+            }
+        });
     }
 
     // ── Render Analytics Page ─────────────────────────────────────────────────
@@ -69,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         renderSubjectBreakdownList(data.subjectBreakdown || [], data.totalStudyHours || 0);
     }
 
-    // ── Chart 1: 7-Day Study Trend (Bar Chart) ────────────────────────────────
+    // ── Chart 1: Study Trend (Bar Chart) ──────────────────────────────────────
     function renderWeeklyTrendChart(trendMap) {
         const ctx = document.getElementById('weeklyTrendChart').getContext('2d');
         const labels = Object.keys(trendMap);
@@ -257,7 +276,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 { subjectId: 3, subjectName: 'Chemistry', colorCode: '#059669', hours: 5.0 },
                 { subjectId: 4, subjectName: 'English', colorCode: '#d97706', hours: 3.0 }
             ],
-            weeklyTrend: weeklyMap
+            weeklyTrend: weeklyMap,
+            monthlyTrend: weeklyMap // mock just reuses weekly for simplicity
         };
     }
 

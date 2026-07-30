@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  *           UnauthorizedException     → HTTP 403
  */
 @Service
+@SuppressWarnings("null")
 public class StudySessionService {
 
     private static final Logger log = LoggerFactory.getLogger(StudySessionService.class);

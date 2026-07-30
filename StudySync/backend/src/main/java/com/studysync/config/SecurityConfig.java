@@ -115,7 +115,6 @@ public class SecurityConfig {
                 "http://localhost:5500",      // VS Code Live Server
                 "http://127.0.0.1:5500",     // VS Code Live Server (alternate)
                 "http://localhost:3000"       // React (future use)
-                // TODO: Add actual Netlify URL before deployment
         ));
 
         // Allowed HTTP methods

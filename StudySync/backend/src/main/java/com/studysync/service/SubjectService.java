@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  *         Added @Transactional and SLF4J logger.
  */
 @Service
+@SuppressWarnings("null")
 public class SubjectService {
 
     private static final Logger log = LoggerFactory.getLogger(SubjectService.class);

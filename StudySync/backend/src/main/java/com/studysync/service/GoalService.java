@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
  *  - Deleting a goal
  */
 @Service
+@SuppressWarnings("null")
 public class GoalService {
 
     private static final Logger log = LoggerFactory.getLogger(GoalService.class);

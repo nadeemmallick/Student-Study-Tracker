@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
  * Day 8: Analytics & Data Visualization Module
  */
 @Service
+@SuppressWarnings("null")
 public class AnalyticsService {
 
     private static final Logger log = LoggerFactory.getLogger(AnalyticsService.class);
@@ -144,7 +145,62 @@ public class AnalyticsService {
             }
         }
 
-        // 6. Build and return response
+        // 6. Study Streak Logic
+        int currentStreak = 0;
+        int bestStreak = 0;
+        int missedDays = 0;
+
+        List<LocalDate> studyDates = sessions.stream()
+                .map(StudySession::getDate)
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
+
+        // Missed days calculation (within the last 30 days)
+        int uniqueDaysInLast30 = (int) studyDates.stream()
+                .filter(d -> !d.isBefore(today.minusDays(29)) && !d.isAfter(today))
+                .count();
+        missedDays = 30 - uniqueDaysInLast30;
+
+        // Current Streak Calculation
+        if (!studyDates.isEmpty()) {
+            LocalDate expectedDate = today;
+            if (!studyDates.contains(today) && studyDates.contains(today.minusDays(1))) {
+                expectedDate = today.minusDays(1);
+            }
+            
+            for (LocalDate date : studyDates) {
+                if (date.isAfter(expectedDate)) continue;
+                if (date.equals(expectedDate)) {
+                    currentStreak++;
+                    expectedDate = expectedDate.minusDays(1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        // Best Streak Calculation
+        if (!studyDates.isEmpty()) {
+            List<LocalDate> ascDates = new ArrayList<>(studyDates);
+            Collections.reverse(ascDates);
+
+            int tempStreak = 1;
+            bestStreak = 1;
+            for (int i = 1; i < ascDates.size(); i++) {
+                if (ascDates.get(i).equals(ascDates.get(i-1).plusDays(1))) {
+                    tempStreak++;
+                } else {
+                    tempStreak = 1;
+                }
+                if (tempStreak > bestStreak) {
+                    bestStreak = tempStreak;
+                }
+            }
+        }
+
+        // 7. Build and return response
         return AnalyticsResponse.builder()
                 .totalStudyHours(totalHours)
                 .totalSessions(totalSessionsCount)
@@ -153,6 +209,9 @@ public class AnalyticsService {
                 .totalAssignments(assignments.size())
                 .completedGoals(completedGoalsCount)
                 .totalGoals(goals.size())
+                .currentStreak(currentStreak)
+                .bestStreak(bestStreak)
+                .missedDays(missedDays)
                 .subjectBreakdown(subjectStats)
                 .weeklyTrend(weeklyTrend)
                 .monthlyTrend(monthlyTrend)

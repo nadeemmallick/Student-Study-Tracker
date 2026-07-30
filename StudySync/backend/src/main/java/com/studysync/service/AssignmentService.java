@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
  *           UnauthorizedException     → HTTP 403
  */
 @Service
+@SuppressWarnings("null")
 public class AssignmentService {
 
     private static final Logger log = LoggerFactory.getLogger(AssignmentService.class);

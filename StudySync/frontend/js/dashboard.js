@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // pending assignments
                 const pending = (data.totalAssignments || 0) - (data.completedAssignments || 0);
                 
-                // streak -> no real streak logic yet, we'll show total sessions
-                const sessionsCount = data.totalSessions || 0; 
+                // streak logic
+                const currentStreak = data.currentStreak || 0;
+                const bestStreak = data.bestStreak || 0;
                 
                 // goal progress -> completed vs total goals
                 const goalProgress = data.totalGoals > 0 
@@ -57,7 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Inject into DOM
                 document.getElementById('hoursToday').textContent = todayHours.toFixed(1) + 'h';
-                document.getElementById('currentStreak').textContent = sessionsCount + ' Sessions';
+                document.getElementById('currentStreak').textContent = currentStreak + (currentStreak === 1 ? ' Day' : ' Days');
+                const bestStreakBadge = document.getElementById('bestStreakBadge');
+                if (bestStreakBadge) {
+                    bestStreakBadge.textContent = 'Current best: ' + bestStreak;
+                }
                 document.getElementById('pendingAssignments').textContent = pending;
                 
                 const goalEl = document.getElementById('weeklyGoal');

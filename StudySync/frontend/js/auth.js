@@ -5,7 +5,10 @@
 
 // ── Redirect already logged-in users straight to dashboard ──────────────────
 if (window.auth.isLoggedIn()) {
-    window.location.href = "dashboard.html";
+    const path = window.location.pathname;
+    if (path.endsWith('login.html') || path.endsWith('register.html') || path.endsWith('/') || path.endsWith('index.html')) {
+        window.location.href = "dashboard.html";
+    }
 }
 
 // ── REGISTER FORM ────────────────────────────────────────────────────────────

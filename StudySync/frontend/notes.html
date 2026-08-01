@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes | StudySync</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/notes.css">
+</head>
+<body>
+    <div class="app-layout">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+                    <span>StudySync</span>
+                </div>
+                <button class="mobile-toggle" id="sidebarClose"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="subjects.html" class="nav-item">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="study-session.html" class="nav-item">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span>Study Sessions</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="goals.html" class="nav-item">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Goals</span>
+                </a>
+                <a href="notes.html" class="nav-item active">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    <span>Notes</span>
+                </a>
+                <a href="analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Analytics</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Log Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-toggle" id="sidebarOpen"><i class="fa-solid fa-bars"></i></button>
+                    <h1>My Notes</h1>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar glass-panel">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search notes...">
+                    </div>
+                    <div class="user-profile">
+                        <div class="avatar" id="headerAvatar">A</div>
+                        <span id="userNameDisplay">Student</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="page-header">
+                    <h2>All Notes</h2>
+                    <button class="btn btn-primary" id="addNoteBtn">
+                        <i class="fa-solid fa-plus"></i> New Note
+                    </button>
+                </div>
+
+                <!-- Notes Grid -->
+                <div class="notes-grid" id="notesGrid">
+                    <!-- Loading or Empty state will be injected here -->
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fa-solid fa-note-sticky"></i></div>
+                        <h3>No notes yet</h3>
+                        <p>Click 'New Note' to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Note Modal -->
+    <div class="modal-overlay" id="noteModal">
+        <div class="modal glass-panel">
+            <div class="modal-header">
+                <h3 id="modalTitle">New Note</h3>
+                <button class="close-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="noteForm">
+                <input type="hidden" id="noteId">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" class="form-control" required placeholder="Give your note a title">
+                </div>
+                <div class="form-group">
+                    <label for="subjectId">Subject (Optional)</label>
+                    <select id="subjectId" class="form-control">
+                        <option value="">No Subject</option>
+                        <!-- Dynamic Subjects -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" class="form-control" rows="8" placeholder="Start typing..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelNoteBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/notes.js"></script>
+</body>
+</html>

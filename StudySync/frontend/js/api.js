@@ -41,12 +41,12 @@ async function apiFetch(endpoint, method = "GET", body = null) {
 
     const response = await fetch(`${API_BASE}${endpoint}`, options);
 
-    // Handle 401 — token expired or invalid → redirect to login
-    if (response.status === 401) {
+    // Handle 401/403 — token expired or invalid/user deleted → redirect to login
+    if (response.status === 401 || response.status === 403) {
         localStorage.removeItem("studysync_user");
         localStorage.removeItem("studysync_token");
         window.location.href = "login.html";
-        return { ok: false, status: 401, json: async () => ({}) };
+        return { ok: false, status: response.status, json: async () => ({}) };
     }
 
     // Some endpoints return 204 No Content

@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const userName = sessionUser ? sessionUser.name : 'Student';
         
         // Basic user info
-        document.getElementById('userNameDisplay').textContent = userName;
-        document.getElementById('welcomeName').textContent = userName;
+        if (document.getElementById('userNameDisplay')) document.getElementById('userNameDisplay').textContent = userName;
+        if (document.getElementById('welcomeName')) document.getElementById('welcomeName').textContent = userName;
 
         try {
             const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;

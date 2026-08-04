@@ -13,9 +13,15 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    /** Find a user by their email address (used for login + UserDetailsService). */
+    /** Find a user by their email address (case-insensitive). */
+    Optional<User> findByEmailIgnoreCase(String email);
+
+    /** Find a user by their email address (exact match). */
     Optional<User> findByEmail(String email);
 
-    /** Check if an email is already registered (used during registration). */
+    /** Check if an email is already registered (case-insensitive). */
+    boolean existsByEmailIgnoreCase(String email);
+
+    /** Check if an email is already registered (exact match). */
     boolean existsByEmail(String email);
 }

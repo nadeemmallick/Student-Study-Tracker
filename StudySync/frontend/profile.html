@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile | StudySync</title>
+    <meta name="description" content="View and update your StudySync profile and change your password." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/goals.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+</head>
+<body>
+
+<div class="app-layout">
+
+    <!-- ── Sidebar ──────────────────────────────────────────── -->
+    <aside class="sidebar glass-panel" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand-icon">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h2 class="brand-name">StudySync</h2>
+            <button class="btn-icon mobile-close" id="sidebarClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="subjects.html" class="nav-item">
+                <i class="fa-solid fa-book"></i>
+                <span>Subjects</span>
+            </a>
+            <a href="study-session.html" class="nav-item">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span>Sessions</span>
+            </a>
+            <a href="assignments.html" class="nav-item">
+                <i class="fa-solid fa-clipboard-list"></i>
+                <span>Assignments</span>
+            </a>
+            <a href="goals.html" class="nav-item">
+                <i class="fa-solid fa-bullseye"></i>
+                <span>Goals</span>
+            </a>
+            <a href="notes.html" class="nav-item">
+                <i class="fa-solid fa-note-sticky"></i>
+                <span>Notes</span>
+            </a>
+            <a href="analytics.html" class="nav-item">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Analytics</span>
+            </a>
+            <a href="profile.html" class="nav-item active">
+                <i class="fa-solid fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item logout" id="logoutBtn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- ── Main Content ──────────────────────────────────────── -->
+    <div class="main-content">
+
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="btn-icon mobile-open" id="sidebarOpen">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <div class="page-title">👤 Profile & Settings</div>
+                    <div class="page-subtitle">Manage your account information</div>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="user-chip">
+                    <div class="avatar-sm" id="headerAvatar">?</div>
+                    <span id="headerName">...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Body -->
+        <div class="page-body">
+
+            <!-- Alert Banner -->
+            <div class="alert-banner" id="alertBanner" style="display:none;"></div>
+
+            <!-- Profile Grid -->
+            <div class="profile-grid">
+
+                <!-- ── Avatar Card ── -->
+                <div class="profile-avatar-card glass-card">
+                    <div class="big-avatar" id="bigAvatar">?</div>
+                    <h2 class="profile-display-name" id="displayName">Loading...</h2>
+                    <p class="profile-display-email" id="displayEmail">...</p>
+                    <div class="profile-since">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>Member of StudySync</span>
+                    </div>
+                </div>
+
+                <!-- ── Edit Profile Card ── -->
+                <div class="profile-form-card glass-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-pen"></i>
+                        <h3>Edit Profile</h3>
+                    </div>
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label class="form-label" for="profileName">Full Name</label>
+                            <input type="text" id="profileName" class="form-control" placeholder="Your full name" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="profileEmail">Email Address</label>
+                            <input type="email" id="profileEmail" class="form-control" placeholder="your@email.com" required />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-primary" id="saveProfileBtn">
+                                <i class="fa-solid fa-check"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ── Change Password Card ── -->
+                <div class="profile-form-card glass-card">
+                    <div class="card-header">
+                        <i class="fa-solid fa-lock"></i>
+                        <h3>Change Password</h3>
+                    </div>
+                    <form id="passwordForm">
+                        <div class="form-group">
+                            <label class="form-label" for="currentPassword">Current Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" required />
+                                <button type="button" class="toggle-pw" data-target="currentPassword"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newPassword">New Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="newPassword" class="form-control" placeholder="Min 6 characters" required />
+                                <button type="button" class="toggle-pw" data-target="newPassword"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="confirmPassword">Confirm New Password</label>
+                            <div class="input-wrap">
+                                <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat new password" required />
+                                <button type="button" class="toggle-pw" data-target="confirmPassword"><i class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-primary" id="savePasswordBtn">
+                                <i class="fa-solid fa-key"></i> Change Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ── Danger Zone ── -->
+                <div class="profile-form-card glass-card danger-zone">
+                    <div class="card-header">
+                        <i class="fa-solid fa-triangle-exclamation" style="color: var(--danger);"></i>
+                        <h3>Session</h3>
+                    </div>
+                    <p class="danger-desc">Sign out of your account on this device.</p>
+                    <button class="btn-danger" id="logoutBtnCard">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/profile.js"></script>
+</body>
+</html>

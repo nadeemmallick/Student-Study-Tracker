@@ -25,8 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const init = async () => {
         const sessionUser = window.auth.getSession();
         if (sessionUser) {
-            document.getElementById('userNameDisplay').textContent = sessionUser.name;
-            document.getElementById('headerAvatar').textContent = sessionUser.name.charAt(0).toUpperCase();
+            const userEl = document.getElementById('userNameDisplay');
+            if (userEl) userEl.textContent = sessionUser.name;
+            const avatarEl = document.getElementById('headerAvatar');
+            if (avatarEl) avatarEl.textContent = sessionUser.name.charAt(0).toUpperCase();
         }
         
         await loadSubjects();

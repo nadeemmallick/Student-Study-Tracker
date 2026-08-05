@@ -1,19 +1,22 @@
 /* =========================================================
    assignments.css – Assignment Tracker styles (Kanban)
+   Inherits global design system from style.css & dashboard.css
 ========================================================= */
 
 .assignments-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
-    margin-top: 1.5rem;
-    align-items: start; /* Don't stretch columns to full height if empty */
+    align-items: start;
 }
 
 .status-column {
-    padding: 1.25rem;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
     min-height: 500px;
 }
 
@@ -26,7 +29,7 @@
 .column-header h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -40,19 +43,20 @@
 
 /* ── Task Card ──────────────────────────────────────────────────────────── */
 .task-card {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 1rem;
-    transition: all 0.2s;
+    padding: 1.25rem;
+    transition: all var(--transition-speed);
     position: relative;
     overflow: hidden;
 }
 
 .task-card:hover {
-    background: rgba(255,255,255,0.05);
-    transform: translateY(-2px);
-    border-color: rgba(124,58,237,0.3);
+    background: var(--bg-card-hover);
+    transform: translateY(-3px);
+    border-color: rgba(124, 58, 237, 0.35);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 .task-card-header {
@@ -65,7 +69,7 @@
 .task-title {
     font-size: 1rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
     margin: 0;
     flex: 1;
     padding-right: 0.5rem;
@@ -78,8 +82,8 @@
 
 .priority-badge {
     font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -87,18 +91,21 @@
 }
 
 .priority-high {
-    background: rgba(239, 68, 68, 0.2);
-    color: #ef4444;
+    background: var(--error-bg);
+    color: var(--error);
+    border: 1px solid rgba(248, 113, 113, 0.3);
 }
 
 .priority-medium {
-    background: rgba(245, 158, 11, 0.2);
-    color: #f59e0b;
+    background: var(--warning-bg);
+    color: var(--warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 .priority-low {
-    background: rgba(16, 185, 129, 0.2);
-    color: #10b981;
+    background: var(--success-bg);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .task-subject {
@@ -106,8 +113,8 @@
     font-weight: 500;
     margin-bottom: 0.5rem;
     display: inline-block;
-    padding: 0.1rem 0.4rem;
-    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
 }
 
 .task-desc {
@@ -125,7 +132,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid var(--border);
     padding-top: 0.75rem;
 }
 
@@ -138,7 +145,7 @@
 }
 
 .task-due.overdue {
-    color: #ef4444;
+    color: var(--error);
 }
 
 .task-actions {
@@ -154,122 +161,38 @@
     height: 28px;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s;
 }
 
 .task-actions .action-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
 }
 
 .task-actions .action-btn.delete:hover {
-    background: rgba(239,68,68,0.2);
-    color: #ef4444;
+    background: var(--error-bg);
+    color: var(--error);
 }
 
 .task-actions .action-btn.move:hover {
-    background: rgba(124,58,237,0.2);
-    color: var(--accent);
+    background: rgba(124, 58, 237, 0.15);
+    color: #a78bfa;
 }
 
-.empty-state {
+.empty-column {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 3rem 1rem;
     color: var(--text-muted);
     font-size: 0.9rem;
+    border: 1px dashed var(--border);
+    border-radius: 12px;
 }
 
 .loading-state {
     text-align: center;
     padding: 2rem;
     color: var(--text-muted);
-}
-
-/* ── Form Specifics ──────────────────────────────────────────────────────── */
-.form-row {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
-}
-
-.form-group.half {
-    flex: 1;
-    margin-bottom: 0;
-}
-
-.select-wrap {
-    position: relative;
-}
-
-.select-wrap select {
-    appearance: none;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    color: #fff;
-    outline: none;
-    font-family: inherit;
-    cursor: pointer;
-}
-
-.select-wrap select:focus {
-    border-color: var(--accent);
-}
-
-.select-wrap .select-icon {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    pointer-events: none;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.form-group input, .form-group textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    color: #fff;
-    outline: none;
-    font-family: inherit;
-    transition: all 0.2s;
-}
-
-.form-group textarea {
-    resize: vertical;
-}
-
-.form-group input:focus, .form-group textarea:focus {
-    border-color: var(--accent);
-    background: rgba(124,58,237,0.05);
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .assignments-container {
-        grid-template-columns: 1fr;
-    }
 }

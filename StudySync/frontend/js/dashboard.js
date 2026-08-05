@@ -56,14 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? Math.round((data.completedGoals / data.totalGoals) * 100) 
                     : 0;
 
-                // Inject into DOM
-                document.getElementById('hoursToday').textContent = todayHours.toFixed(1) + 'h';
-                document.getElementById('currentStreak').textContent = currentStreak + (currentStreak === 1 ? ' Day' : ' Days');
+                // Inject into DOM safely
+                const hoursEl = document.getElementById('hoursToday');
+                if (hoursEl) hoursEl.textContent = todayHours.toFixed(1) + 'h';
+
+                const streakEl = document.getElementById('currentStreak');
+                if (streakEl) streakEl.textContent = currentStreak + (currentStreak === 1 ? ' Day' : ' Days');
+
                 const bestStreakBadge = document.getElementById('bestStreakBadge');
                 if (bestStreakBadge) {
                     bestStreakBadge.textContent = 'Current best: ' + bestStreak;
                 }
-                document.getElementById('pendingAssignments').textContent = pending;
+
+                const pendingEl = document.getElementById('pendingAssignments');
+                if (pendingEl) pendingEl.textContent = pending;
                 
                 const goalEl = document.getElementById('weeklyGoal');
                 const progressEl = document.getElementById('weeklyGoalProgress');

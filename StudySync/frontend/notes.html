@@ -7,36 +7,44 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
     <!-- Base Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/notes.css">
 </head>
 <body>
-    <div class="app-layout">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="app-container">
         
-        <!-- Sidebar -->
+        <!-- Master Sidebar -->
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
-                <div class="logo">
-                    <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <span>StudySync</span>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
-                <button class="mobile-toggle" id="sidebarClose"><i class="fa-solid fa-xmark"></i></button>
+                <h2 class="brand-name">StudySync</h2>
+                <button class="btn-icon mobile-close" id="sidebarClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
-            
+
             <nav class="sidebar-nav">
                 <a href="dashboard.html" class="nav-item">
                     <i class="fa-solid fa-house"></i>
                     <span>Dashboard</span>
                 </a>
                 <a href="subjects.html" class="nav-item">
-                    <i class="fa-solid fa-book-open"></i>
+                    <i class="fa-solid fa-book"></i>
                     <span>Subjects</span>
                 </a>
                 <a href="study-session.html" class="nav-item">
                     <i class="fa-solid fa-stopwatch"></i>
-                    <span>Study Sessions</span>
+                    <span>Sessions</span>
                 </a>
                 <a href="assignments.html" class="nav-item">
                     <i class="fa-solid fa-clipboard-list"></i>
@@ -51,7 +59,7 @@
                     <span>Notes</span>
                 </a>
                 <a href="analytics.html" class="nav-item">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <i class="fa-solid fa-chart-pie"></i>
                     <span>Analytics</span>
                 </a>
                 <a href="profile.html" class="nav-item">
@@ -61,44 +69,59 @@
             </nav>
 
             <div class="sidebar-footer">
-                <button id="logoutBtn" class="logout-btn">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Log Out</span>
+                <div class="user-profile">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info">
+                        <p class="user-name" id="userNameDisplay">Loading...</p>
+                        <p class="user-role">Student</p>
+                    </div>
+                </div>
+                <button class="btn-icon logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
                 </button>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
-            <header class="top-header">
-                <div class="header-left">
-                    <button class="mobile-toggle" id="sidebarOpen"><i class="fa-solid fa-bars"></i></button>
-                    <h1>My Notes</h1>
-                </div>
-                <div class="header-right">
-                    <div class="search-bar glass-panel">
-                        <i class="fa-solid fa-search"></i>
+            <!-- Master Topbar -->
+            <header class="topbar glass-panel">
+                <div class="topbar-left">
+                    <button class="btn-icon mobile-menu" id="sidebarOpen">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
                         <input type="text" id="searchInput" placeholder="Search notes...">
                     </div>
-                    <div class="user-profile">
-                        <div class="avatar" id="headerAvatar">A</div>
-                        <span id="userNameDisplay">Student</span>
-                    </div>
+                </div>
+                
+                <div class="topbar-right">
+                    <button class="btn-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
                 </div>
             </header>
 
             <div class="dashboard-content">
-                <div class="page-header">
-                    <h2>All Notes</h2>
-                    <button class="btn btn-primary" id="addNoteBtn">
-                        <i class="fa-solid fa-plus"></i> New Note
-                    </button>
+                <div class="welcome-section">
+                    <div>
+                        <h1 class="page-title text-gradient">My Notes 📝</h1>
+                        <p class="page-subtitle">Organize and search your study notes.</p>
+                    </div>
+                    <div class="quick-actions">
+                        <button class="btn btn-primary" id="addNoteBtn">
+                            <i class="fa-solid fa-plus"></i> New Note
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Notes Grid -->
+                <!-- Notes Grid (Full Width) -->
                 <div class="notes-grid" id="notesGrid">
-                    <!-- Loading or Empty state will be injected here -->
+                    <!-- Loading or Empty state injected via JS -->
                     <div class="empty-state">
                         <div class="empty-icon"><i class="fa-solid fa-note-sticky"></i></div>
                         <h3>No notes yet</h3>
@@ -111,10 +134,10 @@
 
     <!-- Note Modal -->
     <div class="modal-overlay" id="noteModal">
-        <div class="modal glass-panel">
+        <div class="modal-content glass-panel">
             <div class="modal-header">
                 <h3 id="modalTitle">New Note</h3>
-                <button class="close-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+                <button class="btn-icon" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="noteForm">
                 <input type="hidden" id="noteId">
@@ -131,7 +154,7 @@
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea id="content" class="form-control" rows="8" placeholder="Start typing..."></textarea>
+                    <textarea id="content" class="form-control" rows="6" placeholder="Start typing..."></textarea>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="cancelNoteBtn">Cancel</button>

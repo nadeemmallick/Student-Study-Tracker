@@ -5,179 +5,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analytics & Reports | StudySync</title>
     <meta name="description" content="Track your study stats, visual trends, and subject distribution with StudySync Analytics." />
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/analytics.css" />
+    
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<div class="app-layout">
+    <!-- Animated Background -->
+    <div class="bg-gradient"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-    <!-- ── Sidebar ──────────────────────────────────────────── -->
-    <aside class="sidebar glass-panel" id="sidebar">
-        <div class="sidebar-header">
-            <div class="brand-icon">
-                <i class="fa-solid fa-bolt"></i>
-            </div>
-            <h2 class="brand-name">StudySync</h2>
-            <button class="btn-icon mobile-close" id="sidebarClose">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
+    <div class="app-container">
 
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item">
-                <i class="fa-solid fa-house"></i>
-                <span>Dashboard</span>
-            </a>
-            <a href="subjects.html" class="nav-item">
-                <i class="fa-solid fa-book"></i>
-                <span>Subjects</span>
-            </a>
-            <a href="study-session.html" class="nav-item">
-                <i class="fa-solid fa-stopwatch"></i>
-                <span>Sessions</span>
-            </a>
-            <a href="assignments.html" class="nav-item">
-                <i class="fa-solid fa-clipboard-list"></i>
-                <span>Assignments</span>
-            </a>
-            <a href="goals.html" class="nav-item">
-                <i class="fa-solid fa-bullseye"></i>
-                <span>Goals</span>
-            </a>
-            <a href="notes.html" class="nav-item">
-                <i class="fa-solid fa-note-sticky"></i>
-                <span>Notes</span>
-            </a>
-            <a href="analytics.html" class="nav-item active">
-                <i class="fa-solid fa-chart-pie"></i>
-                <span>Analytics</span>
-            </a>
-            <a href="profile.html" class="nav-item">
-                <i class="fa-solid fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </nav>
-
-        <div class="sidebar-footer">
-            <a href="#" class="nav-item logout" id="logoutBtn">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Logout</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- ── Main Content ──────────────────────────────────────── -->
-    <div class="main-content">
-
-        <!-- Topbar -->
-        <header class="topbar">
-            <div class="topbar-left">
-                <div>
-                    <div class="page-title">📊 Analytics & Insights</div>
-                    <div class="page-subtitle">Visual reports of your study habits and productivity</div>
+        <!-- Master Sidebar -->
+        <aside class="sidebar glass-panel" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
-            </div>
-        </header>
-
-        <!-- Page Body -->
-        <div class="page-body">
-
-            <!-- Stats Overview Row -->
-            <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-icon purple">⏱️</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="statTotalHours">0.0h</div>
-                        <div class="stat-label">Total Study Time</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon cyan">📝</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="statTotalSessions">0</div>
-                        <div class="stat-label">Sessions Completed</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon green">✅</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="statAssignmentRatio">0/0</div>
-                        <div class="stat-label">Assignments Done</div>
-                        <div class="stat-subtext" id="statAssignmentPct">0% completion</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon yellow">🎯</div>
-                    <div class="stat-info">
-                        <div class="stat-value" id="statGoalRatio">0/0</div>
-                        <div class="stat-label">Goals Reached</div>
-                        <div class="stat-subtext" id="statGoalPct">0% success rate</div>
-                    </div>
-                </div>
+                <h2 class="brand-name">StudySync</h2>
+                <button class="btn-icon mobile-close" id="sidebarClose">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
 
-            <!-- Charts Grid -->
-            <div class="charts-grid">
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="subjects.html" class="nav-item">
+                    <i class="fa-solid fa-book"></i>
+                    <span>Subjects</span>
+                </a>
+                <a href="study-session.html" class="nav-item">
+                    <i class="fa-solid fa-stopwatch"></i>
+                    <span>Sessions</span>
+                </a>
+                <a href="assignments.html" class="nav-item">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="goals.html" class="nav-item">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Goals</span>
+                </a>
+                <a href="notes.html" class="nav-item">
+                    <i class="fa-solid fa-note-sticky"></i>
+                    <span>Notes</span>
+                </a>
+                <a href="analytics.html" class="nav-item active">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Analytics</span>
+                </a>
+                <a href="profile.html" class="nav-item">
+                    <i class="fa-solid fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="user-info">
+                        <p class="user-name" id="userNameDisplay">Loading...</p>
+                        <p class="user-role">Student</p>
+                    </div>
+                </div>
+                <button class="btn-icon logout-btn" id="logoutBtn" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Master Topbar -->
+            <header class="topbar glass-panel">
+                <div class="topbar-left">
+                    <button class="btn-icon mobile-menu" id="sidebarOpen">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="search-bar">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" placeholder="Search analytics...">
+                    </div>
+                </div>
                 
-                <!-- Chart 1: Study Trend -->
-                <div class="chart-card">
-                    <div class="chart-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div class="chart-title-wrap">
-                            <div>
-                                <div class="chart-title">📈 Study Trend</div>
-                                <div class="chart-subtitle">Daily hours studied over time</div>
-                            </div>
-                        </div>
-                        <select id="trendRange" style="border: 1px solid #ddd; border-radius: 8px; padding: 6px 12px; background: white; font-family: inherit; font-size: 0.9rem; cursor: pointer; color: #333; outline: none;">
-                            <option value="7">Last 7 Days</option>
-                            <option value="30">Last 30 Days</option>
-                        </select>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="weeklyTrendChart"></canvas>
-                    </div>
+                <div class="topbar-right">
+                    <button class="btn-icon">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+                    <button class="btn-icon">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
                 </div>
+            </header>
 
-                <!-- Chart 2: Subject Distribution -->
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title-wrap">
-                            <div>
-                                <div class="chart-title">🍩 Time by Subject</div>
-                                <div class="chart-subtitle">Hours allocated per subject</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="subjectDistributionChart"></canvas>
-                    </div>
-                </div>
+            <div class="dashboard-content">
 
-            </div>
-
-            <!-- Subject Breakdown Section -->
-            <div class="breakdown-section">
-                <div class="chart-title-wrap">
+                <div class="welcome-section">
                     <div>
-                        <div class="chart-title">📚 Subject Hours Breakdown</div>
-                        <div class="chart-subtitle">Detailed breakdown of study time per registered subject</div>
+                        <h1 class="page-title text-gradient">Analytics & Reports 📊</h1>
+                        <p class="page-subtitle">Visual reports of your study habits and productivity.</p>
                     </div>
                 </div>
 
-                <div class="breakdown-list" id="subjectBreakdownList">
-                    <div class="empty-chart-state">Loading subject statistics...</div>
+                <!-- Stats Overview Row -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(124,58,237,0.2); color: #a78bfa;">⏱️</div>
+                        </div>
+                        <div class="stat-value" id="statTotalHours">0.0h</div>
+                        <div class="stat-label" style="color: var(--text-muted);">Total Study Time</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(59,130,246,0.2); color: #60a5fa;">📝</div>
+                        </div>
+                        <div class="stat-value" id="statTotalSessions">0</div>
+                        <div class="stat-label" style="color: var(--text-muted);">Sessions Completed</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(16,185,129,0.2); color: #34d399;">✅</div>
+                        </div>
+                        <div class="stat-value" id="statAssignmentRatio">0/0</div>
+                        <div class="stat-label" style="color: var(--text-muted);">Assignments Done</div>
+                        <div class="stat-subtext" id="statAssignmentPct" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% completion</div>
+                    </div>
+                    <div class="stat-card glass-panel">
+                        <div class="stat-header">
+                            <div class="stat-icon" style="background: rgba(245,158,11,0.2); color: #fbbf24;">🎯</div>
+                        </div>
+                        <div class="stat-value" id="statGoalRatio">0/0</div>
+                        <div class="stat-label" style="color: var(--text-muted);">Goals Reached</div>
+                        <div class="stat-subtext" id="statGoalPct" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% success rate</div>
+                    </div>
                 </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    
+                    <!-- Chart 1: Study Trend -->
+                    <div class="chart-card glass-panel">
+                        <div class="chart-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="chart-title-wrap">
+                                <div>
+                                    <div class="chart-title" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📈 Study Trend</div>
+                                    <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Daily hours studied over time</div>
+                                </div>
+                            </div>
+                            <select id="trendRange" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                            </select>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem;">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Chart 2: Subject Distribution -->
+                    <div class="chart-card glass-panel">
+                        <div class="chart-title-wrap">
+                            <div>
+                                <div class="chart-title" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📚 Subject Breakdown</div>
+                                <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Hours per subject</div>
+                            </div>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem;">
+                            <canvas id="subjectChart"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
+        </main>
+    </div>
 
-        </div><!-- /page-body -->
-    </div><!-- /main-content -->
-</div><!-- /app-layout -->
-
-<script src="js/api.js"></script>
-<script src="js/analytics.js"></script>
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/analytics.js"></script>
 </body>
 </html>

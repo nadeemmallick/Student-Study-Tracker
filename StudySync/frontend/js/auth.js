@@ -1,6 +1,5 @@
 /* =========================================================
-   auth.js – Register & Login form handlers
-   Wires the HTML forms to the backend REST API via api.js
+   auth.js – Register, Login & Universal App Shell Listeners
 ========================================================= */
 
 // ── Redirect already logged-in users straight to dashboard ──────────────────
@@ -10,6 +9,62 @@ if (window.auth.isLoggedIn()) {
         window.location.href = "dashboard.html";
     }
 }
+
+// ── Global Shell Initialization (Runs on all pages) ─────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Set User Profile Info
+    const session = window.auth.getSession();
+    if (session) {
+        const userNameEl = document.getElementById('userNameDisplay');
+        if (userNameEl) userNameEl.textContent = session.name || 'Student';
+        
+        const welcomeNameEl = document.getElementById('welcomeName');
+        if (welcomeNameEl) welcomeNameEl.textContent = session.name || 'Student';
+
+        const avatarEl = document.getElementById('headerAvatar');
+        if (avatarEl && session.name) avatarEl.textContent = session.name.charAt(0).toUpperCase();
+    }
+
+    // 2. Mobile Sidebar Drawer Controls
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOpen = document.getElementById('sidebarOpen');
+    const sidebarClose = document.getElementById('sidebarClose');
+
+    if (sidebarOpen && sidebar) {
+        sidebarOpen.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.add('open');
+        });
+    }
+
+    if (sidebarClose && sidebar) {
+        sidebarClose.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.remove('open');
+        });
+    }
+
+    // Close sidebar on click outside in mobile view
+    document.addEventListener('click', (e) => {
+        if (sidebar && sidebar.classList.contains('open')) {
+            if (!sidebar.contains(e.target) && sidebarOpen && !sidebarOpen.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        }
+    });
+
+    // 3. Universal Logout Handler
+    const logoutBtns = document.querySelectorAll('#logoutBtn, .logout-btn');
+    logoutBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to log out?')) {
+                window.auth.clearSession();
+                window.location.href = 'login.html';
+            }
+        });
+    });
+});
 
 // ── REGISTER FORM ────────────────────────────────────────────────────────────
 const registerForm = document.getElementById("register-form");
@@ -23,11 +78,9 @@ if (registerForm) {
         const errorEl  = document.getElementById("reg-error");
         const btnEl    = document.getElementById("reg-btn");
 
-        // Clear previous error
         errorEl.textContent = "";
         errorEl.style.display = "none";
 
-        // Loading state
         btnEl.disabled = true;
         btnEl.textContent = "Creating account…";
 
@@ -39,7 +92,6 @@ if (registerForm) {
                 throw new Error(result.message || "Registration failed");
             }
 
-            // Save session and redirect to dashboard
             window.auth.saveSession(result.data);
             window.location.href = "dashboard.html";
 
@@ -64,11 +116,9 @@ if (loginForm) {
         const errorEl  = document.getElementById("login-error");
         const btnEl    = document.getElementById("login-btn");
 
-        // Clear previous error
         errorEl.textContent = "";
         errorEl.style.display = "none";
 
-        // Loading state
         btnEl.disabled = true;
         btnEl.textContent = "Signing in…";
 
@@ -80,7 +130,6 @@ if (loginForm) {
                 throw new Error(result.message || "Login failed");
             }
 
-            // Save session and redirect to dashboard
             window.auth.saveSession(result.data);
             window.location.href = "dashboard.html";
 

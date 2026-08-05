@@ -1,12 +1,17 @@
 /* =========================================================
    study.css – Study Session specific styles
+   Inherits global design system from style.css & dashboard.css
 ========================================================= */
 
 /* ── Session History List ────────────────────────────────────────────────── */
 .session-history {
     padding: 1.5rem;
     margin-top: 1.5rem;
-    border-radius: 16px;
+    border-radius: var(--border-radius);
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
 }
 
 .section-header {
@@ -18,7 +23,7 @@
 .section-header h2 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .sessions-list {
@@ -31,17 +36,18 @@
     display: flex;
     align-items: center;
     padding: 1.25rem;
-    background: rgba(255,255,255,0.02);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
     border-radius: 12px;
-    transition: all 0.2s;
+    transition: all var(--transition-speed);
     position: relative;
     overflow: hidden;
 }
 
 .session-item:hover {
-    background: rgba(255,255,255,0.04);
+    background: var(--bg-card-hover);
     transform: translateX(5px);
+    border-color: rgba(124, 58, 237, 0.35);
 }
 
 .session-indicator {
@@ -50,7 +56,6 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    /* color applied inline */
 }
 
 .session-details {
@@ -60,7 +65,7 @@
 
 .session-details h4 {
     font-size: 1rem;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
     display: flex;
     align-items: center;
@@ -89,7 +94,7 @@
 .duration-text {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
 }
 
@@ -99,8 +104,8 @@
 }
 
 .session-actions .action-btn {
-    background: rgba(255,255,255,0.05);
-    border: none;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
     color: var(--text-muted);
     width: 32px;
     height: 32px;
@@ -110,8 +115,9 @@
 }
 
 .session-actions .action-btn:hover {
-    background: rgba(239,68,68,0.2);
-    color: #f87171;
+    background: var(--error-bg);
+    color: var(--error);
+    border-color: rgba(248, 113, 113, 0.3);
 }
 
 .empty-state {
@@ -149,7 +155,7 @@
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 10px;
-    color: #fff;
+    color: var(--text-primary);
     outline: none;
     font-family: inherit;
     cursor: pointer;
@@ -169,7 +175,8 @@
 }
 
 .duration-preview {
-    background: rgba(255,255,255,0.05);
+    background: var(--input-bg);
+    border: 1px solid var(--border);
     padding: 0.75rem;
     border-radius: 8px;
     margin-bottom: 1.25rem;
@@ -181,38 +188,4 @@
 .duration-preview span {
     font-weight: 700;
     color: var(--accent);
-}
-
-/* Reusing generic form elements from subjects.css conceptually */
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    color: #fff;
-    outline: none;
-    font-family: inherit;
-    transition: all 0.2s;
-}
-
-.form-group input:focus {
-    border-color: var(--accent);
-    background: rgba(124,58,237,0.05);
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
 }

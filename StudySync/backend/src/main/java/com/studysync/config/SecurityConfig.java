@@ -101,21 +101,23 @@ public class SecurityConfig {
         return provider;
     }
 
+    @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins:http://localhost:5500,http://127.0.0.1:5500}")
+    private String allowedOriginsConfig;
+
     /**
      * CORS Configuration
-     * Allows frontend (VS Code Live Server on port 5500) to call the backend.
-     * Specific origins are required when allowCredentials is true.
+     * Allows configured frontend URLs (local dev or production domains) to call the backend.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allowed origins (frontend URLs)
-        config.setAllowedOrigins(List.of(
-                "http://localhost:5500",      // VS Code Live Server
-                "http://127.0.0.1:5500",     // VS Code Live Server (alternate)
-                "http://localhost:3000"       // React (future use)
-        ));
+        List<String> origins = java.util.Arrays.stream(allowedOriginsConfig.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(java.util.stream.Collectors.toList());
+
+        config.setAllowedOrigins(origins);
 
         // Allowed HTTP methods
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

@@ -1,5 +1,6 @@
 /* =========================================================
    subjects.css – Subject Management specific styles
+   Inherits global design system from style.css & dashboard.css
 ========================================================= */
 
 /* ── Subjects Grid ───────────────────────────────────────────────────────── */
@@ -12,8 +13,13 @@
 .subject-card {
     position: relative;
     padding: 1.5rem;
+    background: var(--bg-card);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius);
     border-top: 4px solid var(--accent); /* Overridden by inline style for custom colors */
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed);
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -21,7 +27,8 @@
 
 .subject-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.35);
+    border-color: var(--border-hover);
 }
 
 .subject-header {
@@ -39,7 +46,7 @@
     justify-content: center;
     font-size: 1.5rem;
     color: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .subject-actions {
@@ -54,8 +61,8 @@
 }
 
 .action-btn {
-    background: rgba(255,255,255,0.05);
-    border: none;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
     color: var(--text-muted);
     width: 32px;
     height: 32px;
@@ -65,19 +72,20 @@
 }
 
 .action-btn:hover {
-    background: rgba(255,255,255,0.1);
+    background: var(--bg-card-hover);
     color: var(--text-primary);
 }
 
 .action-btn.delete:hover {
-    background: rgba(239,68,68,0.2);
-    color: #f87171;
+    background: var(--error-bg);
+    color: var(--error);
+    border-color: rgba(248, 113, 113, 0.3);
 }
 
 .subject-info h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
@@ -107,7 +115,7 @@
     padding: 3rem;
     color: var(--text-muted);
     background: var(--bg-card);
-    border-radius: 16px;
+    border-radius: var(--border-radius);
     border: 1px dashed var(--border);
 }
 
@@ -118,86 +126,11 @@
     color: var(--text-muted);
 }
 
-/* ── Modal Styles ────────────────────────────────────────────────────────── */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity var(--transition-speed);
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    pointer-events: all;
-}
-
-.modal-content {
-    width: 100%;
-    max-width: 450px;
-    padding: 2rem;
-    transform: translateY(20px);
-    transition: transform var(--transition-speed);
-}
-
-.modal-overlay.active .modal-content {
-    transform: translateY(0);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-}
-
-.modal-header h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-/* Form inputs re-using global/forms styles where possible, but custom structure here */
-.form-group {
-    margin-bottom: 1.25rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 10px;
-    color: #fff;
-    outline: none;
-    font-family: inherit;
-    transition: all 0.2s;
-}
-
-.form-group input:focus {
-    border-color: var(--accent);
-    background: rgba(124,58,237,0.05);
-}
-
-.color-picker-group {
+/* ── Color Picker Options ────────────────────────────────────────────────── */
+.color-picker {
     display: flex;
     gap: 0.75rem;
-    flex-wrap: wrap;
+    margin-top: 0.5rem;
 }
 
 .color-option {
@@ -206,7 +139,7 @@
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: transform 0.2s;
+    transition: transform 0.2s ease;
 }
 
 .color-option:hover {
@@ -215,12 +148,5 @@
 
 .color-option.selected {
     border-color: #fff;
-    box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px rgba(255,255,255,0.5);
-}
-
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }

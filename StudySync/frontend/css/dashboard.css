@@ -1,265 +1,7 @@
 /* =========================================================
-   dashboard.css – Dashboard specific layout and styles
+   dashboard.css – Specific Widget Styles for Dashboard Page
+   Inherits global layout, sidebar & topbar from style.css
 ========================================================= */
-
-/* ── App Layout ──────────────────────────────────────────────────────────── */
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    position: relative;
-    z-index: 1;
-    overflow: hidden;
-}
-
-/* ── Sidebar ─────────────────────────────────────────────────────────────── */
-.sidebar {
-    width: var(--sidebar-width);
-    height: calc(100vh - 2rem);
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    transition: transform var(--transition-speed) ease;
-    z-index: 50;
-}
-
-.sidebar-header {
-    height: var(--header-height);
-    display: flex;
-    align-items: center;
-    padding: 0 1.5rem;
-    gap: 0.75rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.brand-icon {
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, var(--accent), #3b82f6);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1rem;
-    box-shadow: 0 4px 15px var(--accent-glow);
-}
-
-.brand-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.5px;
-}
-
-.mobile-close {
-    display: none;
-    margin-left: auto;
-}
-
-.sidebar-nav {
-    flex: 1;
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    overflow-y: auto;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem 1rem;
-    border-radius: 12px;
-    color: var(--text-muted);
-    text-decoration: none;
-    font-weight: 500;
-    transition: all var(--transition-speed);
-}
-
-.nav-item i {
-    font-size: 1.1rem;
-    width: 20px;
-    text-align: center;
-}
-
-.nav-item:hover {
-    background: rgba(255,255,255,0.05);
-    color: var(--text-primary);
-}
-
-.nav-item.active {
-    background: linear-gradient(90deg, rgba(124,58,237,0.2) 0%, transparent 100%);
-    color: var(--text-primary);
-    border-left: 3px solid var(--accent);
-}
-
-.nav-item.active i {
-    color: #a78bfa;
-}
-
-.sidebar-footer {
-    padding: 1.5rem;
-    border-top: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.avatar {
-    width: 36px;
-    height: 36px;
-    background: rgba(124,58,237,0.2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #a78bfa;
-    border: 1px solid rgba(124,58,237,0.4);
-}
-
-.user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.user-name {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.user-role {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-.logout-btn {
-    color: var(--error);
-    border-color: rgba(248,113,113,0.2);
-}
-.logout-btn:hover {
-    background: var(--error-bg);
-    color: var(--error);
-}
-
-/* ── Main Content ────────────────────────────────────────────────────────── */
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    overflow-y: auto;
-    padding-right: 1rem;
-}
-
-/* ── Topbar ──────────────────────────────────────────────────────────────── */
-.topbar {
-    height: var(--header-height);
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-}
-
-.topbar-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex: 1;
-}
-
-.mobile-menu {
-    display: none;
-}
-
-.search-bar {
-    position: relative;
-    max-width: 300px;
-    width: 100%;
-}
-
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-}
-
-.search-bar input {
-    width: 100%;
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 20px;
-    padding: 0.6rem 1rem 0.6rem 2.5rem;
-    color: var(--text-primary);
-    outline: none;
-    transition: all var(--transition-speed);
-}
-
-.search-bar input:focus {
-    border-color: var(--accent);
-    background: rgba(124,58,237,0.1);
-}
-
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-/* ── Dashboard Content ───────────────────────────────────────────────────── */
-.dashboard-content {
-    padding-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.welcome-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.page-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-}
-
-.page-subtitle {
-    color: var(--text-muted);
-    font-size: 1rem;
-}
-
-.quick-actions {
-    display: flex;
-    gap: 1rem;
-}
-
-.btn-secondary {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text-primary);
-}
-.btn-secondary:hover {
-    background: var(--bg-card-hover);
-    border-color: rgba(255,255,255,0.2);
-}
 
 /* ── Stats Grid ──────────────────────────────────────────────────────────── */
 .stats-grid {
@@ -277,7 +19,7 @@
 
 .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3), 0 0 0 1px rgba(124,58,237,0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.3);
 }
 
 .stat-header {
@@ -303,9 +45,9 @@
     border-radius: 20px;
     font-weight: 500;
 }
-.stat-badge.positive { background: rgba(16,185,129,0.15); color: #34d399; }
-.stat-badge.negative { background: rgba(239,68,68,0.15); color: #f87171; }
-.stat-badge.neutral { background: rgba(148,163,184,0.15); color: #94a3b8; }
+.stat-badge.positive { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.stat-badge.negative { background: rgba(248, 113, 113, 0.15); color: #f87171; }
+.stat-badge.neutral  { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 
 .stat-value {
     font-size: 2rem;
@@ -322,7 +64,7 @@
 .progress-bar-bg {
     width: 100%;
     height: 6px;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
     overflow: hidden;
     margin-top: 1rem;
@@ -338,7 +80,7 @@
 /* ── Bottom Grid (Activity Panels) ───────────────────────────────────────── */
 .bottom-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
     gap: 1.5rem;
 }
 
@@ -379,20 +121,20 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     transition: background var(--transition-speed);
 }
 
 .list-item:hover {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .item-icon {
     width: 40px;
     height: 40px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -415,48 +157,5 @@
 @media (max-width: 1024px) {
     .bottom-grid {
         grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        left: -100%;
-        top: 0;
-        bottom: 0;
-        margin: 0;
-        height: 100vh;
-        border-radius: 0;
-        border-right: 1px solid var(--border);
-    }
-    
-    .sidebar.open {
-        left: 0;
-    }
-    
-    .main-content {
-        padding: 0 1rem;
-    }
-    
-    .topbar {
-        margin-top: 1rem;
-        padding: 0 1rem;
-    }
-    
-    .mobile-menu, .mobile-close {
-        display: block;
-    }
-    
-    .welcome-section {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .quick-actions {
-        width: 100%;
-    }
-    
-    .quick-actions .btn {
-        flex: 1;
     }
 }

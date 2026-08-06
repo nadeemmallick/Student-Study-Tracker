@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="css/subjects.css">
 </head>
 <body>
-    <!-- Animated Background -->
+
+    <!-- Animated background -->
     <div class="bg-gradient"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -29,12 +30,12 @@
                 <div class="brand-icon">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <h2 class="brand-name">StudySync</h2>
+                <span class="brand-name text-gradient">StudySync</span>
                 <button class="btn-icon mobile-close" id="sidebarClose">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-
+            
             <nav class="sidebar-nav">
                 <a href="dashboard.html" class="nav-item">
                     <i class="fa-solid fa-house"></i>
@@ -57,7 +58,7 @@
                     <span>Goals</span>
                 </a>
                 <a href="notes.html" class="nav-item">
-                    <i class="fa-solid fa-note-sticky"></i>
+                    <i class="fa-solid fa-sticky-note"></i>
                     <span>Notes</span>
                 </a>
                 <a href="analytics.html" class="nav-item">
@@ -69,7 +70,7 @@
                     <span>Profile</span>
                 </a>
             </nav>
-
+            
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -95,7 +96,7 @@
                     </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" placeholder="Search subjects...">
+                        <input type="text" id="searchInput" placeholder="Search subjects...">
                     </div>
                 </div>
                 
@@ -143,37 +144,39 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form id="subjectForm">
-                <input type="hidden" id="subjectIdInput">
-                
-                <div class="form-group">
-                    <label>Subject Name</label>
-                    <div class="input-wrap">
-                        <input type="text" id="subjectNameInput" placeholder="e.g. Mathematics" required>
+            <form id="subjectForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body">
+                    <input type="hidden" id="subjectIdInput">
+                    
+                    <div class="form-group">
+                        <label>Subject Name</label>
+                        <div class="input-wrap">
+                            <input type="text" id="subjectNameInput" placeholder="e.g. Mathematics" required>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Description</label>
-                    <div class="input-wrap">
-                        <input type="text" id="subjectDescInput" placeholder="e.g. Calculus & Algebra">
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <div class="input-wrap">
+                            <input type="text" id="subjectDescInput" placeholder="e.g. Calculus & Algebra">
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Color Theme</label>
-                    <div class="color-picker-group" id="colorPickerGroup">
-                        <div class="color-option selected" data-color="#7c3aed" style="background: #7c3aed;"></div>
-                        <div class="color-option" data-color="#3b82f6" style="background: #3b82f6;"></div>
-                        <div class="color-option" data-color="#10b981" style="background: #10b981;"></div>
-                        <div class="color-option" data-color="#f59e0b" style="background: #f59e0b;"></div>
-                        <div class="color-option" data-color="#ef4444" style="background: #ef4444;"></div>
-                        <div class="color-option" data-color="#ec4899" style="background: #ec4899;"></div>
+                    
+                    <div class="form-group">
+                        <label>Color Theme</label>
+                        <div class="color-picker-group" id="colorPickerGroup">
+                            <div class="color-option selected" data-color="#7c3aed" style="background: #7c3aed;"></div>
+                            <div class="color-option" data-color="#3b82f6" style="background: #3b82f6;"></div>
+                            <div class="color-option" data-color="#10b981" style="background: #10b981;"></div>
+                            <div class="color-option" data-color="#f59e0b" style="background: #f59e0b;"></div>
+                            <div class="color-option" data-color="#ef4444" style="background: #ef4444;"></div>
+                            <div class="color-option" data-color="#ec4899" style="background: #ec4899;"></div>
+                        </div>
+                        <input type="hidden" id="subjectColorInput" value="#7c3aed">
                     </div>
-                    <input type="hidden" id="subjectColorInput" value="#7c3aed">
                 </div>
 
-                <div class="form-actions">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Subject</button>
                 </div>

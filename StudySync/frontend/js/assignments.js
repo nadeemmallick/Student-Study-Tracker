@@ -151,12 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 closeModal();
                 fetchAssignments();
+                if (window.toast) window.toast.success(isEditMode ? 'Assignment updated!' : 'Assignment added!');
             } else {
-                alert('Error saving assignment');
+                if (window.toast) window.toast.error('Error saving assignment');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     }
 
@@ -169,12 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await api.delete(`/assignments/${id}`);
             if (res.ok) {
                 fetchAssignments();
+                if (window.toast) window.toast.success('Assignment deleted');
             } else {
-                alert('Failed to delete assignment');
+                if (window.toast) window.toast.error('Failed to delete assignment');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     };
 

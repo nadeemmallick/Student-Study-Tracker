@@ -86,6 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 3. Render Subject Breakdown List
         renderSubjectBreakdownList(data.subjectBreakdown || [], data.totalStudyHours || 0);
+
+        // 4. Render Study Activity Heatmap
+        if (window.renderStudyHeatmap) {
+            window.renderStudyHeatmap('analyticsHeatmap', data.weeklyTrend || {});
+        }
     }
 
     // ── Chart 1: Study Trend (Bar Chart) ──────────────────────────────────────

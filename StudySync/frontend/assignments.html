@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="css/assignments.css">
 </head>
 <body>
-    <!-- Animated Background -->
+
+    <!-- Animated background -->
     <div class="bg-gradient"></div>
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -29,12 +30,12 @@
                 <div class="brand-icon">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <h2 class="brand-name">StudySync</h2>
+                <span class="brand-name text-gradient">StudySync</span>
                 <button class="btn-icon mobile-close" id="sidebarClose">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-
+            
             <nav class="sidebar-nav">
                 <a href="dashboard.html" class="nav-item">
                     <i class="fa-solid fa-house"></i>
@@ -57,7 +58,7 @@
                     <span>Goals</span>
                 </a>
                 <a href="notes.html" class="nav-item">
-                    <i class="fa-solid fa-note-sticky"></i>
+                    <i class="fa-solid fa-sticky-note"></i>
                     <span>Notes</span>
                 </a>
                 <a href="analytics.html" class="nav-item">
@@ -69,7 +70,7 @@
                     <span>Profile</span>
                 </a>
             </nav>
-
+            
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="avatar"><i class="fa-solid fa-user"></i></div>
@@ -95,7 +96,7 @@
                     </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" placeholder="Search assignments...">
+                        <input type="text" id="searchInput" placeholder="Search tasks...">
                     </div>
                 </div>
                 
@@ -109,44 +110,49 @@
                 </div>
             </header>
 
-            <!-- Assignments Content -->
+            <!-- Page Content -->
             <div class="dashboard-content">
                 
                 <div class="welcome-section">
                     <div>
-                        <h1 class="page-title text-gradient">Assignments 📝</h1>
-                        <p class="page-subtitle">Manage your homework, projects, and deadlines.</p>
+                        <h1 class="page-title text-gradient">Assignment Tracker 📋</h1>
+                        <p class="page-subtitle">Manage your coursework and upcoming deadlines.</p>
                     </div>
                     <div class="quick-actions">
                         <button class="btn btn-primary" id="addAssignmentBtn">
-                            <i class="fa-solid fa-plus"></i> New Assignment
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Add Assignment</span>
                         </button>
                     </div>
                 </div>
 
+                <!-- Kanban Board Container -->
                 <div class="assignments-container">
+                    
+                    <!-- PENDING Column -->
                     <div class="status-column glass-panel">
                         <div class="column-header">
-                            <h3><i class="fa-regular fa-circle"></i> To Do</h3>
+                            <h3><i class="fa-regular fa-clock" style="color: #f59e0b;"></i> Pending</h3>
                         </div>
                         <div class="task-list" id="pendingList">
                             <!-- Tasks injected here -->
-                            <div class="loading-state">Loading tasks...</div>
                         </div>
                     </div>
-                    
+
+                    <!-- IN_PROGRESS Column -->
                     <div class="status-column glass-panel">
                         <div class="column-header">
-                            <h3><i class="fa-solid fa-spinner"></i> In Progress</h3>
+                            <h3><i class="fa-solid fa-spinner" style="color: #3b82f6;"></i> In Progress</h3>
                         </div>
                         <div class="task-list" id="inProgressList">
                             <!-- Tasks injected here -->
                         </div>
                     </div>
-                    
+
+                    <!-- COMPLETED Column -->
                     <div class="status-column glass-panel">
                         <div class="column-header">
-                            <h3><i class="fa-regular fa-circle-check"></i> Completed</h3>
+                            <h3><i class="fa-regular fa-circle-check" style="color: #10b981;"></i> Completed</h3>
                         </div>
                         <div class="task-list" id="completedList">
                             <!-- Tasks injected here -->
@@ -167,60 +173,59 @@
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
-            <form id="assignmentForm">
-                <input type="hidden" id="assignmentIdInput">
-                
-                <div class="form-group">
-                    <label>Title</label>
-                    <input type="text" id="assignmentTitleInput" required placeholder="E.g., Read Chapter 5">
-                </div>
-                
-                <div class="form-group">
-                    <label>Subject</label>
-                    <div class="input-wrap select-wrap">
-                        <select id="assignmentSubjectInput" required>
-                            <option value="" disabled selected>Loading subjects...</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-icon"></i>
+            <form id="assignmentForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body">
+                    <input type="hidden" id="assignmentIdInput">
+                    
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="assignmentTitleInput" required placeholder="E.g., Read Chapter 5">
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group half">
-                        <label>Due Date</label>
-                        <input type="date" id="assignmentDueDateInput" required>
-                    </div>
-                    <div class="form-group half">
-                        <label>Priority</label>
+                    
+                    <div class="form-group">
+                        <label>Subject</label>
                         <div class="input-wrap select-wrap">
-                            <select id="assignmentPriorityInput" required>
-                                <option value="LOW">Low</option>
-                                <option value="MEDIUM" selected>Medium</option>
-                                <option value="HIGH">High</option>
+                            <select id="assignmentSubjectInput" required>
+                                <option value="" disabled selected>Loading subjects...</option>
                             </select>
-                            <i class="fa-solid fa-chevron-down select-icon"></i>
                         </div>
                     </div>
-                </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label>Due Date</label>
+                            <input type="date" id="assignmentDueDateInput" required>
+                        </div>
+                        <div class="form-group half">
+                            <label>Priority</label>
+                            <div class="input-wrap select-wrap">
+                                <select id="assignmentPriorityInput" required>
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM" selected>Medium</option>
+                                    <option value="HIGH">High</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="form-group">
-                    <label>Status</label>
-                    <div class="input-wrap select-wrap">
-                        <select id="assignmentStatusInput" required>
-                            <option value="PENDING" selected>Pending</option>
-                            <option value="IN_PROGRESS">In Progress</option>
-                            <option value="COMPLETED">Completed</option>
-                        </select>
-                        <i class="fa-solid fa-chevron-down select-icon"></i>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <div class="input-wrap select-wrap">
+                            <select id="assignmentStatusInput" required>
+                                <option value="PENDING" selected>Pending</option>
+                                <option value="IN_PROGRESS">In Progress</option>
+                                <option value="COMPLETED">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description (Optional)</label>
+                        <textarea id="assignmentDescInput" placeholder="Add any details or links..." rows="3"></textarea>
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label>Description (Optional)</label>
-                    <textarea id="assignmentDescInput" placeholder="Add any details or links..." rows="3"></textarea>
-                </div>
-                
-                <div class="form-actions">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Assignment</button>
                 </div>

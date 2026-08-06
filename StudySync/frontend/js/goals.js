@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hours   = parseFloat(hoursInput.value);
 
         if (!title || !type || isNaN(hours) || hours < 0.1) {
-            alert('Please fill in all fields correctly.');
+            if (window.toast) window.toast.warning('Please fill in all fields correctly.');
             return;
         }
 
@@ -270,9 +270,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 closeModal();
                 await fetchGoals();
+                if (window.toast) window.toast.success(isEditMode ? 'Goal updated!' : 'Goal created!');
             } else {
                 const err = await res.json();
-                alert(err.message || 'Failed to save goal');
+                if (window.toast) window.toast.error(err.message || 'Failed to save goal');
             }
         } catch (err) {
             console.warn('Backend offline, updating locally');

@@ -139,24 +139,26 @@
                 <h3 id="modalTitle">New Note</h3>
                 <button class="btn-icon" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="noteForm">
-                <input type="hidden" id="noteId">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" id="title" class="form-control" required placeholder="Give your note a title">
+            <form id="noteForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body">
+                    <input type="hidden" id="noteId">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" class="form-control" required placeholder="Give your note a title">
+                    </div>
+                    <div class="form-group">
+                        <label for="subjectId">Subject (Optional)</label>
+                        <select id="subjectId" class="form-control">
+                            <option value="">No Subject</option>
+                            <!-- Dynamic Subjects -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea id="content" class="form-control" rows="6" placeholder="Start typing..."></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="subjectId">Subject (Optional)</label>
-                    <select id="subjectId" class="form-control">
-                        <option value="">No Subject</option>
-                        <!-- Dynamic Subjects -->
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea id="content" class="form-control" rows="6" placeholder="Start typing..."></textarea>
-                </div>
-                <div class="form-actions">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelNoteBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Note</button>
                 </div>

@@ -117,13 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (res.ok) {
                 closeModal();
-                fetchSubjects(); // Refresh list
+                fetchSubjects();
+                if (window.toast) window.toast.success(isEditMode ? 'Subject updated successfully!' : 'New subject added!');
             } else {
-                alert('Error saving subject');
+                if (window.toast) window.toast.error('Error saving subject');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     }
 
@@ -136,12 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await api.delete(`/subjects/${id}`);
             if (res.ok) {
                 fetchSubjects();
+                if (window.toast) window.toast.success('Subject deleted successfully');
             } else {
-                alert('Failed to delete subject');
+                if (window.toast) window.toast.error('Failed to delete subject');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     };
 

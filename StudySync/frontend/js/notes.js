@@ -60,6 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load Notes
     const loadNotes = async () => {
+        notesGrid.innerHTML = `
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+        `;
         try {
             const res = await api.get('/notes');
             if (res.ok) {
@@ -228,11 +233,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal();
                 searchInput.value = ''; // clear search on save
                 await loadNotes();
+                if (window.toast) window.toast.success(id ? 'Note updated!' : 'Note created!');
             } else {
-                alert('Failed to save note.');
+                if (window.toast) window.toast.error('Failed to save note.');
             }
         } catch (error) {
             console.error("Save failed", error);
+            if (window.toast) window.toast.error('Network error');
         }
     });
 

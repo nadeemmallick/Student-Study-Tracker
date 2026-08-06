@@ -135,12 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 closeModal();
                 fetchSessions();
+                if (window.toast) window.toast.success('Study session logged successfully!');
             } else {
-                alert('Error saving session');
+                if (window.toast) window.toast.error('Error saving session');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     }
 
@@ -153,12 +154,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await api.delete(`/sessions/${id}`);
             if (res.ok) {
                 fetchSessions();
+                if (window.toast) window.toast.success('Study session deleted');
             } else {
-                alert('Failed to delete session');
+                if (window.toast) window.toast.error('Failed to delete session');
             }
         } catch (error) {
             console.error(error);
-            alert('Network error');
+            if (window.toast) window.toast.error('Network error');
         }
     };
 

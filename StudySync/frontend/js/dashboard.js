@@ -80,6 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         progressEl.style.width = goalProgress + '%';
                     }, 300);
                 }
+
+                // Render Study Activity Heatmap
+                if (window.renderStudyHeatmap) {
+                    window.renderStudyHeatmap('dashboardHeatmap', data.weeklyTrend || {});
+                }
             } else {
                 console.warn("Failed to fetch analytics for dashboard");
             }

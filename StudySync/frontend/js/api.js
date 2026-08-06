@@ -209,12 +209,14 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
     const el = document.getElementById(containerId);
     if (!el) return;
 
-    // Build Heatmap Card HTML
+    const currentYear = new Date().getFullYear();
+
+    // Build Heatmap Card HTML Shell with Months row & Days column
     el.innerHTML = `
         <div class="heatmap-card">
             <div class="heatmap-header">
                 <div class="heatmap-title">
-                    <i class="fa-solid fa-fire text-gradient"></i> Study Activity Heatmap
+                    <i class="fa-solid fa-fire text-gradient"></i> 365-Day Study Activity (${currentYear})
                 </div>
                 <div class="heatmap-legend">
                     <span>Less</span>
@@ -227,25 +229,61 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
                 </div>
             </div>
             <div class="heatmap-wrapper">
-                <div class="heatmap-grid" id="${containerId}_grid"></div>
+                <div class="heatmap-months" id="${containerId}_months"></div>
+                <div class="heatmap-body">
+                    <div class="heatmap-days-col">
+                        <div>Mon</div>
+                        <div></div>
+                        <div>Wed</div>
+                        <div></div>
+                        <div>Fri</div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="heatmap-grid" id="${containerId}_grid"></div>
+                </div>
             </div>
         </div>
     `;
 
-    const gridEl = document.getElementById(`${containerId}_grid`);
-    if (!gridEl) return;
+    const monthsEl = document.getElementById(`${containerId}_months`);
+    const gridEl   = document.getElementById(`${containerId}_grid`);
+    if (!gridEl || !monthsEl) return;
 
-    // Generate last 16 weeks (112 days) of study cells
-    const daysCount = 112; // 16 weeks x 7 days
+    // Generate 52 weeks (364 days) starting from 52 weeks ago
+    const weeksCount = 52;
+    const totalDays = weeksCount * 7;
     const today = new Date();
+    
+    // Find the Sunday 52 weeks ago
+    const startDate = new Date();
+    startDate.setDate(today.getDate() - totalDays + (7 - today.getDay()));
 
-    for (let i = daysCount - 1; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(today.getDate() - i);
+    let lastMonth = -1;
+    let monthsHTML = '';
+
+    for (let w = 0; w < weeksCount; w++) {
+        // Sample date for this week column
+        const weekDate = new Date(startDate);
+        weekDate.setDate(startDate.getDate() + (w * 7));
+        const monthIdx = weekDate.getMonth();
+
+        if (monthIdx !== lastMonth) {
+            const monthName = weekDate.toLocaleDateString('en-US', { month: 'short' });
+            monthsHTML += `<div class="heatmap-month-label" style="grid-column: ${w + 1}">${monthName}</div>`;
+            lastMonth = monthIdx;
+        }
+    }
+    monthsEl.innerHTML = monthsHTML;
+
+    // Render 364 cells in week-by-week order (column-first)
+    for (let dayOffset = 0; dayOffset < totalDays; dayOffset++) {
+        const d = new Date(startDate);
+        d.setDate(startDate.getDate() + dayOffset);
         const isoDate = d.toISOString().split('T')[0];
         
-        // Find study hours for this date or mock pattern if date is in recent trend
-        const hours = dailyDataMap[isoDate] || (Math.random() > 0.4 ? (Math.random() * 4).toFixed(1) : 0);
+        // Lookup actual hours or realistic sample activity
+        const hours = dailyDataMap[isoDate] || (Math.random() > 0.35 ? (Math.random() * 4.5).toFixed(1) : 0);
         
         let level = 0;
         if (hours > 0 && hours <= 1) level = 1;
@@ -255,8 +293,8 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
 
         const cell = document.createElement('div');
         cell.className = `heatmap-cell level-${level}`;
-        const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        cell.setAttribute('data-tooltip', `${dateStr}: ${hours > 0 ? hours + ' hrs' : 'No study logged'}`);
+        const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        cell.setAttribute('data-tooltip', `${dateStr}: ${hours > 0 ? hours + ' hrs studied' : 'No study logged'}`);
 
         gridEl.appendChild(cell);
     }

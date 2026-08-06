@@ -195,29 +195,31 @@
                 <h3 id="modalTitle">New Goal</h3>
                 <button class="btn-icon" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <form id="goalForm">
-                <input type="hidden" id="goalId" />
+            <form id="goalForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                <div class="modal-body">
+                    <input type="hidden" id="goalId" />
 
-                <div class="form-group">
-                    <label class="form-label" for="goalTitle">Goal Title</label>
-                    <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Study Math 2 Hours" required />
+                    <div class="form-group">
+                        <label class="form-label" for="goalTitle">Goal Title</label>
+                        <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Study Math 2 Hours" required />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label class="form-label" for="goalType">Goal Type</label>
+                            <select id="goalType" class="form-control">
+                                <option value="DAILY">Daily Goal</option>
+                                <option value="WEEKLY">Weekly Goal</option>
+                            </select>
+                        </div>
+                        <div class="form-group half">
+                            <label class="form-label" for="targetHours">Target Hours</label>
+                            <input type="number" id="targetHours" class="form-control" min="0.5" max="168" step="0.5" value="2.0" required />
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label" for="goalType">Goal Type</label>
-                        <select id="goalType" class="form-control">
-                            <option value="DAILY">Daily Goal</option>
-                            <option value="WEEKLY">Weekly Goal</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="targetHours">Target Hours</label>
-                        <input type="number" id="targetHours" class="form-control" min="0.5" max="168" step="0.5" value="2.0" required />
-                    </div>
-                </div>
-
-                <div class="form-actions">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary" id="saveGoalBtn">Save Goal</button>
                 </div>

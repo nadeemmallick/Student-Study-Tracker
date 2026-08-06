@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (avatarEl && session.name) avatarEl.textContent = session.name.charAt(0).toUpperCase();
     }
 
-    // 2. Mobile Sidebar Drawer Controls
+    // 2. Sidebar Toggle Controls (Desktop Collapsible & Mobile Drawer)
     const sidebar = document.getElementById('sidebar');
     const sidebarOpen = document.getElementById('sidebarOpen');
     const sidebarClose = document.getElementById('sidebarClose');
@@ -33,20 +33,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sidebarOpen && sidebar) {
         sidebarOpen.addEventListener('click', (e) => {
             e.stopPropagation();
-            sidebar.classList.add('open');
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.toggle('open');
+            } else {
+                sidebar.classList.toggle('collapsed');
+            }
         });
     }
 
     if (sidebarClose && sidebar) {
         sidebarClose.addEventListener('click', (e) => {
             e.stopPropagation();
-            sidebar.classList.remove('open');
+            if (window.innerWidth <= 1024) {
+                sidebar.classList.remove('open');
+            } else {
+                sidebar.classList.add('collapsed');
+            }
         });
     }
 
     // Close sidebar on click outside in mobile view
     document.addEventListener('click', (e) => {
-        if (sidebar && sidebar.classList.contains('open')) {
+        if (window.innerWidth <= 1024 && sidebar && sidebar.classList.contains('open')) {
             if (!sidebar.contains(e.target) && sidebarOpen && !sidebarOpen.contains(e.target)) {
                 sidebar.classList.remove('open');
             }

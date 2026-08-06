@@ -138,11 +138,17 @@ html, body {
     margin: 1rem;
     display: flex;
     flex-direction: column;
-    transition: transform var(--transition-speed) ease;
+    transition: transform var(--transition-speed) ease, margin-left var(--transition-speed) ease, opacity var(--transition-speed) ease;
     z-index: 50;
     overflow-y: auto;
     overflow-x: hidden;
     flex-shrink: 0;
+}
+
+.sidebar.collapsed {
+    margin-left: calc(-1 * var(--sidebar-width) - 2rem);
+    opacity: 0;
+    pointer-events: none;
 }
 
 .sidebar-header {
@@ -176,7 +182,7 @@ html, body {
 }
 
 .mobile-close {
-    display: none;
+    display: inline-flex;
     margin-left: auto;
 }
 
@@ -311,7 +317,7 @@ html, body {
 }
 
 .mobile-menu {
-    display: none;
+    display: inline-flex;
 }
 
 .search-bar {
@@ -459,6 +465,8 @@ html, body {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
+    padding: 1.5rem;
+    overflow-y: auto;
     transition: all var(--transition-speed) ease;
 }
 
@@ -469,17 +477,22 @@ html, body {
 }
 
 .modal-content, .modal {
-    background: rgba(18, 17, 43, 0.95);
+    background: rgba(18, 17, 43, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border);
     border-radius: 20px;
     width: 100%;
     max-width: 520px;
-    padding: 2rem;
+    max-height: calc(100vh - 3rem);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
     transform: scale(0.95) translateY(10px);
     transition: all var(--transition-speed) ease;
-    margin: 1rem;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
 }
 
 .modal-overlay.active .modal-content,
@@ -493,15 +506,23 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.75rem;
+    padding: 1.5rem 1.75rem 1rem 1.75rem;
     border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
 .modal-header h3 {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--text-primary);
+}
+
+/* Scrollable Form Body inside Modals */
+.modal-body, .modal-form-body, .modal-content form {
+    padding: 1.5rem 1.75rem;
+    overflow-y: auto;
+    flex: 1;
+    max-height: calc(100vh - 180px);
 }
 
 /* Form controls in modals */
@@ -519,9 +540,10 @@ html, body {
     letter-spacing: 0.5px;
 }
 
-.form-control, .form-group input, .form-group select, .form-group textarea {
+.form-control, .form-group input, .form-group select, .form-group textarea, select {
     width: 100%;
-    padding: 0.8rem 1rem;
+    height: 44px;
+    padding: 0.7rem 1rem;
     background: var(--input-bg);
     border: 1px solid var(--input-border);
     border-radius: 10px;
@@ -532,18 +554,60 @@ html, body {
     transition: all var(--transition-speed);
 }
 
-.form-control:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    border-color: var(--accent);
-    background: rgba(124, 58, 237, 0.08);
+.form-group textarea {
+    height: auto;
+    min-height: 95px;
+    resize: vertical;
 }
 
-.form-actions {
+/* Native Select Custom Styling & Dark Theme Dropdown Options */
+.form-group select, select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #f1f5f9;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+    padding-right: 2.75rem;
+    cursor: pointer;
+}
+
+/* Hide duplicate chevron icon inside select wrapper */
+.select-wrap .select-icon, .select-wrap i.fa-chevron-down {
+    display: none !important;
+}
+
+/* Dark theme dropdown menu options */
+select option {
+    background-color: #12112b !important;
+    color: #f1f5f9 !important;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+}
+
+select option:hover, select option:focus, select option:active, select option:checked {
+    background-color: #7c3aed !important;
+    color: #ffffff !important;
+}
+
+.form-control:focus, .form-group input:focus, .form-group select:focus, .form-group textarea:focus, select:focus {
+    border-color: var(--accent);
+    background-color: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+
+.modal-footer, .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
+    padding: 1rem 1.75rem 1.5rem 1.75rem;
     border-top: 1px solid var(--border);
+    background: rgba(18, 17, 43, 0.96);
+    flex-shrink: 0;
+    margin-top: 0;
 }
 
 /* ── 11. Responsive Breakpoints ─────────────────────────────────────────── */
@@ -764,6 +828,42 @@ html, body {
 .heatmap-wrapper {
     overflow-x: auto;
     padding-bottom: 0.5rem;
+}
+
+.heatmap-months {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 12px;
+    gap: 3px;
+    margin-left: 28px;
+    margin-bottom: 6px;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    height: 16px;
+}
+
+.heatmap-month-label {
+    grid-column-span: 4;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.heatmap-body {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.heatmap-days-col {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    gap: 3px;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    line-height: 12px;
+    width: 20px;
+    text-align: right;
 }
 
 .heatmap-grid {

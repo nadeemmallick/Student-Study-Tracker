@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign In – StudySync</title>
-    <meta name="description" content="Sign in to StudySync and continue tracking your study sessions, assignments, and goals." />
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico" />
+    <meta name="description"
+        content="Sign in to StudySync and continue tracking your study sessions, assignments, and goals." />
+    <link rel="icon" type="image/png" href="assets/logo/favicon.png" />
     <link rel="stylesheet" href="css/forms.css" />
 </head>
+
 <body>
 
     <!-- Animated background -->
@@ -21,7 +24,9 @@
 
             <!-- Brand -->
             <div class="brand">
-                <div class="brand-icon">📚</div>
+                <div class="brand-icon">
+                    <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="brand-logo-img" />
+                </div>
                 <span class="brand-name">StudySync</span>
             </div>
 
@@ -38,30 +43,50 @@
                 <div class="form-group">
                     <label for="login-email">Email address</label>
                     <div class="input-wrap">
-                        <span class="input-icon">✉️</span>
-                        <input
-                            type="email"
-                            id="login-email"
-                            name="email"
-                            placeholder="you@example.com"
-                            autocomplete="email"
-                            required
-                        />
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2" />
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            </svg>
+                        </span>
+                        <input type="email" id="login-email" name="email" placeholder="you@example.com"
+                            autocomplete="email" required />
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="login-password">Password</label>
                     <div class="input-wrap">
-                        <span class="input-icon">🔒</span>
-                        <input
-                            type="password"
-                            id="login-password"
-                            name="password"
-                            placeholder="Your password"
-                            autocomplete="current-password"
-                            required
-                        />
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                            </svg>
+                        </span>
+                        <input type="password" id="login-password" name="password" placeholder="Your password"
+                            autocomplete="current-password" required />
+                        <button type="button" class="password-toggle" title="Toggle password visibility"
+                            aria-label="Toggle password visibility">
+                            <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            <svg class="eye-off-icon" style="display:none;" xmlns="http://www.w3.org/2000/svg"
+                                width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                                <path
+                                    d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                                <path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                                <line x1="2" x2="22" y1="2" y2="22" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
 
@@ -82,4 +107,5 @@
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +8,13 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
+    <link rel="icon" type="image/png" href="assets/logo/favicon.png">
     <!-- Base Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/notes.css">
 </head>
+
 <body>
     <!-- Animated Background -->
     <div class="bg-gradient"></div>
@@ -20,12 +22,12 @@
     <div class="orb orb-2"></div>
 
     <div class="app-container">
-        
+
         <!-- Master Sidebar -->
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="sidebar-logo-img">
                 </div>
                 <h2 class="brand-name">StudySync</h2>
                 <button class="btn-icon mobile-close" id="sidebarClose">
@@ -95,7 +97,7 @@
                         <input type="text" id="searchInput" placeholder="Search notes...">
                     </div>
                 </div>
-                
+
                 <div class="topbar-right">
                     <button class="btn-icon">
                         <i class="fa-regular fa-bell"></i>
@@ -144,7 +146,8 @@
                     <input type="hidden" id="noteId">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" class="form-control" required placeholder="Give your note a title">
+                        <input type="text" id="title" class="form-control" required
+                            placeholder="Give your note a title">
                     </div>
                     <div class="form-group">
                         <label for="subjectId">Subject (Optional)</label>
@@ -171,4 +174,5 @@
     <script src="js/auth.js"></script>
     <script src="js/notes.js"></script>
 </body>
+
 </html>

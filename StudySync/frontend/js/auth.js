@@ -12,6 +12,25 @@ if (window.auth.isLoggedIn()) {
 
 // ── Global Shell Initialization (Runs on all pages) ─────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+    // 0. Password Visibility Toggle
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+    passwordToggles.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const input = btn.closest('.input-wrap').querySelector('input');
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            
+            const eyeIcon = btn.querySelector('.eye-icon');
+            const eyeOffIcon = btn.querySelector('.eye-off-icon');
+            if (eyeIcon && eyeOffIcon) {
+                eyeIcon.style.display = isPassword ? 'none' : 'block';
+                eyeOffIcon.style.display = isPassword ? 'block' : 'none';
+            }
+        });
+    });
+
     // 1. Set User Profile Info
     const session = window.auth.getSession();
     if (session) {

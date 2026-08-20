@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,15 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-    
+
+    <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/study.css">
 </head>
+
 <body>
     <!-- Animated Background -->
     <div class="bg-gradient"></div>
@@ -22,12 +24,12 @@
     <div class="orb orb-2"></div>
 
     <div class="app-container">
-        
+
         <!-- Sidebar -->
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="sidebar-logo-img">
                 </div>
                 <h2 class="brand-name">StudySync</h2>
                 <button class="btn-icon mobile-close" id="sidebarClose">
@@ -86,7 +88,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            
+
             <!-- Topbar -->
             <header class="topbar glass-panel">
                 <div class="topbar-left">
@@ -98,7 +100,7 @@
                         <input type="text" placeholder="Search sessions...">
                     </div>
                 </div>
-                
+
                 <div class="topbar-right">
                     <button class="btn-icon">
                         <i class="fa-regular fa-bell"></i>
@@ -111,7 +113,7 @@
 
             <!-- Sessions Content -->
             <div class="dashboard-content">
-                
+
                 <div class="welcome-section">
                     <div>
                         <h1 class="page-title text-gradient">Study Sessions ⏱️</h1>
@@ -134,7 +136,7 @@
                         <div class="loading-state">Loading sessions...</div>
                     </div>
                 </div>
-                
+
             </div>
         </main>
     </div>
@@ -158,14 +160,14 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label>Date</label>
                             <input type="date" id="sessionDateInput" required>
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group half">
                             <label>Start Time</label>
@@ -180,7 +182,7 @@
                     <div class="duration-preview" id="durationPreview">
                         <i class="fa-regular fa-clock"></i> Duration: <span id="durationValue">0</span> mins
                     </div>
-                    
+
                     <div class="form-group">
                         <label>Notes (Optional)</label>
                         <div class="input-wrap">
@@ -188,7 +190,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save Session</button>
@@ -202,4 +204,5 @@
     <script src="js/dashboard.js"></script>
     <script src="js/study.js"></script>
 </body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,14 +9,15 @@
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-    
+
+    <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/goals.css" />
 </head>
+
 <body>
     <!-- Animated Background -->
     <div class="bg-gradient"></div>
@@ -28,7 +30,7 @@
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="sidebar-logo-img">
                 </div>
                 <h2 class="brand-name">StudySync</h2>
                 <button class="btn-icon mobile-close" id="sidebarClose">
@@ -99,7 +101,7 @@
                         <input type="text" placeholder="Search goals...">
                     </div>
                 </div>
-                
+
                 <div class="topbar-right">
                     <button class="btn-icon">
                         <i class="fa-regular fa-bell"></i>
@@ -166,7 +168,9 @@
                         </div>
                     </div>
                     <div class="goals-grid" id="dailyGoalsList">
-                        <div class="loading-state"><div class="spinner"></div></div>
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -180,7 +184,9 @@
                         </div>
                     </div>
                     <div class="goals-grid" id="weeklyGoalsList">
-                        <div class="loading-state"><div class="spinner"></div></div>
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                        </div>
                     </div>
                 </div>
 
@@ -201,7 +207,8 @@
 
                     <div class="form-group">
                         <label class="form-label" for="goalTitle">Goal Title</label>
-                        <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Study Math 2 Hours" required />
+                        <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Study Math 2 Hours"
+                            required />
                     </div>
 
                     <div class="form-row">
@@ -214,7 +221,8 @@
                         </div>
                         <div class="form-group half">
                             <label class="form-label" for="targetHours">Target Hours</label>
-                            <input type="number" id="targetHours" class="form-control" min="0.5" max="168" step="0.5" value="2.0" required />
+                            <input type="number" id="targetHours" class="form-control" min="0.5" max="168" step="0.5"
+                                value="2.0" required />
                         </div>
                     </div>
                 </div>
@@ -232,4 +240,5 @@
     <script src="js/auth.js"></script>
     <script src="js/goals.js"></script>
 </body>
+
 </html>

@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Analytics & Reports | StudySync</title>
-    <meta name="description" content="Track your study stats, visual trends, and subject distribution with StudySync Analytics." />
+    <meta name="description"
+        content="Track your study stats, visual trends, and subject distribution with StudySync Analytics." />
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico">
-    
+
+    <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/analytics.css" />
-    
+
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
     <!-- Animated Background -->
@@ -32,7 +35,7 @@
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-icon">
-                    <i class="fa-solid fa-bolt"></i>
+                    <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="sidebar-logo-img">
                 </div>
                 <h2 class="brand-name">StudySync</h2>
                 <button class="btn-icon mobile-close" id="sidebarClose">
@@ -103,7 +106,7 @@
                         <input type="text" placeholder="Search analytics...">
                     </div>
                 </div>
-                
+
                 <div class="topbar-right">
                     <button class="btn-icon">
                         <i class="fa-regular fa-bell"></i>
@@ -145,7 +148,8 @@
                         </div>
                         <div class="stat-value" id="statAssignmentRatio">0/0</div>
                         <div class="stat-label" style="color: var(--text-muted);">Assignments Done</div>
-                        <div class="stat-subtext" id="statAssignmentPct" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% completion</div>
+                        <div class="stat-subtext" id="statAssignmentPct"
+                            style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% completion</div>
                     </div>
                     <div class="stat-card glass-panel">
                         <div class="stat-header">
@@ -153,7 +157,8 @@
                         </div>
                         <div class="stat-value" id="statGoalRatio">0/0</div>
                         <div class="stat-label" style="color: var(--text-muted);">Goals Reached</div>
-                        <div class="stat-subtext" id="statGoalPct" style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% success rate</div>
+                        <div class="stat-subtext" id="statGoalPct"
+                            style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">0% success rate</div>
                     </div>
                 </div>
 
@@ -162,17 +167,22 @@
 
                 <!-- Charts Grid -->
                 <div class="charts-grid">
-                    
+
                     <!-- Chart 1: Study Trend -->
                     <div class="chart-card glass-panel">
-                        <div class="chart-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="chart-header"
+                            style="display: flex; justify-content: space-between; align-items: flex-start;">
                             <div class="chart-title-wrap">
                                 <div>
-                                    <div class="chart-title" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📈 Study Trend</div>
-                                    <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Daily hours studied over time</div>
+                                    <div class="chart-title"
+                                        style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📈
+                                        Study Trend</div>
+                                    <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">
+                                        Daily hours studied over time</div>
                                 </div>
                             </div>
-                            <select id="trendRange" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;">
+                            <select id="trendRange" class="form-control"
+                                style="width: auto; padding: 6px 12px; font-size: 0.85rem; cursor: pointer;">
                                 <option value="7">Last 7 Days</option>
                                 <option value="30">Last 30 Days</option>
                             </select>
@@ -186,8 +196,11 @@
                     <div class="chart-card glass-panel">
                         <div class="chart-title-wrap">
                             <div>
-                                <div class="chart-title" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📚 Subject Breakdown</div>
-                                <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Hours per subject</div>
+                                <div class="chart-title"
+                                    style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">📚 Subject
+                                    Breakdown</div>
+                                <div class="chart-subtitle" style="font-size: 0.85rem; color: var(--text-muted);">Hours
+                                    per subject</div>
                             </div>
                         </div>
                         <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem;">
@@ -206,4 +219,5 @@
     <script src="js/auth.js"></script>
     <script src="js/analytics.js"></script>
 </body>
+
 </html>

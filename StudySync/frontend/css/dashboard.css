@@ -6,11 +6,18 @@
 /* ── Stats Grid ──────────────────────────────────────────────────────────── */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    min-width: 0;
 }
 
 .stat-card {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -19,7 +26,7 @@
 
 .stat-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(124, 58, 237, 0.3);
+    box-shadow: 0 15px 35px rgba(11, 34, 85, 0.08), 0 0 0 1px rgba(133, 167, 216, 0.4);
 }
 
 .stat-header {
@@ -45,14 +52,26 @@
     border-radius: 20px;
     font-weight: 500;
 }
-.stat-badge.positive { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-.stat-badge.negative { background: rgba(248, 113, 113, 0.15); color: #f87171; }
-.stat-badge.neutral  { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+
+.stat-badge.positive {
+    background: rgba(79, 175, 143, 0.15);
+    color: #389B79;
+}
+
+.stat-badge.negative {
+    background: rgba(217, 107, 107, 0.15);
+    color: #D96B6B;
+}
+
+.stat-badge.neutral {
+    background: rgba(127, 147, 173, 0.15);
+    color: #4A638D;
+}
 
 .stat-value {
     font-size: 2rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 0.25rem;
 }
 
@@ -64,7 +83,7 @@
 .progress-bar-bg {
     width: 100%;
     height: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #D8E1E8;
     border-radius: 3px;
     overflow: hidden;
     margin-top: 1rem;
@@ -72,7 +91,7 @@
 
 .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #34d399, #10b981);
+    background: linear-gradient(90deg, var(--success), #389B79);
     border-radius: 3px;
     transition: width 1s ease-out;
 }
@@ -80,11 +99,18 @@
 /* ── Bottom Grid (Activity Panels) ───────────────────────────────────────── */
 .bottom-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 .activity-panel {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
     padding: 1.5rem;
 }
 
@@ -98,14 +124,16 @@
 .panel-header h3 {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--text-primary);
 }
 
 .view-all {
     font-size: 0.85rem;
-    color: #a78bfa;
+    color: var(--accent-hover);
     text-decoration: none;
+    font-weight: 500;
 }
+
 .view-all:hover {
     text-decoration: underline;
 }
@@ -121,20 +149,21 @@
     align-items: center;
     gap: 1rem;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
     border-radius: 12px;
     transition: background var(--transition-speed);
 }
 
 .list-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--bg-card-hover);
 }
 
 .item-icon {
     width: 40px;
     height: 40px;
-    background: rgba(255, 255, 255, 0.05);
+    background: #FFFFFF;
+    border: 1px solid var(--border);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -144,7 +173,7 @@
 
 .item-details h4 {
     font-size: 0.95rem;
-    color: #fff;
+    color: var(--text-primary);
     margin-bottom: 0.2rem;
 }
 
@@ -153,9 +182,21 @@
     color: var(--text-muted);
 }
 
-/* ── Responsive Design ───────────────────────────────────────────────────── */
+/* ── Responsive Design for Dashboard ─────────────────────────────────────── */
+@media (max-width: 1100px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
 @media (max-width: 1024px) {
     .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
         grid-template-columns: 1fr;
     }
 }

@@ -33,3 +33,4 @@ ENV SPRING_PROFILES_ACTIVE=prod
 
 # Run executable JAR
 ENTRYPOINT ["java", "-jar", "app.jar"]
+

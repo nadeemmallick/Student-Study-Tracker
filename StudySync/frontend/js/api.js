@@ -211,7 +211,7 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
 
     const currentYear = new Date().getFullYear();
 
-    // Build Heatmap Card HTML Shell with Months row & Days column
+    // Build Heatmap Card HTML Shell with separated months and clean legend
     el.innerHTML = `
         <div class="heatmap-card">
             <div class="heatmap-header">
@@ -220,16 +220,12 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
                 </div>
                 <div class="heatmap-legend">
                     <span>Less</span>
-                    <div class="legend-box level-0"></div>
-                    <div class="legend-box level-1"></div>
-                    <div class="legend-box level-2"></div>
-                    <div class="legend-box level-3"></div>
-                    <div class="legend-box level-4"></div>
+                    <div class="legend-box level-0" title="No study"></div>
+                    <div class="legend-box active" title="Active study"></div>
                     <span>More</span>
                 </div>
             </div>
             <div class="heatmap-wrapper">
-                <div class="heatmap-months" id="${containerId}_months"></div>
                 <div class="heatmap-body">
                     <div class="heatmap-days-col">
                         <div>Mon</div>
@@ -240,63 +236,102 @@ window.renderStudyHeatmap = function(containerId, dailyDataMap = {}) {
                         <div></div>
                         <div></div>
                     </div>
-                    <div class="heatmap-grid" id="${containerId}_grid"></div>
+                    <div class="heatmap-months-container" id="${containerId}_months"></div>
                 </div>
             </div>
         </div>
     `;
 
-    const monthsEl = document.getElementById(`${containerId}_months`);
-    const gridEl   = document.getElementById(`${containerId}_grid`);
-    if (!gridEl || !monthsEl) return;
+    const monthsContainer = document.getElementById(`${containerId}_months`);
+    if (!monthsContainer) return;
 
-    // Generate 52 weeks (364 days) starting from 52 weeks ago
-    const weeksCount = 52;
-    const totalDays = weeksCount * 7;
     const today = new Date();
-    
-    // Find the Sunday 52 weeks ago
-    const startDate = new Date();
-    startDate.setDate(today.getDate() - totalDays + (7 - today.getDay()));
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-    let lastMonth = -1;
-    let monthsHTML = '';
+    // Generate last 12 rolling months ending in current month
+    const months = [];
+    for (let i = 11; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        months.push({
+            year: d.getFullYear(),
+            month: d.getMonth(),
+            name: d.toLocaleDateString('en-US', { month: 'short' }),
+            daysCount: new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
+        });
+    }
 
-    for (let w = 0; w < weeksCount; w++) {
-        // Sample date for this week column
-        const weekDate = new Date(startDate);
-        weekDate.setDate(startDate.getDate() + (w * 7));
-        const monthIdx = weekDate.getMonth();
-
-        if (monthIdx !== lastMonth) {
-            const monthName = weekDate.toLocaleDateString('en-US', { month: 'short' });
-            monthsHTML += `<div class="heatmap-month-label" style="grid-column: ${w + 1}">${monthName}</div>`;
-            lastMonth = monthIdx;
+    // Deterministic hash for realistic activity simulation if dailyDataMap is empty
+    function getDemoHours(isoStr, isRecent) {
+        let hash = 0;
+        for (let j = 0; j < isoStr.length; j++) {
+            hash = ((hash << 5) - hash) + isoStr.charCodeAt(j);
+            hash |= 0;
         }
+        const pseudo = Math.abs(Math.sin(hash) * 10000) % 1;
+        const threshold = isRecent ? 0.38 : 0.65;
+        return pseudo > threshold ? (1 + (pseudo * 3.5)).toFixed(1) : 0;
     }
-    monthsEl.innerHTML = monthsHTML;
 
-    // Render 364 cells in week-by-week order (column-first)
-    for (let dayOffset = 0; dayOffset < totalDays; dayOffset++) {
-        const d = new Date(startDate);
-        d.setDate(startDate.getDate() + dayOffset);
-        const isoDate = d.toISOString().split('T')[0];
-        
-        // Lookup actual hours or realistic sample activity
-        const hours = dailyDataMap[isoDate] || (Math.random() > 0.35 ? (Math.random() * 4.5).toFixed(1) : 0);
-        
-        let level = 0;
-        if (hours > 0 && hours <= 1) level = 1;
-        else if (hours > 1 && hours <= 2.5) level = 2;
-        else if (hours > 2.5 && hours <= 4) level = 3;
-        else if (hours > 4) level = 4;
+    months.forEach((m, idx) => {
+        const monthCol = document.createElement('div');
+        monthCol.className = 'heatmap-month-col';
 
-        const cell = document.createElement('div');
-        cell.className = `heatmap-cell level-${level}`;
-        const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        cell.setAttribute('data-tooltip', `${dateStr}: ${hours > 0 ? hours + ' hrs studied' : 'No study logged'}`);
+        const monthGrid = document.createElement('div');
+        monthGrid.className = 'heatmap-month-grid';
 
-        gridEl.appendChild(cell);
-    }
+        // Day of week for 1st of month (0 = Mon, ..., 6 = Sun)
+        const jsDay = new Date(m.year, m.month, 1).getDay();
+        const startDayOfWeek = (jsDay + 6) % 7;
+
+        const totalSlots = startDayOfWeek + m.daysCount;
+        const cols = Math.ceil(totalSlots / 7);
+        const totalGridCells = cols * 7;
+        const isRecent = idx >= 8;
+
+        for (let slot = 0; slot < totalGridCells; slot++) {
+            const cell = document.createElement('div');
+
+            if (slot < startDayOfWeek || slot >= totalSlots) {
+                // Invisible placeholder slot for calendar alignment
+                cell.className = 'heatmap-cell empty-slot';
+            } else {
+                const dayNum = slot - startDayOfWeek + 1;
+                const dateObj = new Date(m.year, m.month, dayNum);
+
+                const isFuture = dateObj > todayStart;
+
+                const y = m.year;
+                const mm = String(m.month + 1).padStart(2, '0');
+                const dd = String(dayNum).padStart(2, '0');
+                const isoDate = `${y}-${mm}-${dd}`;
+
+                let hours = 0;
+                if (!isFuture) {
+                    if (dailyDataMap && dailyDataMap[isoDate] !== undefined) {
+                        hours = parseFloat(dailyDataMap[isoDate]) || 0;
+                    } else {
+                        hours = getDemoHours(isoDate, isRecent);
+                    }
+                }
+
+                const isActive = hours > 0;
+                cell.className = `heatmap-cell ${isActive ? 'active' : 'level-0'}`;
+
+                const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                cell.setAttribute('data-tooltip', `${dateStr}: ${isActive ? hours + ' hrs studied' : 'No study logged'}`);
+            }
+
+            monthGrid.appendChild(cell);
+        }
+
+        const label = document.createElement('div');
+        label.className = 'heatmap-month-name';
+        label.textContent = m.name;
+
+        monthCol.appendChild(monthGrid);
+        monthCol.appendChild(label);
+        monthsContainer.appendChild(monthCol);
+    });
 };
+
 

@@ -961,25 +961,6 @@ select:focus {
     padding-bottom: 0.5rem;
 }
 
-.heatmap-months {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 12px;
-    gap: 3px;
-    margin-left: 28px;
-    margin-bottom: 6px;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    height: 16px;
-}
-
-.heatmap-month-label {
-    grid-column-span: 4;
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--text-muted);
-}
-
 .heatmap-body {
     display: flex;
     gap: 8px;
@@ -993,17 +974,40 @@ select:focus {
     font-size: 0.65rem;
     color: var(--text-muted);
     line-height: 12px;
-    width: 20px;
+    width: 24px;
     text-align: right;
+    margin-right: 4px;
+    user-select: none;
 }
 
-.heatmap-grid {
+.heatmap-months-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: max-content;
+}
+
+.heatmap-month-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heatmap-month-grid {
     display: grid;
     grid-template-rows: repeat(7, 12px);
     grid-auto-flow: column;
     grid-auto-columns: 12px;
     gap: 3px;
-    min-width: max-content;
+}
+
+.heatmap-month-name {
+    margin-top: 8px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    user-select: none;
 }
 
 .heatmap-cell {
@@ -1012,7 +1016,7 @@ select:focus {
     border-radius: 3px;
     background: #EEF3F5;
     border: 1px solid #D8E1E8;
-    transition: transform 0.15s, border-color 0.15s;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
     cursor: pointer;
     position: relative;
 }
@@ -1025,23 +1029,43 @@ select:focus {
 
 .heatmap-cell.level-0 {
     background: #EEF3F5;
+    border-color: #D8E1E8;
 }
 
-.heatmap-cell.level-1 {
-    background: #BAD5EB;
-}
-
-.heatmap-cell.level-2 {
-    background: #9AB9E0;
-}
-
-.heatmap-cell.level-3 {
-    background: #85A7D8;
-}
-
+/* All active days have the exact same color */
+.heatmap-cell.active,
+.heatmap-cell.level-1,
+.heatmap-cell.level-2,
+.heatmap-cell.level-3,
 .heatmap-cell.level-4 {
-    background: #4FAF8F;
-    box-shadow: 0 0 8px rgba(79, 175, 143, 0.6);
+    background: #22c55e !important;
+    border-color: #16a34a !important;
+}
+
+.heatmap-cell.active:hover,
+.heatmap-cell.level-1:hover,
+.heatmap-cell.level-2:hover,
+.heatmap-cell.level-3:hover,
+.heatmap-cell.level-4:hover {
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+.heatmap-cell.empty-slot {
+    visibility: hidden;
+    pointer-events: none;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.legend-box.level-0 {
+    background: #EEF3F5;
+    border: 1px solid #D8E1E8;
+}
+
+.legend-box.active {
+    background: #22c55e;
+    border: 1px solid #16a34a;
 }
 
 /* Tooltip on cell hover */

@@ -3,7 +3,7 @@
 # =========================================================
 
 # ── Stage 1: Build Stage ──────────────────────────────────────────────────
-FROM maven:3.9.6-eclipse-temurin-17 AS builder
+FROM maven:3.9-eclipse-temurin-21 AS builder
 WORKDIR /app
 
 # Copy pom.xml and download dependencies
@@ -15,7 +15,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # ── Stage 2: Runtime Stage ────────────────────────────────────────────────
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Create non-root user for security
@@ -27,10 +27,6 @@ COPY --from=builder /app/target/studysync-backend-*.jar app.jar
 
 # Expose server port
 EXPOSE 8080
-
-# Configure healthcheck
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:8080/actuator/health || exit 1
 
 # Environment variables defaults
 ENV SPRING_PROFILES_ACTIVE=prod

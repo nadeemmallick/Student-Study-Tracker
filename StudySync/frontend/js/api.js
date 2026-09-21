@@ -12,7 +12,7 @@
    - auth.js   → Form UI handlers for login and register pages only
 ========================================================= */
 
-const API_BASE = "http://localhost:8080/api";
+const API_BASE = "https://student-study-tracker-f6al.onrender.com/api";
 
 /**
  * Core fetch wrapper.

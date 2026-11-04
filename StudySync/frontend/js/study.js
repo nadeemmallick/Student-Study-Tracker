@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 populateSubjectDropdown();
             }
         } catch (error) {
-            console.error("Failed to load subjects", error);
-            subjectSelect.innerHTML = '<option value="" disabled selected>Error loading subjects. Is the backend running?</option>';
+            console.warn('Backend offline or cold-starting, could not load subjects:', error);
+            subjectSelect.innerHTML = '<option value="" disabled selected>Backend starting up — refresh in ~30s</option>';
         }
     }
 
@@ -114,8 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 showError("Failed to fetch sessions");
             }
         } catch (error) {
-            console.error(error);
-            showError("Network error while fetching sessions");
+            console.warn('Backend offline or cold-starting:', error);
+            sessionsList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-satellite-dish" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--border);"></i>
+                    <h3>Backend is starting up...</h3>
+                    <p>The server is warming up (free tier cold start can take ~30 seconds).<br>
+                    Please wait a moment then
+                    <a href="study-session.html" style="color: var(--primary); text-decoration: underline;">refresh this page</a>.</p>
+                </div>`;
         }
     }
 

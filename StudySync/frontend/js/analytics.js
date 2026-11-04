@@ -11,17 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!session) return;
     const userId = session.userId;
 
-    // ── Logout ────────────────────────────────────────────────────────────────
-    const logoutBtn = document.getElementById('logoutBtn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('Are you sure you want to log out?')) {
-                window.auth.clearSession();
-                window.location.href = 'login.html';
-            }
-        });
-    }
+
+
 
     // ── Chart Instances & State ───────────────────────────────────────────────
     let trendChartInstance = null;

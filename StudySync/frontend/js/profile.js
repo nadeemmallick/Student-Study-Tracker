@@ -68,7 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 setAvatarText(data.name);
             }
         } catch (err) {
-            console.error('Failed to load profile', err);
+            console.warn('Failed to load profile from API, using cached session data.', err);
+            // Fall back to locally cached session data stored at login
+            const cached = window.auth.getSession();
+            if (cached) {
+                profileNameInput.value   = cached.name  || '';
+                profileEmailInput.value  = cached.email || '';
+                displayName.textContent  = cached.name  || 'Student';
+                displayEmail.textContent = cached.email || '';
+                headerName.textContent   = cached.name  || 'Student';
+                setAvatarText(cached.name);
+            }
         }
     }
 
@@ -171,12 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Sidebar Mobile Toggle ────────────────────────────────
 
-    const sidebar     = document.getElementById('sidebar');
-    const sidebarOpen = document.getElementById('sidebarOpen');
-    const sidebarClose= document.getElementById('sidebarClose');
 
-    if (sidebarOpen)  sidebarOpen.addEventListener('click',  () => sidebar.classList.add('open'));
-    if (sidebarClose) sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
 
     // ── Logout ───────────────────────────────────────────────
 

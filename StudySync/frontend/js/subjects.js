@@ -92,8 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 showError("Failed to fetch subjects");
             }
         } catch (error) {
-            console.error(error);
-            showError("Network error while fetching subjects");
+            console.warn('Backend offline or cold-starting:', error);
+            subjectsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fa-solid fa-satellite-dish" style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--border);"></i>
+                    <h3>Backend is starting up...</h3>
+                    <p>The server is warming up (free tier cold start can take ~30 seconds).<br>
+                    Please wait a moment then
+                    <a href="subjects.html" style="color: var(--primary); text-decoration: underline;">refresh this page</a>.</p>
+                </div>`;
         }
     }
 

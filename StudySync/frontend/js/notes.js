@@ -243,22 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Sidebar Mobile Toggle (Global)
-    const sidebar = document.getElementById('sidebar');
-    const sidebarOpen = document.getElementById('sidebarOpen');
-    const sidebarClose = document.getElementById('sidebarClose');
-
-    if (sidebarOpen && sidebar) {
-        sidebarOpen.addEventListener('click', () => {
-            sidebar.classList.add('open');
-        });
-    }
-
-    if (sidebarClose && sidebar) {
-        sidebarClose.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-        });
-    }
 
     // Start
     init();

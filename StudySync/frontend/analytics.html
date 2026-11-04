@@ -193,7 +193,7 @@
                             </select>
                         </div>
                         <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem;">
-                            <canvas id="trendChart"></canvas>
+                            <canvas id="weeklyTrendChart"></canvas>
                         </div>
                     </div>
 
@@ -209,10 +209,20 @@
                             </div>
                         </div>
                         <div class="chart-container" style="position: relative; height: 300px; margin-top: 1rem;">
-                            <canvas id="subjectChart"></canvas>
+                            <canvas id="subjectDistributionChart"></canvas>
                         </div>
                     </div>
 
+                </div>
+
+                <!-- Subject Breakdown List -->
+                <div class="chart-card glass-panel" style="margin-top: 1.5rem;">
+                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">
+                        📚 Subject Breakdown
+                    </div>
+                    <div id="subjectBreakdownList">
+                        <!-- Dynamically populated by analytics.js -->
+                    </div>
                 </div>
 
             </div>

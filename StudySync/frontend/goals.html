@@ -103,7 +103,7 @@
                     </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" placeholder="Search goals...">
+                        <input type="text" id="goalSearchInput" placeholder="Search goals...">
                     </div>
                 </div>
 
@@ -199,46 +199,64 @@
         </main>
     </div>
 
-    <!-- Goal Modal -->
-    <div class="modal-overlay" id="goalModal">
-        <div class="modal-content glass-panel">
-            <div class="modal-header">
-                <h3 id="modalTitle">New Goal</h3>
-                <button class="btn-icon" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
+    <!-- 3-Step Goal Modal -->
+    <div class="ov" id="ov">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalStepTitle">
+            <div class="mh">
+                <div>
+                    <h2 id="modalStepTitle">What kind of goal?</h2>
+                    <p id="modalStepSub">Step 1 of 3</p>
+                </div>
+                <button class="x" id="close" aria-label="Close" type="button">✕</button>
             </div>
-            <form id="goalForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div class="modal-body">
-                    <input type="hidden" id="goalId" />
 
-                    <div class="form-group">
-                        <label class="form-label" for="goalTitle">Goal Title</label>
-                        <input type="text" id="goalTitle" class="form-control" placeholder="e.g. Study Math 2 Hours"
-                            required />
+            <div class="prog">
+                <i></i><i></i><i></i>
+            </div>
+
+            <div class="modal-body-custom">
+                <!-- Step 1: Goal Type -->
+                <div class="pane on" data-s="1">
+                    <div class="types" id="types"></div>
+                </div>
+
+                <!-- Step 2: Target Hours -->
+                <div class="pane" data-s="2">
+                    <div class="bigv"><b id="hval">2</b><span>hours</span></div>
+                    <div class="stepper">
+                        <button class="sb" id="dm" aria-label="Decrease by half an hour" type="button">−</button>
+                        <div class="chips" id="hchips"></div>
+                        <button class="sb" id="dp" aria-label="Increase by half an hour" type="button">+</button>
                     </div>
+                    <div class="hint" id="hint"></div>
+                </div>
 
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label class="form-label" for="goalType">Goal Type</label>
-                            <select id="goalType" class="form-control">
-                                <option value="DAILY">Daily Goal</option>
-                                <option value="WEEKLY">Weekly Goal</option>
-                            </select>
-                        </div>
-                        <div class="form-group half">
-                            <label class="form-label" for="targetHours">Target Hours</label>
-                            <input type="number" id="targetHours" class="form-control" min="0.5" max="168" step="0.5"
-                                value="2.0" required />
+                <!-- Step 3: Title & Preview -->
+                <div class="pane" data-s="3">
+                    <div class="sec">
+                        <div class="lbl">Goal title <em>edit if you like</em></div>
+                        <input type="text" id="inTitle" class="modal-input" placeholder="e.g. Study Math 2 Hours" autocomplete="off">
+                    </div>
+                    <div class="pv">
+                        <div class="gc">
+                            <span class="gtag" id="pvTag">Daily</span>
+                            <div class="gt" id="pvTitle"></div>
+                            <div class="bar"></div>
+                            <div class="gm" id="pvMeta"></div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="saveGoalBtn">Save Goal</button>
-                </div>
-            </form>
+            <div class="foot">
+                <button type="button" class="btn-custom hidden" id="back">Back</button>
+                <button type="button" class="btn-custom p" id="next">Next</button>
+                <button type="button" class="btn-custom p hidden" id="save" disabled>Save Goal</button>
+            </div>
         </div>
     </div>
+
+    <div class="custom-toast" id="toast">Goal added ✓</div>
 
     <!-- Scripts -->
     <script src="js/api.js"></script>

@@ -5,33 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Sessions | StudySync</title>
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="Log and track focused study sessions, record durations, and maintain your streak.">
+    <!-- Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="icon" type="image/png" href="assets/logo/favicon.png">
 
-    <!-- CSS -->
+    <!-- CSS Layers (Separated Architecture) -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/study.css">
 </head>
 
 <body>
-    <!-- Animated Background -->
-    <div class="bg-gradient"></div>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
 
     <div class="app-container">
 
-        <!-- Sidebar -->
+        <!-- Sidebar Navigation -->
         <aside class="sidebar glass-panel" id="sidebar">
             <div class="sidebar-header">
                 <div class="brand-icon">
                     <img src="assets/logo/studysync-logo.png" alt="StudySync Logo" class="sidebar-logo-img">
                 </div>
-                <h2 class="brand-name">StudySync</h2>
+                <span class="brand-name text-gradient">StudySync</span>
                 <button class="btn-icon mobile-close" id="sidebarClose">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
@@ -48,23 +46,41 @@
                     <span>Dashboard</span>
                 </a>
                 <a href="subjects.html" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
                     <span>Subjects</span>
                 </a>
                 <a href="study-session.html" class="nav-item active">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="10" x2="14" y1="2" y2="2"/>
+                        <line x1="12" x2="15" y1="14" y2="11"/>
+                        <circle cx="12" cy="14" r="8"/>
+                    </svg>
                     <span>Sessions</span>
                 </a>
                 <a href="assignments.html" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <path d="M12 11h4"/>
+                        <path d="M12 16h4"/>
+                        <path d="M8 11h.01"/>
+                        <path d="M8 16h.01"/>
+                    </svg>
                     <span>Assignments</span>
                 </a>
                 <a href="goals.html" class="nav-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"/>
+                        <circle cx="12" cy="12" r="6"/>
+                        <circle cx="12" cy="2" r="2"/>
+                    </svg>
                     <span>Goals</span>
                 </a>
                 <a href="notes.html" class="nav-item">
-                    <i class="fa-solid fa-note-sticky"></i>
+                    <i class="fa-solid fa-sticky-note"></i>
                     <span>Notes</span>
                 </a>
                 <a href="analytics.html" class="nav-item">
@@ -81,7 +97,7 @@
                 <div class="user-profile">
                     <div class="avatar"><i class="fa-solid fa-user"></i></div>
                     <div class="user-info">
-                        <p class="user-name" id="userNameDisplay">Loading...</p>
+                        <p class="user-name" id="userNameDisplay">Student</p>
                         <p class="user-role">Student</p>
                     </div>
                 </div>
@@ -102,43 +118,44 @@
                     </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" placeholder="Search sessions...">
+                        <input type="text" id="searchInput" placeholder="Search sessions by subject or notes...">
                     </div>
                 </div>
 
                 <div class="topbar-right">
-                    <button class="btn-icon">
-                        <i class="fa-regular fa-bell"></i>
-                    </button>
-                    <button class="btn-icon">
-                        <i class="fa-solid fa-gear"></i>
-                    </button>
+                    <a href="profile.html" class="btn-icon" title="View Profile">
+                        <i class="fa-regular fa-user"></i>
+                    </a>
                 </div>
             </header>
 
-            <!-- Sessions Content -->
+            <!-- Page Body -->
             <div class="dashboard-content">
 
-                <div class="welcome-section">
+                <!-- Welcome Section -->
+                <div class="sessions-welcome">
                     <div>
-                        <h1 class="page-title text-gradient">Study Sessions ⏱️</h1>
-                        <p class="page-subtitle">Track your study time and view history.</p>
+                        <h1>Study Sessions ⏱️</h1>
+                        <p>Log your focused study blocks, review duration history, and track consistency.</p>
                     </div>
-                    <div class="quick-actions">
-                        <button class="btn btn-primary" id="logSessionBtn">
+                    <div>
+                        <button type="button" class="btn p" id="logSessionBtn">
                             <i class="fa-solid fa-plus"></i> Log Session
                         </button>
                     </div>
                 </div>
 
-                <!-- Session History List -->
-                <div class="session-history glass-panel">
-                    <div class="section-header">
+                <!-- Session History Card -->
+                <div class="session-history-card">
+                    <div class="history-header">
                         <h2>Recent History</h2>
+                        <span class="history-stats" id="historyStats">Loading stats...</span>
                     </div>
+
                     <div id="sessionsList" class="sessions-list">
-                        <!-- Sessions dynamically injected here -->
-                        <div class="loading-state">Loading sessions...</div>
+                        <div class="empty-state">
+                            <p>Loading study sessions...</p>
+                        </div>
                     </div>
                 </div>
 
@@ -146,64 +163,97 @@
         </main>
     </div>
 
-    <!-- Session Modal (Hidden by default) -->
-    <div class="modal-overlay" id="sessionModal">
-        <div class="modal-content glass-panel">
-            <div class="modal-header">
-                <h3>Log Study Session</h3>
-                <button class="btn-icon" id="closeModalBtn">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+    <!-- =========================================================
+         Step-by-Step Modern Session Modal
+         Step 1: Pick Subject
+         Step 2: Set Duration
+         Step 3: Review & Save (Date, Focus Rating & Notes)
+    ========================================================== -->
+    <div class="ov" id="sessionModal" aria-modal="true" role="dialog">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="stepTitle">
+
+            <!-- Header -->
+            <div class="mh">
+                <div>
+                    <h2 id="stepTitle">What are you studying?</h2>
+                    <p id="stepSubtitle">Step 1 of 3</p>
+                </div>
+                <button type="button" class="x" id="closeModalBtn" aria-label="Close">✕</button>
             </div>
-            <form id="sessionForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <div class="input-wrap select-wrap">
-                            <select id="sessionSubjectInput" required>
-                                <option value="" disabled selected>Loading subjects...</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label>Date</label>
-                            <input type="date" id="sessionDateInput" required>
-                        </div>
-                    </div>
+            <!-- Progress Bar -->
+            <div class="prog">
+                <i></i><i></i><i></i>
+            </div>
 
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label>Start Time</label>
-                            <input type="time" id="sessionStartInput" required>
-                        </div>
-                        <div class="form-group half">
-                            <label>End Time</label>
-                            <input type="time" id="sessionEndInput" required>
-                        </div>
-                    </div>
+            <!-- Body -->
+            <div class="body">
 
-                    <div class="duration-preview" id="durationPreview">
-                        <i class="fa-regular fa-clock"></i> Duration: <span id="durationValue">0</span> mins
+                <!-- Step 1: Subject Selection -->
+                <div class="pane on" data-s="1">
+                    <div class="sgrid" id="subjectsGridInModal">
+                        <!-- Loaded dynamically from user's subjects -->
                     </div>
-
-                    <div class="form-group">
-                        <label>Notes (Optional)</label>
-                        <div class="input-wrap">
-                            <input type="text" id="sessionNotesInput" placeholder="What did you cover?">
-                        </div>
+                    <div class="nosub hidden" id="nosub">
+                        <b>No subjects found yet</b>
+                        Please create a subject first to log study sessions against it.
+                        <br>
+                        <a href="subjects.html">+ Add a subject in Subjects tab</a>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Session</button>
+                <!-- Step 2: Duration Stepper -->
+                <div class="pane" data-s="2">
+                    <div class="dur">
+                        <button type="button" class="step" id="dm" aria-label="5 minutes less">−</button>
+                        <div class="dv">
+                            <b id="dval">30</b>
+                            <span>minutes</span>
+                        </div>
+                        <button type="button" class="step" id="dp" aria-label="5 minutes more">+</button>
+                    </div>
+                    <div class="chips" id="durs" style="justify-content:center"></div>
                 </div>
-            </form>
+
+                <!-- Step 3: Review & Save -->
+                <div class="pane" data-s="3">
+                    <div class="rv">
+                        <i></i>
+                        <div>
+                            <b id="rvSub">Select Subject</b>
+                            <span id="rvMeta">30 min · Today</span>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">Date</div>
+                        <div class="chips" id="dates"></div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">How focused were you? <em>optional</em></div>
+                        <div class="rate" id="rate"></div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">Notes <em>optional</em></div>
+                        <textarea id="notes" placeholder="What did you cover in this session?"></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer Controls -->
+            <div class="foot">
+                <button type="button" class="btn hidden" id="stepBack">Back</button>
+                <button type="button" class="btn p" id="stepNext" disabled>Next</button>
+                <button type="button" class="btn p hidden" id="stepSave">Save Session</button>
+            </div>
+
         </div>
     </div>
 
+    <!-- Floating Toast Notification -->
+    <div class="session-toast" id="sessionToast">Session saved ✓</div>
+
+    <!-- Scripts -->
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/study.js"></script>

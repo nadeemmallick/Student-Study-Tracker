@@ -137,9 +137,10 @@
                 <div class="assignments-container">
 
                     <!-- PENDING Column -->
-                    <div class="status-column glass-panel">
+                    <div class="status-column">
                         <div class="column-header">
                             <h3><i class="fa-regular fa-clock" style="color: #f59e0b;"></i> Pending</h3>
+                            <span class="count-badge" id="pendingCount">0</span>
                         </div>
                         <div class="task-list" id="pendingList">
                             <!-- Tasks injected here -->
@@ -147,9 +148,10 @@
                     </div>
 
                     <!-- IN_PROGRESS Column -->
-                    <div class="status-column glass-panel">
+                    <div class="status-column">
                         <div class="column-header">
                             <h3><i class="fa-solid fa-spinner" style="color: #3b82f6;"></i> In Progress</h3>
+                            <span class="count-badge" id="inProgressCount">0</span>
                         </div>
                         <div class="task-list" id="inProgressList">
                             <!-- Tasks injected here -->
@@ -157,9 +159,10 @@
                     </div>
 
                     <!-- COMPLETED Column -->
-                    <div class="status-column glass-panel">
+                    <div class="status-column">
                         <div class="column-header">
                             <h3><i class="fa-regular fa-circle-check" style="color: #10b981;"></i> Completed</h3>
+                            <span class="count-badge" id="completedCount">0</span>
                         </div>
                         <div class="task-list" id="completedList">
                             <!-- Tasks injected here -->
@@ -171,75 +174,79 @@
         </main>
     </div>
 
-    <!-- Assignment Modal (Hidden by default) -->
-    <div class="modal-overlay" id="assignmentModal">
-        <div class="modal-content glass-panel">
-            <div class="modal-header">
-                <h3 id="modalTitle">Add Assignment</h3>
-                <button class="btn-icon" id="closeModalBtn">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+    <!-- 3-Step Assignment Modal -->
+    <div class="ov" id="ov">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalStepTitle">
+            <div class="mh">
+                <div>
+                    <h2 id="modalStepTitle">What's the assignment?</h2>
+                    <p id="modalStepSub">Step 1 of 3</p>
+                </div>
+                <button class="x" id="close" aria-label="Close" type="button">✕</button>
             </div>
-            <form id="assignmentForm" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
-                <div class="modal-body">
-                    <input type="hidden" id="assignmentIdInput">
 
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="assignmentTitleInput" required placeholder="E.g., Read Chapter 5">
+            <div class="prog">
+                <i></i><i></i><i></i>
+            </div>
+
+            <div class="modal-body-custom">
+                <!-- Step 1: Title & Subject -->
+                <div class="pane on" data-s="1">
+                    <div class="sec">
+                        <div class="lbl">Title</div>
+                        <input type="text" id="inTitle" class="modal-input titlein" placeholder="E.g., Read Chapter 5" autocomplete="off">
                     </div>
-
-                    <div class="form-group">
-                        <label>Subject</label>
-                        <div class="input-wrap select-wrap">
-                            <select id="assignmentSubjectInput" required>
-                                <option value="" disabled selected>Loading subjects...</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group half">
-                            <label>Due Date</label>
-                            <input type="date" id="assignmentDueDateInput" required>
-                        </div>
-                        <div class="form-group half">
-                            <label>Priority</label>
-                            <div class="input-wrap select-wrap">
-                                <select id="assignmentPriorityInput" required>
-                                    <option value="LOW">Low</option>
-                                    <option value="MEDIUM" selected>Medium</option>
-                                    <option value="HIGH">High</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Status</label>
-                        <div class="input-wrap select-wrap">
-                            <select id="assignmentStatusInput" required>
-                                <option value="PENDING" selected>Pending</option>
-                                <option value="IN_PROGRESS">In Progress</option>
-                                <option value="COMPLETED">Completed</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Description (Optional)</label>
-                        <textarea id="assignmentDescInput" placeholder="Add any details or links..."
-                            rows="3"></textarea>
+                    <div class="sec">
+                        <div class="lbl">Subject</div>
+                        <div class="chips" id="subjects"></div>
+                        <div class="nosub hidden" id="nosub">No subjects yet. Add a subject first, then come back.</div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Assignment</button>
+                <!-- Step 2: Due date & Priority -->
+                <div class="pane" data-s="2">
+                    <div class="sec">
+                        <div class="lbl">When is it due?</div>
+                        <div class="chips" id="dates"></div>
+                        <div class="expand" id="pickBox">
+                            <input type="date" id="pickDate" class="modal-input">
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">How important is it?</div>
+                        <div class="seg prio" id="prio"></div>
+                    </div>
                 </div>
-            </form>
+
+                <!-- Step 3: Review & Status & Details -->
+                <div class="pane" data-s="3">
+                    <div class="rv">
+                        <i id="rvDot"></i>
+                        <div>
+                            <b id="rvTitle">Untitled Assignment</b>
+                            <span id="rvMeta"></span>
+                        </div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">Status</div>
+                        <div class="seg stat" id="stat"></div>
+                    </div>
+                    <div class="sec">
+                        <div class="lbl">Details <em>optional</em></div>
+                        <textarea id="inDesc" class="modal-input" placeholder="Add any details or links..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="foot">
+                <button type="button" class="btn-custom hidden" id="back">Back</button>
+                <button type="button" class="btn-custom p" id="next" disabled>Next</button>
+                <button type="button" class="btn-custom p hidden" id="save">Save Assignment</button>
+            </div>
         </div>
     </div>
+
+    <div class="custom-toast" id="toast">Assignment added ✓</div>
 
     <script src="js/api.js"></script>
     <script src="js/auth.js"></script>

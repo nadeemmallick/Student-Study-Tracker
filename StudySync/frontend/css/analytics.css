@@ -1,31 +1,465 @@
 /* =========================================================
-   analytics.css – Component-specific styles for Analytics Page
-   Inherits global design system from style.css & dashboard.css
+   analytics.css – StudySync Analytics & Reports
+   StudySync Design System
 ========================================================= */
 
-/* ── Charts Grid ─────────────────────────────────────────────────────────── */
-.charts-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1.5rem;
-    width: 100%;
+:root {
+  --bg-secondary: #EEF3F5;
+  --surface: #FFFFFF;
+  --hover: #E8F0F7;
+  --border: #D8E1E8;
+  --brand: #85A7D8;
+  --brand-hover: #6F94CA;
+  --brand-soft: rgba(133, 167, 216, 0.18);
+  --text: #0B2255;
+  --text-2: #4A638D;
+  --muted: #7F93AD;
+  --ease: cubic-bezier(.4, 0, .2, 1);
 }
 
-.chart-card {
-    padding: 1.5rem;
-    display: flex;
+/* ================= Page header ================= */
+.ph {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.ph h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ph p {
+  color: var(--text-2);
+  margin-top: 4px;
+  font-size: 15px;
+}
+
+.btn {
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.2s var(--ease);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.btn:hover {
+  background: var(--hover);
+  transform: translateY(-1px);
+}
+
+/* ================= Toast Notification ================= */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  background: var(--text);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 500;
+  transition: all 0.3s var(--ease);
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(11, 34, 85, 0.2);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ================= Grid Layouts ================= */
+.grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.g4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.g21 {
+  grid-template-columns: 2fr 1fr;
+}
+
+/* ================= Cards ================= */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(11, 34, 85, 0.05);
+  transition: box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
+  min-width: 0;
+}
+
+.card:hover {
+  box-shadow: 0 10px 24px rgba(11, 34, 85, 0.08);
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.card h3 svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--brand-hover);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.sub {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.ch {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* ================= Stat Cards ================= */
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.sic {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+}
+
+.sic svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stat b {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.stat .l {
+  color: var(--muted);
+  font-size: 14.5px;
+  margin-top: 5px;
+}
+
+.stat small {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.spark {
+  margin-top: 10px;
+  height: 34px;
+  width: 100%;
+}
+
+/* ================= Range Chips ================= */
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s var(--ease);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.chip:hover {
+  background: var(--hover);
+}
+
+.chip.on {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(133, 167, 216, 0.4);
+}
+
+/* ================= Charts ================= */
+.chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.gl {
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.yl, .xl {
+  fill: var(--muted);
+  font-size: 11px;
+  font-family: 'Inter', sans-serif;
+}
+
+.bar {
+  fill: var(--brand);
+  transform-box: fill-box;
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.8s var(--ease) var(--d, 0s), fill 0.2s;
+}
+
+.go .bar {
+  transform: scaleY(1);
+}
+
+.bg:hover .bar {
+  fill: var(--brand-hover);
+}
+
+.hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.ln {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.3s var(--ease);
+}
+
+.go .ln {
+  stroke-dashoffset: 0;
+}
+
+.seg2 {
+  fill: none;
+  stroke-dasharray: 0 var(--circ);
+  transition: stroke-dasharray 1s var(--ease) var(--d, 0s), opacity 0.2s;
+  cursor: pointer;
+}
+
+.go .seg2 {
+  stroke-dasharray: var(--len) var(--circ);
+}
+
+.seg2:hover {
+  opacity: 0.8;
+}
+
+.track {
+  fill: none;
+  stroke: var(--bg-secondary);
+}
+
+.dwrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.dwrap svg {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+}
+
+.dc {
+  position: absolute;
+  text-align: center;
+  pointer-events: none;
+}
+
+.dc b {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.dc span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--text-2);
+}
+
+.legend i {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ================= Subject Progress Bars ================= */
+.pr {
+  margin-bottom: 18px;
+}
+
+.pr:last-child {
+  margin-bottom: 0;
+}
+
+.pr .top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 8px;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.pr .top span {
+  color: var(--text);
+}
+
+.pr .top em {
+  font-style: normal;
+  font-size: 13px;
+}
+
+.pr .tr {
+  height: 10px;
+  border-radius: 99px;
+  background: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.pr .tr i {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 99px;
+  transition: width 1s var(--ease) var(--d, 0s);
+}
+
+.go .pr .tr i {
+  width: var(--w);
+}
+
+/* ================= View & Animation ================= */
+.view {
+  animation: vin 0.45s var(--ease);
+}
+
+@keyframes vin {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tip {
+  position: fixed;
+  z-index: 1000;
+  background: var(--text);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  white-space: pre;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s;
+  box-shadow: 0 4px 14px rgba(11, 34, 85, 0.2);
+}
+
+.empty {
+  color: var(--muted);
+  padding: 24px 0;
+  text-align: center;
+  font-size: 14.5px;
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 1000px) {
+  .g4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .g21 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .g4 {
+    grid-template-columns: 1fr;
+  }
+  .ph {
     flex-direction: column;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
-}
-
-.chart-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-}
-
-/* Responsive Grid */
-@media (max-width: 1024px) {
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+    align-items: flex-start;
+  }
 }

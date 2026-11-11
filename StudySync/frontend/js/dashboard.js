@@ -244,6 +244,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // --- Quick Action Buttons ---
+    const startSessionBtn = document.getElementById('startSessionBtn');
+    if (startSessionBtn) {
+        startSessionBtn.addEventListener('click', () => {
+            window.location.href = 'study-session.html';
+        });
+    }
+
+    const addAssignmentBtn = document.getElementById('addAssignmentBtn');
+    if (addAssignmentBtn) {
+        addAssignmentBtn.addEventListener('click', () => {
+            window.location.href = 'assignments.html';
+        });
+    }
+
     // --- Logout ---
     const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {

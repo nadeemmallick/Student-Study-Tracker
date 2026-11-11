@@ -1,0 +1,38 @@
+# ================================================
+# Student-Study-Tracker – Root .gitignore
+# ================================================
+
+# ===== Internal Architecture & Planning Documentation =====
+PRD.md
+TECHStack.md
+DESIGN.md
+color.md
+StudySync/README.md
+
+# ===== Security & Secrets =====
+**/.env
+**/.env.*
+**/application-local.properties
+**/application-local.yml
+
+# ===== Build Outputs & Dependencies =====
+**/target/
+*.jar
+*.war
+*.nar
+node_modules/
+
+# ===== IDE & Editors =====
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.code-workspace
+
+# ===== OS & Logs =====
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+logs/

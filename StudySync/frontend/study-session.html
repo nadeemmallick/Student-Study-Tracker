@@ -136,11 +136,85 @@
                 <div class="sessions-welcome">
                     <div>
                         <h1>Study Sessions ⏱️</h1>
-                        <p>Log your focused study blocks, review duration history, and track consistency.</p>
+                        <p>Focus with the live countdown timer, or log your completed study sessions.</p>
                     </div>
                     <div>
-                        <button type="button" class="btn p" id="logSessionBtn">
-                            <i class="fa-solid fa-plus"></i> Log Session
+                        <button type="button" class="btn" id="logSessionBtn">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Log Past Session
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Focus Countdown Timer Card -->
+                <div class="focus-timer-card" id="focusTimerCard">
+                    <div class="timer-card-header">
+                        <div class="timer-badge" id="timerBadge">
+                            <span class="live-dot" id="liveDot"></span>
+                            <span id="liveStatusText">Ready to Focus</span>
+                        </div>
+
+                        <div class="timer-subject-picker">
+                            <label for="timerSubjectSelect"><i class="fa-solid fa-book-bookmark"></i> Subject:</label>
+                            <div class="custom-select-wrap">
+                                <span class="subject-color-indicator" id="timerSubjectColorDot"></span>
+                                <select id="timerSubjectSelect" class="timer-select" aria-label="Select Subject for Focus Session">
+                                    <option value="" disabled selected>Select a subject...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Presets & Mode Selector -->
+                    <div class="timer-presets" id="timerPresets">
+                        <button type="button" class="preset-chip on" data-mins="25">
+                            <i class="fa-regular fa-clock"></i> 25m Pomodoro
+                        </button>
+                        <button type="button" class="preset-chip" data-mins="45">
+                            <i class="fa-solid fa-brain"></i> 45m Deep Focus
+                        </button>
+                        <button type="button" class="preset-chip" data-mins="60">
+                            <i class="fa-solid fa-bolt"></i> 60m Power Hour
+                        </button>
+                        <button type="button" class="preset-chip" data-mins="15">
+                            <i class="fa-solid fa-stopwatch-20"></i> 15m Quick Sprint
+                        </button>
+                        <button type="button" class="preset-chip" data-mode="stopwatch">
+                            <i class="fa-solid fa-stopwatch"></i> Stopwatch
+                        </button>
+                    </div>
+
+                    <!-- Circular Countdown Display -->
+                    <div class="timer-display-area">
+                        <div class="circular-timer-wrap">
+                            <svg class="timer-svg" viewBox="0 0 280 280" aria-hidden="true">
+                                <circle class="timer-track" cx="140" cy="140" r="120"></circle>
+                                <circle class="timer-progress" id="timerProgressRing" cx="140" cy="140" r="120"></circle>
+                            </svg>
+
+                            <div class="timer-inner-content">
+                                <span class="timer-digits" id="timerDigits">25:00</span>
+                                <div class="timer-tag" id="timerSubjectBadge">Select a subject</div>
+                                <div class="timer-time-adjust" id="timerAdjustGroup">
+                                    <button type="button" class="adjust-btn" id="adjustMinus5" title="Subtract 5 minutes">−5m</button>
+                                    <button type="button" class="adjust-btn" id="adjustPlus5" title="Add 5 minutes">+5m</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timer Controls -->
+                    <div class="timer-controls">
+                        <button type="button" class="timer-btn sec" id="timerResetBtn" title="Reset Timer">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+
+                        <button type="button" class="timer-btn pri" id="timerToggleBtn">
+                            <i class="fa-solid fa-play" id="timerToggleIcon"></i>
+                            <span id="timerToggleText">Start Focus</span>
+                        </button>
+
+                        <button type="button" class="timer-btn finish" id="timerFinishBtn" disabled title="Finish and log session">
+                            <i class="fa-solid fa-circle-check"></i> Finish & Save
                         </button>
                     </div>
                 </div>
@@ -164,7 +238,49 @@
     </div>
 
     <!-- =========================================================
-         Step-by-Step Modern Session Modal
+         Session Complete Modal (Triggered on Timer Finished / Early Stop)
+    ========================================================== -->
+    <div class="ov" id="completeModal" aria-modal="true" role="dialog">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
+
+            <div class="mh">
+                <div>
+                    <h2 id="completeTitle">🎉 Great Focus Session!</h2>
+                    <p id="completeSubtitle">Record your reflection & save to your history</p>
+                </div>
+                <button type="button" class="x" id="closeCompleteModalBtn" aria-label="Close">✕</button>
+            </div>
+
+            <div class="body">
+                <div class="rv" id="completeReviewBanner">
+                    <i class="fa-solid fa-trophy" style="display:grid;place-items:center;font-size:18px;background:var(--sc-soft,rgba(133,167,216,0.2));color:var(--sc,var(--brand));border-radius:12px;"></i>
+                    <div>
+                        <b id="completeSubjectName">Subject</b>
+                        <span id="completeDurationMeta">25 min focused · Today</span>
+                    </div>
+                </div>
+
+                <div class="sec">
+                    <div class="lbl">How focused were you? <em>optional</em></div>
+                    <div class="rate" id="completeRate"></div>
+                </div>
+
+                <div class="sec">
+                    <div class="lbl">Notes / What did you accomplish? <em>optional</em></div>
+                    <textarea id="completeNotes" placeholder="Summary of what you worked on, solved, or learned..."></textarea>
+                </div>
+            </div>
+
+            <div class="foot">
+                <button type="button" class="btn" id="discardSessionBtn">Discard</button>
+                <button type="button" class="btn p" id="saveCompleteSessionBtn">Save to History</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================================================
+         Step-by-Step Modern Session Modal (Manual Past Log)
          Step 1: Pick Subject
          Step 2: Set Duration
          Step 3: Review & Save (Date, Focus Rating & Notes)

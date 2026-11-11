@@ -195,7 +195,7 @@ body {
     margin: 1rem;
     display: flex;
     flex-direction: column;
-    transition: transform var(--transition-speed) ease, margin-left var(--transition-speed) ease, opacity var(--transition-speed) ease;
+    transition: transform var(--transition-speed) ease, margin-left var(--transition-speed) ease, margin-right var(--transition-speed) ease, opacity var(--transition-speed) ease, visibility var(--transition-speed) ease;
     z-index: 50;
     overflow-y: auto;
     overflow-x: hidden;
@@ -203,9 +203,11 @@ body {
 }
 
 .sidebar.collapsed {
-    margin-left: calc(-1 * var(--sidebar-width) - 2rem);
+    margin-left: calc(-1 * var(--sidebar-width) - 1rem);
+    margin-right: 0;
     opacity: 0;
     pointer-events: none;
+    visibility: hidden;
 }
 
 .sidebar-header {
@@ -356,7 +358,13 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 1rem;
+    padding-left: 0;
     min-width: 0;
+    transition: padding-left var(--transition-speed) ease;
+}
+
+.sidebar.collapsed ~ .main-content {
+    padding-left: 1rem;
 }
 
 /* ── 7. Topbar Component ─────────────────────────────────────────────────── */
@@ -718,6 +726,11 @@ select:focus {
 
     .main-content {
         padding-right: 0;
+        padding-left: 0;
+    }
+
+    .sidebar.collapsed ~ .main-content {
+        padding-left: 0;
     }
 
     .topbar {

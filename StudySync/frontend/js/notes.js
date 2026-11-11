@@ -20,21 +20,27 @@ document.addEventListener('DOMContentLoaded', () => {
     let SUBJECTS = [];
     let NOTES = [];
     let editing = null;             // The note currently being edited, or null for new note
-    let selectedSubjectId = null;   // The selected subject ID, or null
+    let selectedSubjectId = null;   // The selected subject ID inside composer, or null
     let lastSavedId = null;
+    const F = { q: '', subjectId: null }; // Global search & subject filter
 
     // ── Helper Utilities ──────────────────────────────────────
     const $ = id => document.getElementById(id);
     const esc = s => (s || '').toString().replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    
+    // Convert HTML to clean plain text, with space between tags
     const plain = html => {
+        if (!html) return '';
         const d = document.createElement('div');
-        d.innerHTML = html || '';
-        return (d.textContent || d.innerText || '').trim();
+        d.innerHTML = (html || '').replace(/<\/(p|div|li|h[1-6]|ul|ol|blockquote)>|<br\s*\/?>/gi, ' ');
+        return (d.textContent || d.innerText || '').replace(/\s+/g, ' ').trim();
     };
+
     const colorOf = subjectId => {
         const found = SUBJECTS.find(s => s.subjectId === subjectId);
         return found ? (found.colorCode || '#85A7D8') : '#85A7D8';
     };
+
     const fmtDate = d => {
         if (!d) return 'Just now';
         return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
@@ -49,9 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const inTitle = $('inTitle');
     const inBody = $('inBody');
     const subjectsChipsWrap = $('subjects');
+    const filtersWrap = $('filters');
     const grid = $('grid') || $('notesGrid');
     const toastEl = $('toast');
-    const searchInput = $('searchInput');
+    const searchInput = $('searchInput'); // Topbar
+    const inlineSearch = $('q');           // Page-level tools search
     const addNoteBtn = $('addNoteBtn');
 
     // ── Toast Notification ────────────────────────────────────
@@ -77,12 +85,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.warn("Using offline fallback subjects:", error);
             SUBJECTS = [
-                { subjectId: 1, name: 'Mathematics', colorCode: '#7C3AED' },
-                { subjectId: 2, name: 'Physics', colorCode: '#3B82F6' },
-                { subjectId: 3, name: 'Coding', colorCode: '#10B981' },
-                { subjectId: 4, name: 'SQL', colorCode: '#F59E0B' }
+                { subjectId: 1, name: 'math', colorCode: '#7C3AED' },
+                { subjectId: 2, name: 'coding', colorCode: '#10B981' },
+                { subjectId: 3, name: 'Java', colorCode: '#F59E0B' },
+                { subjectId: 4, name: 'SQL', colorCode: '#3B82F6' },
+                { subjectId: 5, name: 'DSA', colorCode: '#EF4444' }
             ];
         }
+        renderFilters();
         renderChips();
     }
 
@@ -104,44 +114,99 @@ document.addEventListener('DOMContentLoaded', () => {
             NOTES = [
                 {
                     noteId: 1,
-                    title: 'Calculus Cheat Sheet',
+                    title: 'Calculus cheat sheet',
                     content: 'Derivative rules, integration by parts, and trigonometric limits.',
                     subjectId: 1,
-                    subjectName: 'Mathematics',
+                    subjectName: 'math',
                     subjectColorCode: '#7C3AED',
                     updatedAt: new Date().toISOString()
+                },
+                {
+                    noteId: 2,
+                    title: 'Java collections cheat sheet',
+                    content: '<h2>List vs Set</h2><ul><li>ArrayList: fast random access</li><li>HashSet: no duplicates</li><li>LinkedList: fast inserts</li></ul>',
+                    subjectId: 3,
+                    subjectName: 'Java',
+                    subjectColorCode: '#F59E0B',
+                    updatedAt: new Date(Date.now() - 864e5).toISOString()
+                },
+                {
+                    noteId: 3,
+                    title: 'SQL joins recap',
+                    content: 'INNER JOIN returns matching rows only. LEFT JOIN keeps every row from the left table.',
+                    subjectId: 4,
+                    subjectName: 'SQL',
+                    subjectColorCode: '#3B82F6',
+                    updatedAt: new Date(Date.now() - 2 * 864e5).toISOString()
                 }
             ];
             renderGrid();
         }
     }
 
-    // ── Render Notes Grid ─────────────────────────────────────
-    function renderGrid(notesToDisplay = null) {
-        const displayList = notesToDisplay || NOTES;
-        if (!grid) return;
+    // ── Visible Notes Calculation ─────────────────────────────
+    function visibleNotes() {
+        return NOTES.filter(n => {
+            const matchSubject = F.subjectId === null || n.subjectId === F.subjectId;
+            if (!matchSubject) return false;
 
+            if (!F.q) return true;
+            const fullText = ((n.title || '') + ' ' + plain(n.content) + ' ' + (n.subjectName || '')).toLowerCase();
+            return fullText.includes(F.q);
+        }).sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
+    }
+
+    // ── Render Filter Chips (All + Subject options) ───────────
+    function renderFilters() {
+        if (!filtersWrap) return;
+        filtersWrap.innerHTML = '';
+
+        const filterOptions = [
+            { subjectId: null, label: 'All', color: '#85A7D8' },
+            ...SUBJECTS.map(s => ({ subjectId: s.subjectId, label: s.name, color: s.colorCode || '#85A7D8' }))
+        ];
+
+        filterOptions.forEach(s => {
+            const b = document.createElement('button');
+            b.type = 'button';
+            b.className = 'chip' + (F.subjectId === s.subjectId ? ' on' : '');
+            b.style.setProperty('--sc', s.color);
+            b.style.setProperty('--sc-soft', s.color + '26');
+            b.innerHTML = s.subjectId !== null ? `<i></i>${esc(s.label)}` : esc(s.label);
+            b.onclick = () => {
+                F.subjectId = s.subjectId;
+                renderFilters();
+                renderGrid();
+            };
+            filtersWrap.appendChild(b);
+        });
+    }
+
+    // ── Render Notes Grid ─────────────────────────────────────
+    function renderGrid() {
+        if (!grid) return;
         grid.innerHTML = '';
-        if (!displayList || !displayList.length) {
+
+        const list = visibleNotes();
+        if (!list.length) {
             grid.innerHTML = `
                 <div class="empty">
                     <b>No notes found</b>
-                    ${searchInput && searchInput.value ? 'Try adjusting your search query.' : 'Click "Take a note…" above to get started!'}
+                    ${F.q ? 'Try adjusting your search query.' : 'Click "+ New Note" or "Take a note…" to get started!'}
                 </div>
             `;
             return;
         }
 
-        const sorted = [...displayList].sort((a, b) => new Date(b.updatedAt || b.createdAt || 0) - new Date(a.updatedAt || a.createdAt || 0));
-
-        sorted.forEach(n => {
+        list.forEach(n => {
             const subjectId = n.subjectId;
             const subjectObj = SUBJECTS.find(s => s.subjectId === subjectId);
             const subName = n.subjectName || (subjectObj ? subjectObj.name : null);
             const subColor = n.subjectColorCode || (subjectObj ? subjectObj.colorCode : colorOf(subjectId));
 
             const card = document.createElement('div');
-            card.className = 'nc' + (n.noteId === lastSavedId ? ' new' : '');
+            const isJustSaved = (n.noteId === lastSavedId || (n.id && n.id === lastSavedId));
+            card.className = 'nc' + (isJustSaved ? ' new' : '');
             card.style.setProperty('--nc', subName ? subColor : '#BAD5EB');
             card.style.setProperty('--nc-soft', subName ? subColor + '33' : '#BAD5EB33');
 
@@ -202,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderChips();
         comp.classList.add('open');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        comp.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         setTimeout(() => {
             if (note) {
@@ -253,10 +318,12 @@ document.addEventListener('DOMContentLoaded', () => {
             compDone.disabled = true;
             compDone.textContent = 'Saving...';
 
+            const activeId = editing ? (editing.noteId || editing.id) : null;
+
             try {
                 let res;
-                if (editing && editing.noteId) {
-                    res = await api.put(`/notes/${editing.noteId}`, payload);
+                if (activeId) {
+                    res = await api.put(`/notes/${activeId}`, payload);
                 } else {
                     res = await api.post('/notes', payload);
                 }
@@ -264,19 +331,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (res.ok) {
                     const savedData = await res.json();
                     lastSavedId = savedData ? (savedData.noteId || savedData.id) : null;
-                    showToast(editing ? 'Note updated ✓' : 'Note saved ✓');
+                    showToast(activeId ? 'Note updated ✓' : 'Note saved ✓');
                     closeComposer();
                     await loadNotes();
                 } else {
-                    throw new Error('Save error');
+                    throw new Error('Save failed');
                 }
             } catch (err) {
                 console.warn('Backend save failed, updating locally:', err);
                 // Fallback simulation
-                if (editing) {
-                    const idx = NOTES.findIndex(n => n.noteId === editing.noteId);
+                const sub = SUBJECTS.find(s => s.subjectId === selectedSubjectId);
+                if (activeId) {
+                    const idx = NOTES.findIndex(n => (n.noteId === activeId || n.id === activeId));
                     if (idx !== -1) {
-                        const sub = SUBJECTS.find(s => s.subjectId === selectedSubjectId);
                         NOTES[idx] = {
                             ...NOTES[idx],
                             ...payload,
@@ -285,8 +352,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             updatedAt: new Date().toISOString()
                         };
                     }
+                    lastSavedId = activeId;
                 } else {
-                    const sub = SUBJECTS.find(s => s.subjectId === selectedSubjectId);
                     const newId = Date.now();
                     lastSavedId = newId;
                     NOTES.unshift({
@@ -297,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         updatedAt: new Date().toISOString()
                     });
                 }
-                showToast(editing ? 'Note updated ✓' : 'Note saved ✓');
+                showToast(activeId ? 'Note updated ✓' : 'Note saved ✓');
                 closeComposer();
                 renderGrid();
             } finally {
@@ -310,11 +377,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Delete Note ───────────────────────────────────────────
     if (compDelete) {
         compDelete.onclick = async () => {
-            if (!editing || !editing.noteId) return;
+            const activeId = editing ? (editing.noteId || editing.id) : null;
+            if (!activeId) return;
             if (!confirm('Are you sure you want to delete this note?')) return;
 
             try {
-                const res = await api.delete(`/notes/${editing.noteId}`);
+                const res = await api.delete(`/notes/${activeId}`);
                 if (res.ok) {
                     showToast('Note deleted');
                     closeComposer();
@@ -324,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.warn('Backend delete failed, removing locally:', err);
-                NOTES = NOTES.filter(n => n.noteId !== editing.noteId);
+                NOTES = NOTES.filter(n => (n.noteId !== activeId && n.id !== activeId));
                 showToast('Note deleted');
                 closeComposer();
                 renderGrid();
@@ -332,38 +400,25 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // ── Search Notes ──────────────────────────────────────────
+    // ── Search Notes (Both Inline & Topbar) ────────────────────
+    function handleSearchInput(query) {
+        F.q = query.trim().toLowerCase();
+        renderGrid();
+    }
+
+    if (inlineSearch) {
+        inlineSearch.addEventListener('input', (e) => {
+            const val = e.target.value;
+            if (searchInput) searchInput.value = val;
+            handleSearchInput(val);
+        });
+    }
+
     if (searchInput) {
-        let searchTimeout;
         searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            const query = e.target.value.trim().toLowerCase();
-
-            searchTimeout = setTimeout(async () => {
-                if (!query) {
-                    renderGrid(NOTES);
-                    return;
-                }
-
-                try {
-                    const res = await api.get(`/notes/search?q=${encodeURIComponent(query)}`);
-                    if (res.ok) {
-                        const searchResults = await res.json();
-                        renderGrid(searchResults);
-                        return;
-                    }
-                } catch (err) {
-                    console.warn("Backend search failed, falling back to local filter:", err);
-                }
-
-                // Client filter fallback
-                const filtered = NOTES.filter(n =>
-                    (n.title && n.title.toLowerCase().includes(query)) ||
-                    (n.content && n.content.toLowerCase().includes(query)) ||
-                    (n.subjectName && n.subjectName.toLowerCase().includes(query))
-                );
-                renderGrid(filtered);
-            }, 250);
+            const val = e.target.value;
+            if (inlineSearch) inlineSearch.value = val;
+            handleSearchInput(val);
         });
     }
 

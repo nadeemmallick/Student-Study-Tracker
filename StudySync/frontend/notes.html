@@ -114,16 +114,24 @@
             </header>
 
             <div class="dashboard-content">
-                <div class="welcome-section">
+                <!-- Page Header -->
+                <div class="ph">
                     <div>
                         <h1 class="page-title text-gradient">My Notes 📝</h1>
                         <p class="page-subtitle">Organize and search your study notes.</p>
                     </div>
-                    <div class="quick-actions">
-                        <button class="btn btn-primary" id="addNoteBtn">
-                            <i class="fa-solid fa-plus"></i> New Note
-                        </button>
+                    <button class="btn btn-primary" id="addNoteBtn">
+                        <i class="fa-solid fa-plus"></i> New Note
+                    </button>
+                </div>
+
+                <!-- Search + Subject Filter Bar -->
+                <div class="tools">
+                    <div class="notes-search">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                        <input type="text" id="q" placeholder="Search notes...">
                     </div>
+                    <div class="chips" id="filters"></div>
                 </div>
 
                 <!-- Quick-capture composer -->
@@ -136,10 +144,10 @@
                             <div class="chips" id="subjects"></div>
                         </div>
                         <div class="compfoot">
-                            <button class="btn del hidden" id="compDelete" style="display:none">Delete</button>
+                            <button class="btn sm del" id="compDelete" style="display:none">Delete</button>
                             <span class="spacer"></span>
-                            <button class="btn" id="compCancel">Cancel</button>
-                            <button class="btn p" id="compDone">Done</button>
+                            <button class="btn sm" id="compCancel">Cancel</button>
+                            <button class="btn p sm" id="compDone">Done</button>
                         </div>
                     </div>
                 </div>

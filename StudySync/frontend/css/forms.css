@@ -15,24 +15,27 @@
 }
 
 :root {
-    --bg-dark: #0d0d1a;
-    --bg-card: rgba(255, 255, 255, 0.05);
-    --border: rgba(255, 255, 255, 0.1);
-    --accent: #7c3aed;
-    --accent-hover: #6d28d9;
-    --accent-glow: rgba(124, 58, 237, 0.35);
-    --text-primary: #f1f5f9;
-    --text-muted: #94a3b8;
-    --error: #f87171;
-    --error-bg: rgba(248, 113, 113, 0.1);
-    --input-bg: rgba(255, 255, 255, 0.07);
-    --input-border: rgba(255, 255, 255, 0.12);
-    --input-focus: rgba(124, 58, 237, 0.5);
+    --bg-primary: #F6F2EC;
+    --bg-dark: #F6F2EC;
+    --bg-secondary: #EEF3F5;
+    --surface: #FFFFFF;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --border: #D8E1E8;
+    --accent: #85A7D8;
+    --accent-hover: #6F94CA;
+    --accent-glow: rgba(133, 167, 216, 0.35);
+    --text-primary: #0B2255;
+    --text-muted: #7F93AD;
+    --error: #D96B6B;
+    --error-bg: rgba(217, 107, 107, 0.1);
+    --input-bg: #FFFFFF;
+    --input-border: #D8E1E8;
+    --input-focus: rgba(133, 167, 216, 0.5);
 }
 
 body {
     font-family: 'Inter', sans-serif;
-    background: var(--bg-dark);
+    background: var(--bg-primary);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -48,6 +51,13 @@ body {
     position: fixed;
     inset: 0;
     z-index: 0;
+    background: var(--bg-primary);
+    pointer-events: none;
+}
+
+.orb {
+    display: none;
+}
     background:
         radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124, 58, 237, 0.18) 0%, transparent 60%),
         radial-gradient(ellipse 60% 50% at 80% 80%, rgba(59, 130, 246, 0.12) 0%, transparent 60%),

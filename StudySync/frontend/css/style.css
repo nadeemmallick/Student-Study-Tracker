@@ -16,6 +16,8 @@
 
 :root {
     /* Backgrounds from color.md */
+    --bg-primary: #F6F2EC;
+    /* Primary Background */
     --bg-dark: #F6F2EC;
     /* Primary Background */
     --bg-secondary: #EEF3F5;
@@ -107,7 +109,7 @@
 html,
 body {
     font-family: 'Inter', sans-serif;
-    background: var(--bg-dark);
+    background: var(--bg-primary, #F6F2EC);
     color: var(--text-primary);
     overflow-x: hidden;
     min-height: 100vh;
@@ -115,25 +117,17 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ── 2. Animated Background ──────────────────────────────────────────────── */
+/* ── 2. Page Background ─────────────────────────────────────────────────── */
 .bg-gradient {
     position: fixed;
     inset: 0;
     z-index: 0;
-    background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(186, 213, 235, 0.4) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(154, 185, 224, 0.3) 0%, transparent 60%),
-        linear-gradient(135deg, #F6F2EC 0%, #EEF3F5 50%, #F6F2EC 100%);
+    background: var(--bg-primary, #F6F2EC);
     pointer-events: none;
 }
 
 .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    animation: float 8s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
+    display: none;
 }
 
 .orb-1 {

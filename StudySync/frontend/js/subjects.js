@@ -1,12 +1,14 @@
 /* =========================================================
-   subjects.js – Interactive Modern UI & Full API Integration
+   subjects.js – Interactive Step-by-Step Subject Wizard & API
    StudySync – Student Study Tracker
 ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
     // ── Authentication Check ───────────────────────────────────
-    window.auth.requireAuth();
-    const session = window.auth.getSession();
+    if (window.auth && typeof window.auth.requireAuth === 'function') {
+        window.auth.requireAuth();
+    }
+    const session = window.auth ? window.auth.getSession() : null;
     if (!session) return;
 
     // ── SVG Icon Registry ──────────────────────────────────────
@@ -26,17 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return `<svg class="${className}" viewBox="0 0 24 24">${path}</svg>`;
     };
 
-    // ── Color Swatches & Preset Templates ──────────────────────
+    // ── Color Swatches ─────────────────────────────────────────
     const SWATCH_COLORS = ['#7C3AED', '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#EC4899', '#14B8A6', '#6366F1'];
-
-    const TEMPLATES = [
-        ['Mathematics', 'Calculus & Algebra', '#7C3AED', 'calc'],
-        ['Physics', 'Mechanics & Waves', '#3B82F6', 'flask'],
-        ['Java', 'OOP & Collections', '#F59E0B', 'code'],
-        ['SQL', 'Queries & Schema Design', '#10B981', 'db'],
-        ['DSA', 'Algorithms & Complexity', '#EF4444', 'cpu'],
-        ['English', 'Grammar & Literature', '#EC4899', 'pen']
-    ];
 
     const WIZARD_STEPS = [
         ['Name your subject', 'Step 1 of 3'],
@@ -47,15 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Component State ────────────────────────────────────────
     let subjects = [];
     const S = {
-        v: 1,                 // Active Modal View (1=Colour studio, 2=Step by step, 3=Templates, 4=Big type)
         name: '',
         desc: '',
         color: '#7C3AED',
         icon: 'book',
         goal: 5,
         step: 1,
-        tpl: null,
-        editId: null          // null when adding, number when editing
+        editId: null          // null when adding, ID when editing
     };
 
     // ── DOM References ─────────────────────────────────────────
@@ -65,9 +56,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalOverlay = document.getElementById('subjectModal');
     const toastEl = document.getElementById('subjectToast');
 
+    const nameInput = document.getElementById('subjectNameInput');
+    const descInput = document.getElementById('subjectDescInput');
+    const swatchesContainer = document.getElementById('subjectSwatches');
+    const iconsContainer = document.getElementById('subjectIcons');
+
+    const wzTitle = document.getElementById('wzT');
+    const wzSubtitle = document.getElementById('wzS');
+    const nextBtn = document.querySelector('#subjectWizardModal .next');
+    const backBtn = document.querySelector('#subjectWizardModal .back');
+    const saveBtn = document.querySelector('#subjectWizardModal .save-subject-btn');
+
     // ── Toast Notification Helper ──────────────────────────────
     function showToast(message) {
-        if (window.toast) {
+        if (window.toast && typeof window.toast.success === 'function') {
             window.toast.success(message);
         } else if (toastEl) {
             toastEl.textContent = message;
@@ -76,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ── Build Swatches, Icons & Templates ──────────────────────
+    // ── Build Swatches & Icons ─────────────────────────────────
     function initModalWidgets() {
         // Color Swatches
-        document.querySelectorAll('.swatches').forEach(container => {
-            container.innerHTML = '';
+        if (swatchesContainer) {
+            swatchesContainer.innerHTML = '';
             SWATCH_COLORS.forEach(color => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -92,13 +94,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     S.color = color;
                     paint();
                 };
-                container.appendChild(btn);
+                swatchesContainer.appendChild(btn);
             });
-        });
+        }
 
         // Icon Buttons
-        document.querySelectorAll('.icons').forEach(container => {
-            container.innerHTML = '';
+        if (iconsContainer) {
+            iconsContainer.innerHTML = '';
             Object.keys(ICONS).forEach(key => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
@@ -110,50 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     S.icon = key;
                     paint();
                 };
-                container.appendChild(btn);
+                iconsContainer.appendChild(btn);
             });
-        });
-
-        // Gallery Templates
-        const galContainer = document.getElementById('gal');
-        if (galContainer) {
-            galContainer.innerHTML = '';
-            TEMPLATES.forEach(([name, desc, color, iconKey], idx) => {
-                const card = document.createElement('button');
-                card.type = 'button';
-                card.className = 'gc';
-                card.dataset.i = idx;
-                card.style.setProperty('--gc', color);
-                card.style.setProperty('--gs', color + '22');
-                card.innerHTML = `<div class="bubble">${renderSvg(iconKey)}</div><b>${name}</b><span>${desc}</span>`;
-                card.onclick = () => {
-                    S.tpl = idx;
-                    S.name = name;
-                    S.desc = desc;
-                    S.color = color;
-                    S.icon = iconKey;
-                    paint();
-                };
-                galContainer.appendChild(card);
-            });
-
-            // Custom Template Card
-            const customCard = document.createElement('button');
-            customCard.type = 'button';
-            customCard.className = 'gc custom';
-            customCard.dataset.i = 'custom';
-            customCard.innerHTML = `<div class="bubble">${renderSvg('pen')}</div><b>Custom</b><span>Build your own</span>`;
-            customCard.onclick = () => {
-                S.tpl = 'custom';
-                S.name = '';
-                S.desc = '';
-                paint();
-                setTimeout(() => {
-                    const customInput = document.querySelector('#m3 .in-name');
-                    if (customInput) customInput.focus();
-                }, 100);
-            };
-            galContainer.appendChild(customCard);
         }
     }
 
@@ -164,12 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
         root.setProperty('--c-soft', S.color + '22');
 
         // Update inputs if not currently focused
-        document.querySelectorAll('.in-name').forEach(input => {
-            if (input !== document.activeElement) input.value = S.name;
-        });
-        document.querySelectorAll('.in-desc').forEach(input => {
-            if (input !== document.activeElement) input.value = S.desc;
-        });
+        if (nameInput && nameInput !== document.activeElement) nameInput.value = S.name;
+        if (descInput && descInput !== document.activeElement) descInput.value = S.desc;
 
         // Live preview elements
         document.querySelectorAll('.p-name').forEach(el => {
@@ -200,65 +156,57 @@ document.addEventListener('DOMContentLoaded', () => {
             el.textContent = S.goal;
         });
 
-        // Gallery active states
-        document.querySelectorAll('.gc').forEach(btn => {
-            btn.classList.toggle('on', String(btn.dataset.i) === String(S.tpl) && btn.dataset.i !== 'custom');
-        });
-
-        const customPanel = document.getElementById('cp');
-        if (customPanel) {
-            customPanel.classList.toggle('show', S.tpl !== null);
-        }
-
-        // Enable / Disable Save Buttons
-        const isValid = S.name.trim().length > 0;
-        document.querySelectorAll('.save-subject-btn').forEach(btn => {
-            btn.disabled = !isValid;
-        });
-
-        const nextBtn = document.querySelector('#m2 .next');
-        if (nextBtn) nextBtn.disabled = !isValid;
-
-        // Step by Step Wizard Navigation
-        document.querySelectorAll('#m2 .pane').forEach(pane => {
+        // Step panes visibility
+        document.querySelectorAll('#subjectWizardModal .pane').forEach(pane => {
             pane.classList.toggle('on', +pane.dataset.s === S.step);
         });
 
-        document.querySelectorAll('#m2 .prog i').forEach((progItem, i) => {
+        // Progress bar segments
+        document.querySelectorAll('#subjectWizardModal .prog i').forEach((progItem, i) => {
             progItem.classList.toggle('done', i < S.step);
         });
 
-        const wzTitle = document.getElementById('wzT');
-        const wzSubtitle = document.getElementById('wzS');
+        // Step headers
         if (wzTitle && wzSubtitle && WIZARD_STEPS[S.step - 1]) {
-            wzTitle.textContent = WIZARD_STEPS[S.step - 1][0];
+            if (S.editId && S.step === 1) {
+                wzTitle.textContent = 'Edit subject';
+            } else {
+                wzTitle.textContent = WIZARD_STEPS[S.step - 1][0];
+            }
             wzSubtitle.textContent = WIZARD_STEPS[S.step - 1][1];
         }
 
-        const backBtn = document.querySelector('#m2 .back');
+        // Navigation controls
+        const isValid = S.name.trim().length > 0;
         if (backBtn) backBtn.classList.toggle('hidden', S.step === 1);
-        if (nextBtn) nextBtn.classList.toggle('hidden', S.step === 3);
+        if (nextBtn) {
+            nextBtn.classList.toggle('hidden', S.step === 3);
+            nextBtn.disabled = !isValid;
+        }
 
-        const m2SaveBtn = document.querySelector('#m2 .save-subject-btn');
-        if (m2SaveBtn) m2SaveBtn.classList.toggle('hidden', S.step !== 3);
+        if (saveBtn) {
+            saveBtn.classList.toggle('hidden', S.step !== 3);
+            saveBtn.disabled = !isValid;
+            saveBtn.textContent = S.editId ? 'Update Subject' : 'Save Subject';
+        }
     }
 
     // ── Input Listeners ────────────────────────────────────────
-    document.querySelectorAll('.in-name').forEach(input => {
-        input.addEventListener('input', (e) => {
+    if (nameInput) {
+        nameInput.addEventListener('input', (e) => {
             S.name = e.target.value;
             paint();
         });
-    });
+    }
 
-    document.querySelectorAll('.in-desc').forEach(input => {
-        input.addEventListener('input', (e) => {
+    if (descInput) {
+        descInput.addEventListener('input', (e) => {
             S.desc = e.target.value;
             paint();
         });
-    });
+    }
 
-    // Wizard buttons
+    // Wizard goal stepper buttons (− / +)
     document.querySelectorAll('.gm').forEach(b => b.addEventListener('click', () => {
         S.goal = Math.max(1, S.goal - 1);
         paint();
@@ -269,45 +217,21 @@ document.addEventListener('DOMContentLoaded', () => {
         paint();
     }));
 
-    const nextBtn = document.querySelector('#m2 .next');
+    // Next / Back buttons
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
+            if (S.step === 1 && !S.name.trim()) return;
             S.step = Math.min(3, S.step + 1);
             paint();
         });
     }
 
-    const backBtn = document.querySelector('#m2 .back');
     if (backBtn) {
         backBtn.addEventListener('click', () => {
             S.step = Math.max(1, S.step - 1);
             paint();
         });
     }
-
-    // Modal view switcher tabs
-    function setModalView(viewIndex) {
-        S.v = viewIndex;
-        document.querySelectorAll('#ideasTabs button').forEach(btn => {
-            btn.classList.toggle('on', +btn.dataset.v === viewIndex);
-        });
-        [1, 2, 3, 4].forEach(n => {
-            const modalView = document.getElementById('m' + n);
-            if (modalView) {
-                modalView.classList.toggle('hidden', n !== viewIndex);
-                if (n === viewIndex) {
-                    modalView.style.animation = 'none';
-                    void modalView.offsetWidth;
-                    modalView.style.animation = '';
-                }
-            }
-        });
-        paint();
-    }
-
-    document.querySelectorAll('#ideasTabs button').forEach(btn => {
-        btn.addEventListener('click', () => setModalView(+btn.dataset.v));
-    });
 
     // ── Modal Open / Close Logic ───────────────────────────────
     function openModal(editMode = false, subject = null) {
@@ -317,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
             S.desc = subject.description || '';
             S.color = subject.colorCode || '#7C3AED';
             S.icon = inferIcon(subject.name);
-            S.tpl = null;
+            S.goal = 5;
             S.step = 1;
         } else {
             S.editId = null;
@@ -327,15 +251,13 @@ document.addEventListener('DOMContentLoaded', () => {
             S.icon = 'book';
             S.goal = 5;
             S.step = 1;
-            S.tpl = null;
         }
 
-        setModalView(1);
+        paint();
         modalOverlay.classList.add('active');
 
         setTimeout(() => {
-            const activeInput = document.querySelector('#m' + S.v + ' .in-name');
-            if (activeInput) activeInput.focus();
+            if (nameInput) nameInput.focus();
         }, 150);
     }
 
@@ -345,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (addSubjectBtn) addSubjectBtn.addEventListener('click', () => openModal(false));
-    document.querySelectorAll('.close-modal-btn, .cancel-btn').forEach(btn => {
+    document.querySelectorAll('.close-modal-btn').forEach(btn => {
         btn.addEventListener('click', closeModal);
     });
 
@@ -401,11 +323,10 @@ document.addEventListener('DOMContentLoaded', () => {
             colorCode: S.color
         };
 
-        const saveBtns = document.querySelectorAll('.save-subject-btn');
-        saveBtns.forEach(b => {
-            b.disabled = true;
-            b.textContent = 'Saving...';
-        });
+        if (saveBtn) {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+        }
 
         try {
             let res;
@@ -427,16 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Save error:', err);
             showToast('Network error while saving subject.');
         } finally {
-            saveBtns.forEach(b => {
-                b.disabled = false;
-                b.textContent = 'Save Subject';
-            });
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.textContent = S.editId ? 'Update Subject' : 'Save Subject';
+            }
         }
     }
 
-    document.querySelectorAll('.save-subject-btn').forEach(btn => {
-        btn.addEventListener('click', handleSaveSubject);
-    });
+    if (saveBtn) {
+        saveBtn.addEventListener('click', handleSaveSubject);
+    }
 
     // ── API: Delete Subject ────────────────────────────────────
     window.deleteSubject = async (id) => {
@@ -531,15 +452,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ── Keyboard Shortcuts (Enter key in inputs) ───────────────
+    // ── Keyboard Shortcuts (Escape & Enter) ────────────────────
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
             closeModal();
             return;
         }
-        if (e.key === 'Enter' && e.target.classList.contains('in-name') && S.name.trim()) {
+        if (e.key === 'Enter' && modalOverlay.classList.contains('active') && S.name.trim()) {
             e.preventDefault();
-            if (S.v === 2 && S.step < 3) {
+            if (S.step < 3) {
                 S.step++;
                 paint();
             } else {

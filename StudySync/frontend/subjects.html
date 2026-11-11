@@ -157,56 +157,13 @@
     </div>
 
     <!-- =========================================================
-         Interactive Modern Add/Edit Subject Modal
-         Includes: Colour Studio, Step Wizard, Gallery & Big Type
+         Interactive Step-by-Step Add/Edit Subject Modal
     ========================================================== -->
     <div class="modal-overlay" id="subjectModal" aria-modal="true" role="dialog">
         <div class="modal-wrap">
 
-            <!-- Switcher Tabs -->
-            <div class="ideas" id="ideasTabs">
-                <button type="button" class="on" data-v="1">1 · Colour studio</button>
-                <button type="button" data-v="2">2 · Step by step</button>
-                <button type="button" data-v="3">3 · Template gallery</button>
-                <button type="button" data-v="4">4 · Big type</button>
-            </div>
-
-            <!-- 1 · Colour-Aware Studio -->
-            <div class="modal" id="m1">
-                <div class="band">
-                    <div class="bubble p-ico"></div>
-                    <div class="t">
-                        <b class="p-name" data-ph="New subject">New subject</b>
-                        <span class="p-desc" data-ph="Add a short description">Add a short description</span>
-                    </div>
-                    <button type="button" class="x close-modal-btn" aria-label="Close">✕</button>
-                </div>
-                <div class="body">
-                    <div class="sec">
-                        <div class="lbl">Subject name</div>
-                        <input type="text" class="in-name" placeholder="e.g. Mathematics" autocomplete="off">
-                    </div>
-                    <div class="sec">
-                        <div class="lbl">Description <em>optional</em></div>
-                        <input type="text" class="in-desc" placeholder="e.g. Calculus &amp; Algebra">
-                    </div>
-                    <div class="sec">
-                        <div class="lbl">Icon</div>
-                        <div class="icons"></div>
-                    </div>
-                    <div class="sec">
-                        <div class="lbl">Colour theme</div>
-                        <div class="swatches"></div>
-                    </div>
-                </div>
-                <div class="foot">
-                    <button type="button" class="btn cancel-btn">Cancel</button>
-                    <button type="button" class="btn p save-subject-btn" disabled>Save Subject</button>
-                </div>
-            </div>
-
-            <!-- 2 · Step-by-Step Wizard -->
-            <div class="modal hidden" id="m2">
+            <!-- Step-by-Step Wizard Modal -->
+            <div class="modal" id="subjectWizardModal">
                 <div class="wz-head">
                     <div>
                         <h2 id="wzT">Name your subject</h2>
@@ -218,16 +175,19 @@
                     <i></i><i></i><i></i>
                 </div>
                 <div class="body" style="padding-top:22px">
+                    <!-- Step 1: Name & Description -->
                     <div class="pane on" data-s="1">
                         <div class="sec">
                             <div class="lbl">Subject name</div>
-                            <input type="text" class="in-name" placeholder="e.g. Mathematics" autocomplete="off">
+                            <input type="text" class="in-name" id="subjectNameInput" placeholder="e.g. Mathematics" autocomplete="off">
                         </div>
                         <div class="sec">
                             <div class="lbl">Description <em>optional</em></div>
-                            <input type="text" class="in-desc" placeholder="e.g. Calculus &amp; Algebra">
+                            <input type="text" class="in-desc" id="subjectDescInput" placeholder="e.g. Calculus &amp; Algebra">
                         </div>
                     </div>
+
+                    <!-- Step 2: Icon & Theme Color -->
                     <div class="pane" data-s="2">
                         <div class="minip">
                             <div class="bubble p-ico"></div>
@@ -235,13 +195,15 @@
                         </div>
                         <div class="sec">
                             <div class="lbl">Icon</div>
-                            <div class="icons"></div>
+                            <div class="icons" id="subjectIcons"></div>
                         </div>
                         <div class="sec">
                             <div class="lbl">Colour theme</div>
-                            <div class="swatches"></div>
+                            <div class="swatches" id="subjectSwatches"></div>
                         </div>
                     </div>
+
+                    <!-- Step 3: Study Goal & Preview -->
                     <div class="pane" data-s="3">
                         <div class="lbl" style="justify-content:center">Weekly study goal</div>
                         <div class="goal">
@@ -265,64 +227,6 @@
                     <button type="button" class="btn back hidden">Back</button>
                     <button type="button" class="btn p next" disabled>Next</button>
                     <button type="button" class="btn p save-subject-btn hidden">Save Subject</button>
-                </div>
-            </div>
-
-            <!-- 3 · Template Gallery -->
-            <div class="modal hidden" id="m3">
-                <div class="wz-head" style="padding-bottom:12px">
-                    <div>
-                        <h2>Select Subject Template</h2>
-                        <p>Pick a pre-configured template or start from scratch.</p>
-                    </div>
-                    <button type="button" class="x close-modal-btn" aria-label="Close">✕</button>
-                </div>
-                <div class="body">
-                    <div class="gal" id="gal"></div>
-                    <div class="custpanel" id="cp">
-                        <div class="sec">
-                            <div class="lbl">Subject name</div>
-                            <input type="text" class="in-name" placeholder="e.g. Mathematics" autocomplete="off">
-                        </div>
-                        <div class="sec">
-                            <div class="lbl">Description <em>optional</em></div>
-                            <input type="text" class="in-desc" placeholder="e.g. Core principles">
-                        </div>
-                        <div class="sec">
-                            <div class="lbl">Colour theme</div>
-                            <div class="swatches"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="foot">
-                    <button type="button" class="btn cancel-btn">Cancel</button>
-                    <button type="button" class="btn p save-subject-btn" disabled>Save Subject</button>
-                </div>
-            </div>
-
-            <!-- 4 · Big Type Minimalist -->
-            <div class="modal hidden" id="m4" style="position:relative">
-                <button type="button" class="x close-modal-btn bigx" aria-label="Close">✕</button>
-                <div class="big">
-                    <div class="bigtop">
-                        <div class="bubble p-ico"></div>
-                        <div style="flex:1;padding-right:44px">
-                            <input type="text" class="in-name bn" placeholder="Name your subject" autocomplete="off">
-                        </div>
-                    </div>
-                    <input type="text" class="in-desc bd" placeholder="Add a short description (optional)">
-                    <div class="bigrow">
-                        <div class="lbl">Colour</div>
-                        <div class="swatches"></div>
-                    </div>
-                    <div class="bigrow" style="align-items:flex-start">
-                        <div class="lbl" style="padding-top:12px">Icon</div>
-                        <div class="icons" style="flex:1;min-width:260px"></div>
-                    </div>
-                </div>
-                <div class="foot">
-                    <button type="button" class="btn cancel-btn">Cancel</button>
-                    <button type="button" class="btn p save-subject-btn" disabled>Save Subject</button>
                 </div>
             </div>
 

@@ -254,52 +254,12 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* ---------- Modal Idea Switcher Bar ---------- */
-.ideas {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding: 12px;
-  background: var(--bg-primary);
-  border-bottom: 1px solid var(--border);
-  border-radius: 24px 24px 0 0;
-}
-
-.ideas button {
-  height: 38px;
-  padding: 0 16px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text-2);
-  font-weight: 600;
-  font-size: 13.5px;
-  transition: all 0.2s var(--ease);
-}
-
-.ideas button:hover {
-  background: var(--hover);
-  color: var(--text);
-}
-
-.ideas button.on {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: #ffffff;
-  box-shadow: 0 2px 8px rgba(133, 167, 216, 0.4);
-}
-
-/* ---------- Shared Modal Elements ---------- */
+/* ---------- Modal Elements ---------- */
 .modal {
   width: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-top: 0;
-  border-radius: 0 0 24px 24px;
+  border-radius: 24px;
   overflow: hidden;
 }
 
@@ -536,54 +496,7 @@ svg.i {
   stroke-linejoin: round;
 }
 
-/* ===== 1 · Colour-aware Studio Live Banner ===== */
-.band {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 22px 24px 22px 28px;
-  background: var(--c-soft);
-  border-bottom: 1px solid var(--border);
-  transition: background 0.3s var(--ease);
-}
-
-.band .bubble {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: 0 6px 16px rgba(11, 34, 85, 0.08);
-}
-
-.band .t {
-  flex: 1;
-  min-width: 0;
-}
-
-.band .t b {
-  display: block;
-  font-size: 22px;
-  font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--text);
-}
-
-.band .t b.ph {
-  color: var(--muted);
-}
-
-.band .t span {
-  font-size: 14px;
-  color: var(--text-2);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: block;
-}
-
-/* ===== 2 · Step-by-Step Wizard ===== */
+/* ===== Step-by-Step Wizard ===== */
 .wz-head {
   padding: 24px 28px 0;
   display: flex;
@@ -761,175 +674,6 @@ svg.i {
   color: var(--text-2);
 }
 
-/* ===== 3 · Template Gallery ===== */
-.gal {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.gc {
-  position: relative;
-  text-align: left;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  cursor: pointer;
-  transition: all 0.25s var(--ease);
-}
-
-.gc:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 22px rgba(11, 34, 85, 0.09);
-  border-color: var(--brand);
-}
-
-.gc .bubble {
-  width: 44px;
-  height: 44px;
-  border-radius: 13px;
-  margin-bottom: 12px;
-  background: var(--gs);
-  color: var(--gc);
-}
-
-.gc b {
-  display: block;
-  font-size: 15px;
-  color: var(--text);
-}
-
-.gc span {
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.4;
-  display: block;
-}
-
-.gc.on {
-  border-color: var(--gc);
-  box-shadow: 0 0 0 3px var(--gs), 0 10px 22px rgba(11, 34, 85, 0.09);
-  transform: translateY(-3px);
-}
-
-.gc.on::after {
-  content: "✓";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--gc);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-  animation: tick 0.25s var(--ease);
-}
-
-.gc.custom {
-  border-style: dashed;
-  display: grid;
-  place-content: center;
-  text-align: center;
-  color: var(--text-2);
-}
-
-.gc.custom .bubble {
-  margin: 0 auto 8px;
-  background: var(--bg-secondary);
-  color: var(--text-2);
-}
-
-.custpanel {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: all 0.4s var(--ease);
-}
-
-.custpanel.show {
-  max-height: 260px;
-  opacity: 1;
-  margin-top: 20px;
-}
-
-/* ===== 4 · Big Type ===== */
-.big {
-  padding: 30px 32px 8px;
-}
-
-.bigtop {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  margin-bottom: 6px;
-}
-
-.bigtop .bubble {
-  width: 64px;
-  height: 64px;
-  border-radius: 18px;
-}
-
-.big input.bn {
-  height: auto;
-  padding: 6px 0;
-  font-size: 28px;
-  font-weight: 700;
-  border: 0;
-  border-bottom: 2px solid var(--border);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.big input.bn:focus {
-  border-color: var(--c);
-  box-shadow: none;
-  background: transparent;
-}
-
-.big input.bd {
-  height: auto;
-  padding: 12px 0;
-  font-size: 16px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-2);
-  margin-bottom: 18px;
-}
-
-.big input.bd:focus {
-  box-shadow: none;
-  background: transparent;
-}
-
-.bigrow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  flex-wrap: wrap;
-  padding: 16px 0;
-  border-top: 1px solid var(--border);
-}
-
-.bigrow .lbl {
-  margin: 0;
-}
-
-.bigx {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-}
-
 /* Toast */
 .subject-toast {
   position: fixed;
@@ -960,20 +704,11 @@ svg.i {
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .body, .foot, .wz-head, .prog, .big {
+  .body, .foot, .wz-head, .prog {
     padding-left: 20px;
     padding-right: 20px;
   }
-  .gal {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .icons {
     grid-template-columns: repeat(4, 1fr);
-  }
-  .big input.bn {
-    font-size: 24px;
-  }
-  .band {
-    padding: 16px 20px;
   }
 }
